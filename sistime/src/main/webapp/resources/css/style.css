@@ -81,6 +81,7 @@ input[type=checkbox], input[type=radio] { vertical-align: middle; }
 
 tr.hover:hover { cursor: pointer; background: #f5fffa; }
 
+
 .border { border: 1px solid #ced4da; }
 .border-none { border: none; }
 .border-top { border-top: 1px solid #ced4da; }
@@ -91,6 +92,7 @@ tr.hover:hover { cursor: pointer; background: #f5fffa; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 .text-center { text-align: center; }
+.text-bottom{ text-align: }
 
 .clear { clear: both; }
 .clear:after { content:''; display:block; clear: both; }
