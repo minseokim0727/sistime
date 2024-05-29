@@ -119,7 +119,7 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-        
+         
         <div class="content-wrapper">
             <div class="content">
                 <div class="card">
