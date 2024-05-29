@@ -22,7 +22,7 @@
     SoTongHaeYo&nbsp; <i class="bi bi-caret-down downicon"></i>
   </a>
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">&nbsp;&nbsp;Freedom</a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/test/template">&nbsp;&nbsp;Freedom</a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp;Secret</a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp;Notice</a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp;Event</a></li>

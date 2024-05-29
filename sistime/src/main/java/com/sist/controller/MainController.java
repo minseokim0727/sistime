@@ -14,8 +14,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class MainController {
 	@RequestMapping("/main")
 	public ModelAndView main(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ModelAndView mav = new ModelAndView("member/login");
+		ModelAndView mav = new ModelAndView("/member/login");
 		
 		return mav;
 	}
+
 }

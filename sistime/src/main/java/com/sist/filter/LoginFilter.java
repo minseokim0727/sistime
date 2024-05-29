@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-// @WebFilter("/*")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
