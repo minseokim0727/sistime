@@ -14,6 +14,18 @@ a {
 	font-size: 22px;
 	line-height: 22px;
 }
+.header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin : 20px 20px 0 20px;
+            padding: 20px;
+            background-color: #E0E0E0;
+        }
+        .header input {
+            padding: 5px;
+            width: 200px;
+        }
 </style>
 
 <div class="header">
