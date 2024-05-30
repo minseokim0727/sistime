@@ -56,7 +56,7 @@
          return;
       }
 
-      f.action = "${pageContext.request.contextPath}/member/login";
+      f.action = "${pageContext.request.contextPath}/main";
       f.submit();
    }
 </script>

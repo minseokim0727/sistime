@@ -19,7 +19,7 @@ public class MemberController {
 	public com.sist.servlet.ModelAndView loginForm(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// 로그인 폼
-		return new ModelAndView("main/main");
+		return new ModelAndView("member/login");
 	}
 
 	@RequestMapping(value = "/member/login", method = RequestMethod.POST)
@@ -27,9 +27,8 @@ public class MemberController {
 			throws ServletException, IOException {
 		// 로그인 처리
 		// 세션객체. 세션 정보는 서버에 저장(로그인 정보, 권한등을 저장)
-		
 		// 메인화면으로 리다이렉트
-		return new ModelAndView("redirect:/main/main");
+		return new ModelAndView("redirect:/");
 	}
 	
 }
