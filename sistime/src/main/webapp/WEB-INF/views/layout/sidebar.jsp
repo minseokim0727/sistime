@@ -46,7 +46,7 @@
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/test/template">&nbsp;&nbsp; 자유 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 비밀 </a></li>
-    <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 공지사항 </a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/notice/list">&nbsp;&nbsp; 공지사항 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 이벤트 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 베스트 </a></li>
   </ul>
