@@ -10,7 +10,14 @@
 
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
     <style>
+    	.imageslide{
+    		border : 1px solid black;
+    		margin : 0 auto;
+    		box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    		
+    	}
         .body {
+        	border : 1px solid black;
             font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
@@ -94,19 +101,41 @@
                 flex-direction: column;
             }
         }
+        
+        .pi{
+        	font-size: 100px;
+    		line-height: 100px;
+    		margin : 20px;
+        }
+        .myinfo{
+        	border : 1px solid black;
+        }
     </style>
 </head>
 <body>
 <header>
 <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
+<div class = "myinfo" style="float: right;">
+	<div class = "info-box">
+		<div class = "profileimage">
+			<i class="bi bi-person-square pi"></i>
+		</div>
+			<h5> 프로필 </h5>
+		<div class = "infobutton">
+			<button type="button" class="btn btn-outline-secondary"> 내정보 </button>
+			<button type="button" class="btn btn-outline-secondary"> 프로필 변경</button>
+		</div>
+	</div>
+</div>
 <div class="body">
     <div class="main">
         
-        <div id="carouselExample" class="carousel slide">
+<div id="carouselExample" class="carousel slide imageslide">
   <div class="carousel-inner">
+  
     <div class="carousel-item active">
-      <img src="${pageContext.request.contextPath}/resources/images/bg.png"  class="d-block w-100" alt="...">
+      <img src="${pageContext.request.contextPath}/resources/images/bg.png" alt="...">
     </div>
    
   </div>
@@ -119,6 +148,8 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+
+
          
         <div class="content-wrapper">
             <div class="content">
