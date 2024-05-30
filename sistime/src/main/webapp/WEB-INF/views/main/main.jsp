@@ -23,26 +23,7 @@
             display: flex;
             height: 100vh;
         }
-        .sidebar {
-            width: 100%;
-            height: 100%;
-            background: #f5f5f5;  
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar a {     
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            text-decoration: none;
-            color: #787486;
-            font-weight: 500;
-        }
-        .sidebar img {
-       
-            margin-right: 10px;
-        }
+        
         
         .main {
             flex: 1;
@@ -81,26 +62,7 @@
             flex: 1;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 150px;
-            }
-            .header input {
-                width: 150px;
-            }           
-        }
-        @media (max-width: 480px) {
-            .sidebar {
-                display: none;
-            }
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .content {
-                flex-direction: column;
-            }
-        }
+       
         
         .pi{
         	font-size: 100px;
@@ -108,7 +70,9 @@
     		margin : 20px;
         }
         .myinfo{
+        	width : 200px;
         	border : 1px solid black;
+        	display : flex;
         }
     </style>
 </head>
@@ -116,7 +80,10 @@
 <header>
 <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
-<div class = "myinfo" style="float: right;">
+
+<div class="body">
+    <div class="main">
+        <div class = "myinfo">
 	<div class = "info-box">
 		<div class = "profileimage">
 			<i class="bi bi-person-square pi"></i>
@@ -128,9 +95,6 @@
 		</div>
 	</div>
 </div>
-<div class="body">
-    <div class="main">
-        
 <div id="carouselExample" class="carousel slide imageslide">
   <div class="carousel-inner">
   

@@ -5,6 +5,26 @@
 .downicon{
 	font-size: 14px;
 }
+.sidebar {
+            width: 100%;
+            height: 100%;
+            background: #f5f5f5;  
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar a {     
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            text-decoration: none;
+            color: #787486;
+            font-weight: 500;
+        }
+        .sidebar img {
+       
+            margin-right: 10px;
+        }
 </style>
 <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="background-color: #f5f5f5">
   
