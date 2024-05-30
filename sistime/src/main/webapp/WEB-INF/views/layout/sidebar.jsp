@@ -44,7 +44,7 @@
     화개장터&nbsp; <i class="bi bi-caret-down downicon"></i>
   </a>
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/test/template">&nbsp;&nbsp; 자유 </a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/board/list">&nbsp;&nbsp; 자유 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 비밀 </a></li>
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/notice/list">&nbsp;&nbsp; 공지사항 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 이벤트 </a></li>

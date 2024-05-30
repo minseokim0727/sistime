@@ -10,12 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-public class TestController {
-	@com.sist.annotation.RequestMapping(value = "/test/template")
+public class BoardController {
+	@com.sist.annotation.RequestMapping(value = "/board/list")
 	public com.sist.servlet.ModelAndView testForm(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// 로그인 폼
-		ModelAndView mav = new ModelAndView("test/template");
+		ModelAndView mav = new ModelAndView("board/list");
 		return mav;
 	}
 }
