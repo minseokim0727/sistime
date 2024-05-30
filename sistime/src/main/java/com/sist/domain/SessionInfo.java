@@ -1,16 +1,11 @@
 package com.sist.domain;
 
 public class SessionInfo {
-	private String userId;
+	private String email;
 	private String userName;
 	private int userRoll;
 	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -22,5 +17,11 @@ public class SessionInfo {
 	}
 	public void setUserRoll(int userRoll) {
 		this.userRoll = userRoll;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

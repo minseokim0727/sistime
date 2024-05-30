@@ -44,9 +44,9 @@
       const f = document.loginForm;
       let str;
 
-      str = f.userId.value;
+      str = f.email.value;
       if (!str) {
-         f.userId.focus();
+         f.email.focus();
          return;
       }
 
@@ -56,7 +56,7 @@
          return;
       }
 
-      f.action = "${pageContext.request.contextPath}/main";
+      f.action = "${pageContext.request.contextPath}/member/login";
       f.submit();
    }
 </script>
@@ -73,7 +73,7 @@
                   <form name="loginForm" action="" method="post" class="row g-1">
                      
                      <div class="ssang-container">
-                        <img class="loginimage" alt="" src="resources/images/login.jpg">
+                        <img class="loginimage" alt="" src="${pageContext.request.contextPath}/resources/images/login.jpg">
                         <div style="display: flex; flex-direction: column;">
                            <i class="small">누가 요즘 에타하냐~</i>
                            <i class="ssang">쌍용타임</i>
@@ -82,7 +82,7 @@
                     
                      
                      <div class="col-12">
-                        <input type="text" name="userId" class="form-control" placeholder="아이디">
+                        <input type="text" name="email" class="form-control" placeholder="이메일">
                      </div>
                      <div class="col-12" style="font-weight: bold;">
                         <input type="password" name="userPwd" class="form-control" autocomplete="off" placeholder="패스워드">

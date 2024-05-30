@@ -3,7 +3,6 @@ package com.sist.controller;
 import java.io.IOException;
 
 import com.sist.annotation.Controller;
-import com.sist.annotation.RequestMethod;
 import com.sist.servlet.ModelAndView;
 
 import jakarta.servlet.ServletException;
