@@ -21,8 +21,7 @@
             color: #787486;
             font-weight: 500;
         }
-        .sidebar img {
-       
+        .sidebar img {   
             margin-right: 10px;
         }
         

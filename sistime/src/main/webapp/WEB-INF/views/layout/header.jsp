@@ -14,7 +14,7 @@ a {
 	font-size: 22px;
 	line-height: 22px;
 }
-.header {
+		.header {
             display: flex;
             justify-content: space-between;
             align-items: center;
