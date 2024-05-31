@@ -46,7 +46,7 @@
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/board/list">&nbsp;&nbsp; 자유 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 비밀 </a></li>
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/notice/list">&nbsp;&nbsp; 공지사항 </a></li>
-    <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 이벤트 </a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/event/list">&nbsp;&nbsp; 이벤트 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 베스트 </a></li>
   </ul>
 </div>
@@ -59,7 +59,7 @@
   </a>
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/qna/list">&nbsp;&nbsp; 1대1 문의 </a></li>
-    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/boardrequest/list">&nbsp;&nbsp; 화개장터 요청 </a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/requestboard/list">&nbsp;&nbsp; 화개장터 요청 </a></li>
   </ul>
 </div>
         <a class = "h5" href="#">관리자만 보이는 버튼 하기</a>
