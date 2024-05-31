@@ -86,7 +86,7 @@ public class LoginFilter implements Filter {
 		String uris[] = {
 				"/index.jsp", "/main", 
 				"/member/login", "/member/logout",
-				"/member/member", "/member/userIdCheck",
+				"/member/member", "/member/emailCheck",
 				"/notice/list",
 				"/uploads/photo/**",
 				"/resources/**","/test/template"
