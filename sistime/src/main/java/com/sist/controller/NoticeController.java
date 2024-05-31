@@ -513,7 +513,7 @@ public class NoticeController {
 		
 		boolean b = false;
 		try {
-			long fileNum = Long.parseLong(req.getParameter("fileNum"));
+			long fileNum = Long.parseLong(req.getParameter("noticefile_num"));
 			
 			NoticeDTO dto = dao.findByFileId(fileNum);
 			if(dto != null) {
