@@ -58,7 +58,7 @@
    고객센터&nbsp; <i class="bi bi-caret-down downicon"></i>
   </a>
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 1대1 문의 </a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/qna/list">&nbsp;&nbsp; 1대1 문의 </a></li>
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 화개장터 요청 </a></li>
   </ul>
 </div>
