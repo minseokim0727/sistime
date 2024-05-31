@@ -21,7 +21,7 @@ public class QnaDAO {
 		
 		try {
 			sql = "INSERT INTO qna(qna_num, title, content, reg_date, secret, email,answer_content,answer_reg_date) "
-					+ " VALUES (qna_seq.NEXTVAL, ?, ?, SYSDATE, default, ?,?,?)";
+					+ " VALUES (qna_seq.NEXTVAL, ?, ?, SYSDATE, 1, ?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getTitle());
@@ -212,6 +212,8 @@ public class QnaDAO {
 			}
 		
 		}
+		
+		// 답글 달기
 		public void updateAnswer(QnaDTO dto) throws SQLException {
 			PreparedStatement pstmt = null;
 			String sql;
@@ -223,13 +225,13 @@ public class QnaDAO {
 				} else {
 					sql += " answer_reg_date=SYSDATE ";
 				}
-				sql += " WHERE num = ?";
+				sql += " WHERE qna_num = ?";
 				
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getAnswer_content());
-				pstmt.setString(2, dto.getAnswer_reg_date());
-				pstmt.setLong(3, dto.getQna_num());
+				
+				pstmt.setLong(2, dto.getQna_num());
 				
 				pstmt.executeUpdate();
 
@@ -271,4 +273,6 @@ public class QnaDAO {
 				DBUtil.close(pstmt);
 			}
 		}
+		
+		
 }

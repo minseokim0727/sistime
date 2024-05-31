@@ -155,7 +155,7 @@ public class QnaController {
 
 		try {
 			long qnanum = Long.parseLong(req.getParameter("num"));
-			System.out.println(qnanum);
+			
 			String kwd = req.getParameter("kwd");
 			if (kwd == null) {
 				kwd = "";
@@ -205,4 +205,143 @@ public class QnaController {
 		
 		return new ModelAndView("redirect:/qna/list?" + query);
 	}
+	@RequestMapping(value = "/qna/update", method = RequestMethod.GET)
+	public ModelAndView updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 수정 폼
+		QnaDAO dao = new QnaDAO();
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String page = req.getParameter("page");
+
+		try {
+			long num = Long.parseLong(req.getParameter("num"));
+			QnaDTO dto = dao.findById(num);
+
+			if (dto == null) {
+				return new ModelAndView("redirect:/qna/list?page=" + page);
+			}
+
+			// 게시물을 올린 사용자가 아니면
+			if (! dto.getEmail().equals(info.getEmail())) {
+				return new ModelAndView("redirect:/qna/list?page=" + page);
+			}
+
+			ModelAndView mav = new ModelAndView("qna/write");
+			
+			mav.addObject("dto", dto);
+			mav.addObject("page", page);
+			mav.addObject("mode", "update");
+
+			return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/qna/list?page=" + page);
+	}
+	
+	@RequestMapping(value = "/qna/update", method = RequestMethod.POST)
+	public ModelAndView updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 수정 완료
+		QnaDAO dao = new QnaDAO();
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String page = req.getParameter("page");
+		
+		String num = req.getParameter("num");
+		
+		try {
+			QnaDTO dto = new QnaDTO();
+			
+			dto.setQna_num(Long.parseLong(req.getParameter("num")));
+			dto.setSecret(Integer.parseInt(req.getParameter("secret")));
+			dto.setTitle(req.getParameter("title"));
+			dto.setContent(req.getParameter("content"));
+
+			dto.setEmail(info.getEmail());
+
+			dao.updateQuestion(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/qna/list?page=" + page +"&num="+num);
+	}
+	
+	@RequestMapping(value = "/qna/answer", method = RequestMethod.POST)
+	public ModelAndView answerSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 답변 완료 근데 왜 안됨?
+		QnaDAO dao = new QnaDAO();
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		if (! info.getEmail().equals("admin")) {
+			return new ModelAndView("redirect:/qna/list");
+		}
+		
+		String page = req.getParameter("page");
+		try {
+			QnaDTO dto = new QnaDTO();
+			
+			dto.setQna_num(Long.parseLong(req.getParameter("num")));
+			dto.setAnswer_content(req.getParameter("answer"));
+			// dto.setAnswerId(info.getUserId());
+
+			dao.updateAnswer(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/qna/list?page=" + page);
+	}
+	
+	@RequestMapping(value = "/qna/delete", method = RequestMethod.GET)
+	public ModelAndView delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 삭제
+		QnaDAO dao = new QnaDAO();
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+
+		try {
+			long num = Long.parseLong(req.getParameter("num"));
+			String mode = req.getParameter("mode");
+			
+			String kwd = req.getParameter("kwd");
+			if (kwd == null) {
+				kwd = "";
+			}
+			kwd = URLDecoder.decode(kwd, "utf-8");
+
+			if (kwd.length() != 0) {
+				query += "&kwd=" + URLEncoder.encode(kwd, "UTF-8");
+			}
+			
+			if(mode.equals("answer") && info.getEmail().equals("admin")) {
+				// 답변 삭제
+				QnaDTO dto = new QnaDTO();
+				dto.setQna_num(num);
+				dto.setAnswer_content("");
+				
+				dao.updateAnswer(dto);
+			} else if(mode.equals("question")) {
+				// 질문 삭제
+				dao.deleteQuestion(num, info.getEmail());
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/qna/list?" + query);
+	}
+	
 }
