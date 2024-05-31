@@ -159,7 +159,7 @@
 								<c:choose>
 									<c:when test="${prevDto.secret==1}">
 										<c:if test="${sessionScope.member.email==prevDto.email || sessionScope.member.email=='admin'}">
-											<a href="${pageContext.request.contextPath}/qna/article?num=${prevdto.qna_num}&${query}">${prevDto.title}</a>
+											<a href="${pageContext.request.contextPath}/qna/article?num=${prevDto.qna_num}&${query}">${prevDto.title}</a>
 										</c:if>
 										<c:if test="${sessionScope.member.email!=prevDto.email && sessionScope.member.email!='admin'}">
 											비밀글 입니다.
@@ -180,7 +180,7 @@
 								<c:choose>
 									<c:when test="${nextDto.secret==1}">
 										<c:if test="${sessionScope.member.email==nextDto.email || sessionScope.member.email=='admin'}">
-											<a href="${pageContext.request.contextPath}/qna/article?num=${nextdto.qna_num}&${query}">${nextDto.title}</a>
+											<a href="${pageContext.request.contextPath}/qna/article?num=${nextDto.qna_num}&${query}">${nextDto.title}</a>
 										</c:if>
 										<c:if test="${sessionScope.member.email!=nextDto.email && sessionScope.member.email!='admin'}">
 											비밀글 입니다.
@@ -188,7 +188,7 @@
 										<i class="bi bi-file-lock2"></i>
 									</c:when>
 									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/qna/article?num=${nextdto.qna_num}&${query}">${nextDto.title}</a>
+										<a href="${pageContext.request.contextPath}/qna/article?num=${nextDto.qna_num}&${query}">${nextDto.title}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:if>
