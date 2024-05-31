@@ -168,7 +168,7 @@
 									</c:when>
 									<c:otherwise>
 										<a href="${pageContext.request.contextPath}/qna/article?num=${prevdto.qna_num}&${query}">${prevDto.title}</a>
-									</c:otherwise>
+									</c:otherwise> 
 								</c:choose>
 							</c:if>
 						</td>
