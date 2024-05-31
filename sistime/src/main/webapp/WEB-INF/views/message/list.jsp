@@ -74,10 +74,10 @@ function searchList() {
 
 				<div class="row board-list-footer">
 					<div class="col">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/bbs/list';"><i class="bi bi-arrow-clockwise"></i></button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/message/list';"><i class="bi bi-arrow-clockwise"></i></button>
 					</div>
 					<div class="col-6 text-center">
-						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/bbs/list" method="post">
+						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/message/list" method="post">
 							<div class="col-auto p-1">
 
 							</div>
@@ -90,7 +90,7 @@ function searchList() {
 						</form>
 					</div>
 					<div class="col text-end">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/bbs/write';">글올리기</button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/message/write';">글올리기</button>
 					</div>
 				</div>
 

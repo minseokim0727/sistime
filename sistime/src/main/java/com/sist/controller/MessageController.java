@@ -6,8 +6,9 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import com.sist.annotation.Controller;
+import com.sist.annotation.RequestMapping;
+import com.sist.annotation.RequestMethod;
 import com.sist.dao.MessageDAO;
-import com.sist.domain.BoardDTO;
 import com.sist.domain.MessageDTO;
 import com.sist.domain.SessionInfo;
 import com.sist.servlet.ModelAndView;
@@ -21,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
-	@com.sist.annotation.RequestMapping(value = "/message/list")
+	@RequestMapping(value = "/message/list")
 	public com.sist.servlet.ModelAndView MessageForm(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
@@ -113,6 +114,14 @@ public class MessageController {
 		}
 
 		// JSP로 포워딩
+		return mav;
+	}
+	
+	@RequestMapping(value = "/message/write", method = RequestMethod.GET)
+	public ModelAndView writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 글쓰기 폼
+		ModelAndView mav = new ModelAndView("message/write");
+		
 		return mav;
 	}
 }

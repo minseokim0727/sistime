@@ -72,10 +72,10 @@ public class MessageDAO {
 		try {
 			sb.append(" SELECT read_email, content, msg_num, send_date "
 					+ "FROM ("
-					+ "    SELECT DISTINCT read_email, content, msg_num, send_date, "
+					+ "    SELECT DISTINCT send_email,read_email, content, msg_num, send_date, "
 					+ "           ROW_NUMBER() OVER (PARTITION BY read_email ORDER BY send_date DESC) AS rn "
-					+ "    FROM message "
-					+ ") t\r\n"
+					+ "    FROM message where send_email=?"
+					+ ") t "
 					+ "WHERE rn = 1; ");
 			
 			if (schType.equals("all")) {
@@ -92,14 +92,16 @@ public class MessageDAO {
 			pstmt = conn.prepareStatement(sb.toString());
 
 			if (schType.equals("all")) {
-				pstmt.setString(1, kwd);
+				pstmt.setString(1, email);
+				pstmt.setString(2, kwd);
+				pstmt.setString(3, kwd);
+				pstmt.setInt(4, offset);
+				pstmt.setInt(5, size);
+			} else {
+				pstmt.setString(1, email);
 				pstmt.setString(2, kwd);
 				pstmt.setInt(3, offset);
 				pstmt.setInt(4, size);
-			} else {
-				pstmt.setString(1, kwd);
-				pstmt.setInt(2, offset);
-				pstmt.setInt(3, size);
 			}
 
 			rs = pstmt.executeQuery();
