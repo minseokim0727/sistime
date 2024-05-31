@@ -66,6 +66,39 @@ public class QnaDAO {
 
 			return result;
 		}
+		
+		public int dataCount(String kwd) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql;
+
+			try {
+				sql = "SELECT NVL(COUNT(*), 0) "
+						+ " FROM qna "
+						+ " WHERE INSTR(title, ?) >= 1 OR INSTR(content, ?) >= 1 OR INSTR(answer_content, ?) >= 1 ";
+
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, kwd);
+				pstmt.setString(2, kwd);
+				pstmt.setString(3, kwd);
+
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					result = rs.getInt(1);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				DBUtil.close(rs);
+				DBUtil.close(pstmt);
+			}
+
+			return result;
+		}
 		// 게시물 리스트
 		public List<QnaDTO> listQuestion(int offset, int size) {
 			List<QnaDTO> list = new ArrayList<QnaDTO>();
@@ -74,7 +107,7 @@ public class QnaDAO {
 			StringBuilder sb = new StringBuilder();
 
 			try {
-				sb.append(" SELECT qna_num, secret, q.userId, userName, title, answerId, ");
+				sb.append(" SELECT qna_num, secret, user_Name, title, ");
 				sb.append("       TO_CHAR(reg_date, 'YYYY-MM-DD') reg_date ");
 				sb.append(" FROM qna q ");
 				sb.append(" JOIN member1 m ON q.email = m.email ");
@@ -90,10 +123,15 @@ public class QnaDAO {
 				
 				while (rs.next()) {
 					QnaDTO dto = new QnaDTO();
-
 					
+					dto.setQna_num(rs.getLong("qna_num"));
+					dto.setSecret(rs.getInt("secret"));
+	                
+	                dto.setUserName(rs.getString("user_name"));
+	                dto.setTitle(rs.getString("title"));    
+	                dto.setReg_date(rs.getString("reg_date"));
 
-					list.add(dto);
+	                list.add(dto);
 				}
 
 			} catch (SQLException e) {
@@ -105,5 +143,48 @@ public class QnaDAO {
 
 			return list;
 		}
+		// 글 보기
+		public QnaDTO findById(long qna_num) {
+			QnaDTO dto = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql;
 
+			try {
+				sql = "SELECT qna_num, secret, user_Name, title, content, reg_date,  "
+						+ " answer_content , ANSWER_REG_DATE "
+						+ " FROM qna q "
+						+ " JOIN member1 m ON q.email = m.email  "
+						+ " WHERE qna_num = ? ";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setLong(1, qna_num);
+
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					dto = new QnaDTO();
+					
+					
+					dto.setQna_num(rs.getLong("qna_num"));
+					dto.setSecret(rs.getInt("secret"));
+					dto.setUserName(rs.getString("user_Name"));
+					dto.setTitle(rs.getString("title"));
+					dto.setContent(rs.getString("content"));
+					dto.setReg_date(rs.getString("reg_date"));
+					dto.setAnswer_content(rs.getString("answer_content"));  
+	                dto.setAnswer_reg_date(rs.getString("answer_date"));
+				}
+				System.out.println();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				DBUtil.close(rs);
+				DBUtil.close(pstmt);
+			}
+			
+			return dto;
+	}
+		
+		
 }

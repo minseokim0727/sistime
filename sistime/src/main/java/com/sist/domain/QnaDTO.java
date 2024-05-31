@@ -11,6 +11,14 @@ public class QnaDTO {
 	private String email;
 	private String answer_content;
 	private String answer_reg_date;
+	private String userName;
+	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public long getQna_num() {
 		return qna_num;
 	}
