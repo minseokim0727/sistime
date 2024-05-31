@@ -48,15 +48,16 @@ a {
 	<div>
 		<h2>
 			<c:if test="${empty sessionScope.member}">
-				<a href="${pageContext.request.contextPath}/member/login" title="로그인"><i class="bi bi-unlock"></i></a>
+				<a href="${pageContext.request.contextPath}/member/login" title="로그인"><i class="bi bi-lock"></i></a>
 				<a><i class="bi bi-person-circle"></i></a>
 				<a><i class="bi bi-envelope"></i></a>
 			</c:if>
 			
 			<c:if test="${not empty sessionScope.member}">
-				<a href="${pageContext.request.contextPath}/member/logout"title="로그아웃"><i class="bi bi-lock"></i></a>
+				<a href="${pageContext.request.contextPath}/member/logout"title="로그아웃"><i class="bi bi-unlock"></i></a>
 				<a><i class="bi bi-person-circle"></i></a>
-				<a><i class="bi bi-envelope"></i></a>
+				<a href="${pageContext.request.contextPath}/message/list"><i class="bi bi-envelope"></i></a>
+				<a href="${pageContext.request.contextPath}/main"><i class="bi bi-house-door">Home</i></a>
 			</c:if>
 
 		</h2>

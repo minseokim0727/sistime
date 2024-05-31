@@ -59,7 +59,7 @@
   </a>
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/qna/list">&nbsp;&nbsp; 1대1 문의 </a></li>
-    <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 화개장터 요청 </a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/boardrequest/list">&nbsp;&nbsp; 화개장터 요청 </a></li>
   </ul>
 </div>
         <a class = "h5" href="#">관리자만 보이는 버튼 하기</a>
