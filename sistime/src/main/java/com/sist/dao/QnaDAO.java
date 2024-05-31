@@ -152,7 +152,7 @@ public class QnaDAO {
 
 			try {
 				sql = "SELECT qna_num, secret, user_Name, title, content, reg_date,  "
-						+ " answer_content , ANSWER_REG_DATE "
+						+ " answer_content , ANSWER_REG_DATE, m.email  "
 						+ " FROM qna q "
 						+ " JOIN member1 m ON q.email = m.email  "
 						+ " WHERE qna_num = ? ";
@@ -167,13 +167,14 @@ public class QnaDAO {
 					
 					
 					dto.setQna_num(rs.getLong("qna_num"));
+					dto.setEmail(rs.getString("email"));
 					dto.setSecret(rs.getInt("secret"));
 					dto.setUserName(rs.getString("user_Name"));
 					dto.setTitle(rs.getString("title"));
 					dto.setContent(rs.getString("content"));
 					dto.setReg_date(rs.getString("reg_date"));
 					dto.setAnswer_content(rs.getString("answer_content"));  
-	                dto.setAnswer_reg_date(rs.getString("answer_date"));
+	                dto.setAnswer_reg_date(rs.getString("answer_reg_date"));
 				}
 				System.out.println();
 			} catch (SQLException e) {

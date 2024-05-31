@@ -154,7 +154,7 @@ public class QnaController {
 		String query = "page=" + page;
 
 		try {
-			long qnanum = Long.parseLong(req.getParameter("qna_num"));
+			long qnanum = Long.parseLong(req.getParameter("num"));
 			System.out.println(qnanum);
 			String kwd = req.getParameter("kwd");
 			if (kwd == null) {

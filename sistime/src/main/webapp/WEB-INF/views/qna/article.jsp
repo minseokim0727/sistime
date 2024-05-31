@@ -17,13 +17,13 @@
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/board2.css" type="text/css">
 
-<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+<c:if test="${sessionScope.member.email==dto.email || sessionScope.member.email=='admin'}">
 	<script type="text/javascript">
 		function deleteOk(mode) {
 			let s = mode === "question" ? "질문" : "답변";
 			
 			if(confirm(s + "을 삭제 하시 겠습니까 ? ")) {
-				let query = "num=${dto.num}&${query}&mode="+mode;
+				let query = "num=${dto.qna_num}&${query}&mode="+mode;
 				let url = "${pageContext.request.contextPath}/qna/delete?" + query;
 				location.href = url;
 			}
@@ -31,10 +31,10 @@
 	</script>
 </c:if>
 
-<c:if test="${sessionScope.member.userId=='admin'}">
+<c:if test="${sessionScope.member.email=='admin'}">
 	<script type="text/javascript">
 		$(function(){
-			let answer = "${dto.answer}";
+			let answer = "${dto.answer_content}";
 			if(! answer) {
 				$(".reply").show();
 			}
@@ -158,16 +158,16 @@
 							<c:if test="${not empty prevDto}">
 								<c:choose>
 									<c:when test="${prevDto.secret==1}">
-										<c:if test="${sessionScope.member.email==prevDto.userId || sessionScope.member.email=='admin'}">
-											<a href="${pageContext.request.contextPath}/qna/article?num=${prevDto.num}&${query}">${prevDto.title}</a>
+										<c:if test="${sessionScope.member.email==prevDto.email || sessionScope.member.email=='admin'}">
+											<a href="${pageContext.request.contextPath}/qna/article?num=${prevdto.qna_num}&${query}">${prevDto.title}</a>
 										</c:if>
-										<c:if test="${sessionScope.member.email!=prevDto.userId && sessionScope.member.email!='admin'}">
+										<c:if test="${sessionScope.member.email!=prevDto.email && sessionScope.member.email!='admin'}">
 											비밀글 입니다.
 										</c:if>
 										<i class="bi bi-file-lock2"></i>
 									</c:when>
 									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/qna/article?num=${prevDto.num}&${query}">${prevDto.title}</a>
+										<a href="${pageContext.request.contextPath}/qna/article?num=${prevdto.qna_num}&${query}">${prevDto.title}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:if>
@@ -180,7 +180,7 @@
 								<c:choose>
 									<c:when test="${nextDto.secret==1}">
 										<c:if test="${sessionScope.member.email==nextDto.email || sessionScope.member.email=='admin'}">
-											<a href="${pageContext.request.contextPath}/qna/article?num=${nextDto.num}&${query}">${nextDto.title}</a>
+											<a href="${pageContext.request.contextPath}/qna/article?num=${nextdto.qna_num}&${query}">${nextDto.title}</a>
 										</c:if>
 										<c:if test="${sessionScope.member.email!=nextDto.email && sessionScope.member.eamil!='admin'}">
 											비밀글 입니다.
@@ -188,7 +188,7 @@
 										<i class="bi bi-file-lock2"></i>
 									</c:when>
 									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/qna/article?num=${nextDto.num}&${query}">${nextDto.title}</a>
+										<a href="${pageContext.request.contextPath}/qna/article?num=${nextdto.qna_num}&${query}">${nextDto.title}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:if>
@@ -199,20 +199,25 @@
 				<table class="table table-borderless">
 					<tr>
 						<td width="50%">
-							<c:if test="${sessionScope.member.email==dto.userId}">
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/update?num=${dto.num}&page=${page}';">질문수정</button>
+							<c:if test="${sessionScope.member.email==dto.email}">
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/update?num=${dto.qna_num}&page=${page}';">질문수정</button>
 							</c:if>
+							
+							
 					    	
-				    		<c:if test="${sessionScope.member.eamil==dto.userId || sessionScope.member.userId=='admin'}">
+				    		<c:if test="${sessionScope.member.email==dto.email || sessionScope.member.email=='admin'}">
 				    			<button type="button" class="btn btn-light" onclick="deleteOk('question');">질문삭제</button>
 				    		</c:if>
 				    		
-							<c:if test="${not empty dto.answer and sessionScope.member.userId==dto.answerId}">
+							<c:if test="${not empty dto.answer_content and sessionScope.member.email==dto.email}">
 								<button type="button" class="btn btn-light btnUpdateAnswer" data-mode="update">답변수정</button>
 							</c:if>
-							<c:if test="${not empty dto.answer && (sessionScope.member.userId==dto.answerId)}">
+							<c:if test="${not empty dto.answer_content && (sessionScope.member.email==dto.email)}">
 								<button type="button" class="btn btn-light" onclick="deleteOk('answer');">답변삭제</button>
 							</c:if>
+							
+							
+							
 				    		
 						</td>
 						<td class="text-end">
@@ -230,12 +235,12 @@
 						<table class="table table-borderless reply-form">
 							<tr>
 								<td>
-									<textarea class='form-control' name="answer">${dto.answer}</textarea>
+									<textarea class='form-control' name="answer">${dto.answer_content}</textarea>
 								</td>
 							</tr>
 							<tr>
 							   <td align='right'>
-							   		<input type="hidden" name="num" value="${dto.num}">	
+							   		<input type="hidden" name="num" value="${dto.qna_num}">	
 							   		<input type="hidden" name="page" value="${page}">					   
 							        <button type='button' class='btn btn-light btnSendAnswer'>답변 등록</button>
 							    </td>
