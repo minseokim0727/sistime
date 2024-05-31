@@ -107,7 +107,7 @@ public class QnaDAO {
 			StringBuilder sb = new StringBuilder();
 
 			try {
-				sb.append(" SELECT qna_num, secret, user_Name, title, ");
+				sb.append(" SELECT qna_num, secret, user_Name, title, answer_content,  ");
 				sb.append("       TO_CHAR(reg_date, 'YYYY-MM-DD') reg_date ");
 				sb.append(" FROM qna q ");
 				sb.append(" JOIN member1 m ON q.email = m.email ");
@@ -130,6 +130,7 @@ public class QnaDAO {
 	                dto.setUserName(rs.getString("user_name"));
 	                dto.setTitle(rs.getString("title"));    
 	                dto.setReg_date(rs.getString("reg_date"));
+	                dto.setAnswer_content(rs.getString("answer_content"));
 
 	                list.add(dto);
 				}
@@ -273,6 +274,111 @@ public class QnaDAO {
 				DBUtil.close(pstmt);
 			}
 		}
-		
+		public QnaDTO findByPrev(long num, String kwd) {
+			QnaDTO dto = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			StringBuilder sb = new StringBuilder();
+
+			try {
+				if (kwd != null && kwd.length() != 0) {
+					sb.append(" SELECT qna_num, secret, title, email ");
+					sb.append(" FROM qna ");
+					sb.append(" WHERE ( qna_num > ? ) ");
+					sb.append("     AND ( INSTR(title, ?) >= 1 OR INSTR(content, ?) >= 1 OR INSTR(answer_content, ?) >= 1) ");
+					sb.append(" ORDER BY qna_num ASC ");
+					sb.append(" FETCH FIRST 1 ROWS ONLY ");
+
+					pstmt = conn.prepareStatement(sb.toString());
+					
+					pstmt.setLong(1, num);
+					pstmt.setString(2, kwd);
+					pstmt.setString(3, kwd);
+					pstmt.setString(4, kwd);
+				} else {
+					sb.append(" SELECT qna_num, secret, title, email ");
+					sb.append(" FROM qna ");
+					sb.append(" WHERE qna_num > ? ");
+					sb.append(" ORDER BY qna_num ASC ");
+					sb.append(" FETCH FIRST 1 ROWS ONLY ");
+
+					pstmt = conn.prepareStatement(sb.toString());
+					
+					pstmt.setLong(1, num);
+				}
+
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					dto = new QnaDTO();
+					
+					dto.setQna_num(rs.getLong("qna_num"));
+					dto.setSecret(rs.getInt("secret"));
+					dto.setEmail(rs.getString("email"));
+					dto.setTitle(rs.getString("title"));
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				DBUtil.close(rs);
+				DBUtil.close(pstmt);
+			}
+
+			return dto;
+		}
+		public QnaDTO findByNext(long num, String kwd) {
+			QnaDTO dto = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			StringBuilder sb = new StringBuilder();
+			
+			try {
+				if (kwd != null && kwd.length() != 0) {
+					sb.append(" SELECT qna_num, secret, title, email ");
+					sb.append(" FROM qna ");
+					sb.append(" WHERE ( qna_num < ? ) ");
+					sb.append("     AND ( INSTR(title, ?) >= 1 OR INSTR(content, ?) >= 1 OR INSTR(answer_content, ?) >= 1) ");
+					sb.append(" ORDER BY qna_num ASC ");
+					sb.append(" FETCH FIRST 1 ROWS ONLY ");
+					
+					pstmt = conn.prepareStatement(sb.toString());
+					
+					pstmt.setLong(1, num);
+					pstmt.setString(2, kwd);
+					pstmt.setString(3, kwd);
+					pstmt.setString(4, kwd);
+				} else {
+					sb.append(" SELECT qna_num, secret, title, email ");
+					sb.append(" FROM qna ");
+					sb.append(" WHERE qna_num < ? ");
+					sb.append(" ORDER BY qna_num ASC ");
+					sb.append(" FETCH FIRST 1 ROWS ONLY ");
+					
+					pstmt = conn.prepareStatement(sb.toString());
+					
+					pstmt.setLong(1, num);
+				}
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					dto = new QnaDTO();
+					
+					dto.setQna_num(rs.getLong("qna_num"));
+					dto.setSecret(rs.getInt("secret"));
+					dto.setEmail(rs.getString("email"));
+					dto.setTitle(rs.getString("title"));
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				DBUtil.close(rs);
+				DBUtil.close(pstmt);
+			}
+			
+			return dto;
+		}
 		
 }

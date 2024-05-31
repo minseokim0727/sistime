@@ -185,8 +185,8 @@ public class QnaController {
 			}
 
 			// 이전글 다음글
-			//QnaDTO prevDto = dao.findByPrev(dto.getQna_num(), kwd);
-			//QnaDTO nextDto = dao.findByNext(dto.getQna_num(), kwd);
+			QnaDTO prevDto = dao.findByPrev(dto.getQna_num(), kwd);
+			QnaDTO nextDto = dao.findByNext(dto.getQna_num(), kwd);
 
 			ModelAndView mav = new ModelAndView("qna/article");
 			
@@ -194,8 +194,8 @@ public class QnaController {
 			mav.addObject("dto", dto);
 			mav.addObject("page", page);
 			mav.addObject("query", query);
-			//mav.addObject("prevDto", prevDto);
-			//mav.addObject("nextDto", nextDto);
+			mav.addObject("prevDto", prevDto);
+			mav.addObject("nextDto", nextDto);
 
 			// 포워딩
 			return mav;
@@ -252,7 +252,7 @@ public class QnaController {
 		
 		String page = req.getParameter("page");
 		
-		String num = req.getParameter("num");
+		
 		
 		try {
 			QnaDTO dto = new QnaDTO();
@@ -269,7 +269,7 @@ public class QnaController {
 			e.printStackTrace();
 		}
 
-		return new ModelAndView("redirect:/qna/list?page=" + page +"&num="+num);
+		return new ModelAndView("redirect:/qna/list?page=" + page);
 	}
 	
 	@RequestMapping(value = "/qna/answer", method = RequestMethod.POST)
@@ -289,7 +289,8 @@ public class QnaController {
 			QnaDTO dto = new QnaDTO();
 			
 			dto.setQna_num(Long.parseLong(req.getParameter("num")));
-			dto.setAnswer_content(req.getParameter("answer"));
+			dto.setAnswer_content(req.getParameter("answer_content"));
+			
 			// dto.setAnswerId(info.getUserId());
 
 			dao.updateAnswer(dto);
