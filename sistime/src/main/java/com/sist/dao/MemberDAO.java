@@ -112,16 +112,64 @@ public class MemberDAO {
 		try {
 			sb.append("SELECT m1.email, user_Name, user_Pwd,");
 			sb.append("      enabled, register_date,nickname,univ_num, ");
-			sb.append("      TO_CHAR(birth, 'YYYY-MM-DD') birth, ");
+			sb.append("      birth, ");
 			sb.append("       tel,");
 			sb.append("      zip, addr1, addr2 ");
 			sb.append("  FROM member1 m1");
-			sb.append("  LEFT OUTER JOIN member2 m2 ON m1.email=m2.email ");
+			sb.append("  JOIN member2 m2 ON m1.email=m2.email ");
 			sb.append("  WHERE m1.email = ?");
 			
 			pstmt = conn.prepareStatement(sb.toString());
 			
 			pstmt.setString(1, email);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new MemberDTO();
+				
+				dto.setEmail(rs.getString("email"));
+				dto.setUserPwd(rs.getString("user_Pwd"));
+				dto.setUserName(rs.getString("user_Name"));
+				dto.setEnabled(rs.getInt("enabled"));
+				dto.setRegister_date(rs.getString("register_date"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setUniv_num(rs.getInt("univ_num"));
+				dto.setBirth(rs.getString("birth"));
+				dto.setTel(rs.getString("tel"));
+				dto.setZip(rs.getString("zip"));
+				dto.setAddr1(rs.getString("addr1"));
+				dto.setAddr2(rs.getString("addr2"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return dto;
+	}	
+	
+	public MemberDTO findByNickname(String nickname) {
+		MemberDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			sb.append("SELECT m1.email, user_Name, user_Pwd,");
+			sb.append("      enabled, register_date,nickname,univ_num, ");
+			sb.append("      birth, ");
+			sb.append("       tel,");
+			sb.append("      zip, addr1, addr2 ");
+			sb.append("  FROM member1 m1");
+			sb.append("  JOIN member2 m2 ON m1.email=m2.email ");
+			sb.append("  WHERE nickname = ?");
+			
+			pstmt = conn.prepareStatement(sb.toString());
+			
+			pstmt.setString(1, nickname);
 			
 			rs = pstmt.executeQuery();
 			

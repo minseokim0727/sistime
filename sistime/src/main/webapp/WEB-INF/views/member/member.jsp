@@ -90,7 +90,7 @@ function memberOk() {
 
 
     str = f.univ_num.value;
-    alert(str);
+
    	f.action = "${pageContext.request.contextPath}/member/${mode}";
     f.submit();
     
@@ -102,7 +102,7 @@ function emailCheck() {
 	// 이메일 중복 검사
 	let email = $("#email").val();
 	if( ! /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email) ) { 
-		let str = "이메일형식을 맞춰 주세요2.";
+		let str = "이메일형식을 맞춰 주세요.";
 		$("#email").focus();
 		$("#email").closest(".email-box").find(".help-block").html(str);
 		return;
@@ -137,6 +137,44 @@ function emailCheck() {
 
 }
 
+function nicknameCheck() {
+	
+	let nickname = $("#nickname").val();
+	if( ! /^[0-9a-zA-Zㄱ-ㅎ가-힣\s]{1,10}$/.test(nickname) ) { 
+		let str = "너무 길어요 닉네임은 10글자까지만! 특수문자 안돼요~";
+		$("#nickname").focus();
+		$("#nickname").closest(".nickname-box").find(".help-block").html(str);
+		return;
+	}
+	
+	let url = "${pageContext.request.contextPath}/member/nicknameCheck";
+	let query = "nickname=" + nickname;
+
+	$.ajax({
+		type:"post",
+		url:url,
+		data:query,
+		dataType:"json",
+		success:function(data) {
+			let passed = data.passed;
+
+			if(passed === "true") {
+				let s = "<span style='color:blue; font-weight:700;'>" + nickname + "</span> 닉네임은 사용가능 합니다.";
+				$(".nickname-box").find(".help-block").html(s);
+				$("#nicknameValid").val("true");
+			} else {
+				let s = "<span style='color:red; font-weight:700;'>" + nickname + "</span> 닉네임은 사용할 수 없습니다.";
+				$(".nickname-box").find(".help-block").html(s);
+				$("#nicknameValid").val("false");
+			}
+			
+		},
+		error:function(e) {
+			console.log(e.responseText);
+		}
+	});
+
+}
 window.addEventListener('load', () => {
 	const el = document.querySelector('form input[name=birth]');
 	el.addEventListener('keydown', e => e.preventDefault());
@@ -176,7 +214,7 @@ window.addEventListener('load', () => {
 										<c:if test="${mode=='member'}">
 											<button type="button" class="btn btn-light"
 												onclick="emailCheck();"
-												style="background: #f56020; color: white">아이디중복검사</button>
+												style="background: #f56020; color: white">이메일중복검사</button>
 										</c:if>
 									</div>
 								</div>
@@ -218,10 +256,25 @@ window.addEventListener('load', () => {
 
 						<div class="row mb-3">
 							<label class="col-sm-2 col-form-label" for="nickname">닉네임</label>
-							<div class="col-sm-3">
-								<input type="text" name="nickname" id="nickname"
-									class="form-control" value="${dto.nickname}"
-									${mode=="update" ? "readonly ":""} placeholder="닉네임">
+							<div class="col-sm-10 nickname-box">
+								<div class="row">
+									<div class="col-5 pe-1">
+										<input type="text" name="nickname" id="nickname"
+											class="form-control" value="${dto.nickname}"
+											${mode=="update" ? "readonly ":""} placeholder="닉네임">
+									</div>
+									<div class="col-3 ps-1">
+										<c:if test="${mode=='member'}">
+											<button type="button" class="btn btn-light"
+												onclick="nicknameCheck();"
+												style="background: #f56020; color: white">닉네임중복검사</button>
+										</c:if>
+									</div>
+								</div>
+								<c:if test="${mode=='member'}">
+									<small class="form-control-plaintext help-block">닉네임은
+										10글자까지만 가능해요</small>
+								</c:if>
 							</div>
 						</div>
 
@@ -330,7 +383,9 @@ window.addEventListener('load', () => {
 									${mode=="member"?"가입취소":"수정취소"} <i class="bi bi-x"></i>
 								</button>
 								<input type="hidden" name="emailValid" id="emailValid"
-									value="false">
+									value="false"> 
+								<input type="hidden"
+									name="nicknameValid" id="nicknameValid" value="false">
 							</div>
 						</div>
 

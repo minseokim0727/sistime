@@ -218,5 +218,28 @@ public class MemberController {
 
 		return map;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/member/nicknameCheck", method = RequestMethod.POST)
+	public Map<String, Object> nicknameCheck(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// 아이디 중복 검사 - AJAX : JSON 으로 응답
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		MemberDAO dao = new MemberDAO();
+
+		String nickname = req.getParameter("nickname");
+		MemberDTO dto = dao.findByNickname(nickname);
+
+		String passed = "false";
+		if (dto == null) {
+			passed = "true";
+		}
+
+		map.put("passed", passed);
+
+		return map;
+	}
+
 
 }
