@@ -136,7 +136,7 @@ function searchList() {
 								<tr>
 									<c:if test="${sessionScope.member.email=='admin'}">
 										<td>
-											<input type="checkbox" class="form-check-input" name="nums" value="${dto.notice}">
+											<input type="checkbox" class="form-check-input" name="nums" value="${dto.notice_num}">
 										</td>
 									</c:if>
 									<td>${dataCount-(page-1)*size-status.index}</td>

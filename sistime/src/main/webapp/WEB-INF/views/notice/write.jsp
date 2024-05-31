@@ -102,7 +102,19 @@ function deleteFile(fileNum) {
 								<input type="file" name="selectFile" multiple class="form-control">
 							</td>
 						</tr>
-						
+						<c:if test="${mode=='update'}">
+							<c:forEach var="vo" items="${listFile}">
+								<tr>
+									<td class="bg-light col-sm-2">첨부된파일</td>
+									<td>
+										<p class="form-control-plaintext">
+											<a href="javascript:deleteFile(${vo.noticefile_num})"><i class="bi bi-trash"></i></a>
+											${vo.originalFilename}
+										</p>
+									</td>
+								</tr>
+							</c:forEach>
+						</c:if>
 					</table>
 					
 					<table class="table table-borderless">

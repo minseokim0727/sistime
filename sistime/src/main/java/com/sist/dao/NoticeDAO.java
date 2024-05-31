@@ -540,7 +540,7 @@ public class NoticeDAO {
 			if(mode.equals("all")) {
 				sql = "DELETE FROM noticeFile WHERE notice_num = ?";
 			} else {
-				sql = "DELETE FROM noticeFile WHERE noticefile_Num = ?";
+				sql = "DELETE FROM noticeFile WHERE noticefile_num = ?";
 			}
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, num);
