@@ -145,10 +145,6 @@ window.addEventListener('load', () => {
 </head>
 <body>
 
-	<header>
-		<jsp:include page="/WEB-INF/views/layout/header.jsp" />
-	</header>
-
 	<main>
 		<div class="container">
 			<div class="body-container">
