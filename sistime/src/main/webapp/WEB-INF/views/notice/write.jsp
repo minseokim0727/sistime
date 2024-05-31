@@ -36,10 +36,19 @@ function sendOk() {
         return;
     }
 
-    f.action = "${pageContext.request.contextPath}/";
+    f.action = "${pageContext.request.contextPath}/notice/${mode}";
     f.submit();
 }
-
+<c:if test="${mode=='update'}">
+function deleteFile(fileNum) {
+	if(! confirm('파일을 삭제하시겠습니까 ? ')) {
+		return;
+	}
+	
+	let q = 'num=${dto.notice_num}&page=${page}&size=${size}&fileNum=' + fileNum;
+	location.href = '${pageContext.request.contextPath}/notice/deleteFile?' + q;
+}
+</c:if>
 </script>
 </head>
 <body>
@@ -61,7 +70,7 @@ function sendOk() {
 						<tr>
 							<td class="bg-light col-sm-2" scope="row">제 목</td>
 							<td>
-								<input type="text" name="subject" class="form-control" value="${dto.subject}">
+								<input type="text" name="subject" class="form-control" value="${dto.title}">
 							</td>
 						</tr>
 
@@ -76,7 +85,7 @@ function sendOk() {
 						<tr>
 							<td class="bg-light col-sm-2" scope="row">작성자명</td>
 	 						<td>
-								<p class="form-control-plaintext">${sessionScope.member.userName}</p>
+								<p class="form-control-plaintext">${sessionScope.member.email}</p>
 							</td>
 						</tr>
 	
@@ -101,8 +110,12 @@ function sendOk() {
 							<td class="text-center">
 								<button type="button" class="btn btn-dark" onclick="sendOk();">${mode=='update'?'수정완료':'등록하기'}&nbsp;<i class="bi bi-check2"></i></button>
 								<button type="reset" class="btn btn-light">다시입력</button>
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
-
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/notice/list';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+									<c:if test="${mode == 'update'}">
+									<input type="hidden" name="num" value="${dto.notice_num}">
+									<input type="hidden" name="size" value="${size}">
+									<input type="hidden" name="page" value="${page}">
+								</c:if>
 							</td>
 						</tr>
 					</table>

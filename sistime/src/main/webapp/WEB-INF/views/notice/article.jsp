@@ -17,6 +17,21 @@
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/board2.css" type="text/css">
 
+<c:if test="${sessionScope.member.email=='admin'}">
+	<script type="text/javascript">
+		function deleteNotice() {
+			if(!confirm('게시글을 삭제하시겠습니까? ')){
+				return;
+			}
+			let q = '${query}&num=${dto.num}';
+			let url = '${pageContext.request.contextPath}/notice/delete';
+			
+			location.href = url + '?' + q;
+			
+		}
+	</script>
+</c:if>
+
 </head>
 <body>
 
@@ -37,7 +52,7 @@
 					<thead>
 						<tr>
 							<td colspan="2" align="center">
-								제목입니다.
+								${dto.title}
 							</td>
 						</tr>
 					</thead>
@@ -45,35 +60,44 @@
 					<tbody>
 						<tr>
 							<td width="50%">
-								이름 : 김자바
+								이름 : ${dto.email}
 							</td>
 							<td align="right">
-								2000-10-10 | 조회 1
+								${dto.reg_date}
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="2" valign="top" height="200" style="border-bottom:none;">
-								내용입니다.
+								${dto.content}
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="2">
-								
+								<c:forEach var="vo" items="${listFile}" varStatus="status">
+									<p class="border text-secondary mb-1 p-2">
+										<i class="bi bi-folder2-open"></i>
+										<a href="${pageContext.request.contextPath}/notice/download?fileNum=${vo.fileNum}">${vo.originalFilename}</a>
+									</p>
+								</c:forEach>
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="2">
 								이전글 :
-								
+								<c:if test="${not empty prevDto}">
+									<a href="${pageContext.request.contextPath}/notice/article?${query}&num=${prevDto.notice_num}">${prevDto.title}</a>
+								</c:if>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2">
 								다음글 :
-								
+								<c:if test="${not empty nextDto}">
+									<a href="${pageContext.request.contextPath}/notice/article?${query}&num=${nextDto.notice_num}">${nextDto.title}</a>
+								</c:if>
 							</td>
 						</tr>
 						
@@ -83,11 +107,13 @@
 				<table class="table table-borderless">
 					<tr>
 						<td width="50%">
-							<button type="button" class="btn btn-light">수정</button>
-							<button type="button" class="btn btn-light">삭제</button>
+							<c:if test="${sessionScope.member.email == 'admin'}">
+								<button type="button" class="btn btn-light" onclick="deleteNotice();">삭제</button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/notice/update?num=${dto.num}&page=${page}&size=${size}';">수정</button>
+							</c:if>
 						</td>
 						<td class="text-end">
-							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}';">리스트</button>
+							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/notice/list?${query}';">리스트</button>
 						</td>
 					</tr>
 				</table>

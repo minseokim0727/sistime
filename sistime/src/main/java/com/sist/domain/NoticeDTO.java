@@ -1,14 +1,33 @@
 package com.sist.domain;
 
+import java.util.List;
+
+import com.sist.util.MyMultipartFile;
+
 public class NoticeDTO {
     private long notice_num;
-    private String subject;
+    private String title;
     private String content;
     private String reg_date;
     private String saveFilename;
 	private String originalFilename;
 	private String email;
 	private long file_num;
+	private long gap;
+	public long getGap() {
+		return gap;
+	}
+	public void setGap(long gap) {
+		this.gap = gap;
+	}
+	private List<MyMultipartFile> listFile;
+	
+	public List<MyMultipartFile> getListFile() {
+		return listFile;
+	}
+	public void setListFile(List<MyMultipartFile> listFile) {
+		this.listFile = listFile;
+	}
 	public long getFile_num() {
 		return file_num;
 	}
@@ -21,11 +40,12 @@ public class NoticeDTO {
 	public void setNotice_num(long notice_num) {
 		this.notice_num = notice_num;
 	}
-	public String getSubject() {
-		return subject;
+	
+	public String getTitle() {
+		return title;
 	}
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public String getContent() {
 		return content;
