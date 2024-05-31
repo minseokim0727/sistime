@@ -186,6 +186,89 @@ public class QnaDAO {
 			
 			return dto;
 	}
+	
+	// 게시물 수정
+		public void updateQuestion(QnaDTO dto) throws SQLException {
+			PreparedStatement pstmt = null;
+			String sql;
+
+			try {
+				sql = "UPDATE qna SET title=?, secret=?, content=? WHERE qna_num=? AND email=?";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, dto.getTitle());
+				pstmt.setInt(2, dto.getSecret());
+				pstmt.setString(3, dto.getContent());
+				pstmt.setLong(4, dto.getQna_num());
+				pstmt.setString(5, dto.getEmail());
+				
+				pstmt.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				DBUtil.close(pstmt);
+			}
 		
+		}
+		public void updateAnswer(QnaDTO dto) throws SQLException {
+			PreparedStatement pstmt = null;
+			String sql;
+
+			try {
+				sql = "UPDATE qna SET answer_content=?,  ";
+				if(dto.getAnswer_content().length() == 0) {
+					sql += " answer_reg_date=NULL ";
+				} else {
+					sql += " answer_reg_date=SYSDATE ";
+				}
+				sql += " WHERE num = ?";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, dto.getAnswer_content());
+				pstmt.setString(2, dto.getAnswer_reg_date());
+				pstmt.setLong(3, dto.getQna_num());
+				
+				pstmt.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				DBUtil.close(pstmt);
+			}
+		}
 		
+		// 게시물 삭제
+		public void deleteQuestion(long num, String email) throws SQLException {
+			PreparedStatement pstmt = null;
+			String sql;
+
+			try {
+				if (email.equals("admin")) {
+					sql = "DELETE FROM qna WHERE qna_num=?";
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setLong(1, num);
+					
+					pstmt.executeUpdate();
+				} else {
+					sql = "DELETE FROM qna WHERE qna_num=? AND email=?";
+					
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setLong(1, num);
+					pstmt.setString(2, email);
+					
+					pstmt.executeUpdate();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				DBUtil.close(pstmt);
+			}
+		}
 }

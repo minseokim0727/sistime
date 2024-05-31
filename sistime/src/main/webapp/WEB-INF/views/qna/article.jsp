@@ -182,7 +182,7 @@
 										<c:if test="${sessionScope.member.email==nextDto.email || sessionScope.member.email=='admin'}">
 											<a href="${pageContext.request.contextPath}/qna/article?num=${nextdto.qna_num}&${query}">${nextDto.title}</a>
 										</c:if>
-										<c:if test="${sessionScope.member.email!=nextDto.email && sessionScope.member.eamil!='admin'}">
+										<c:if test="${sessionScope.member.email!=nextDto.email && sessionScope.member.email!='admin'}">
 											비밀글 입니다.
 										</c:if>
 										<i class="bi bi-file-lock2"></i>

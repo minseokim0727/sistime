@@ -37,8 +37,9 @@ a {
 			<i class="bi bi-list"></i>
 		</h2>
 	</button>
-
-	<h2>SISTIME</h2>
+	<h2><a href="${pageContext.request.contextPath}/">
+	SISTIME
+	</a></h2>
 	<div class="search">
 
 		<input type="text" placeholder="Search for anything..."
