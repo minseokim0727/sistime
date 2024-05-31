@@ -22,10 +22,10 @@ function sendOk() {
     const f = document.noticeForm;
 	let str;
 	
-    str = f.subject.value.trim();
+    str = f.title.value.trim();
     if(!str) {
         alert("제목을 입력하세요. ");
-        f.subject.focus();
+        f.title.focus();
         return;
     }
 
@@ -70,7 +70,7 @@ function deleteFile(fileNum) {
 						<tr>
 							<td class="bg-light col-sm-2" scope="row">제 목</td>
 							<td>
-								<input type="text" name="subject" class="form-control" value="${dto.title}">
+								<input type="text" name="title" class="form-control" value="${dto.title}">
 							</td>
 						</tr>
 

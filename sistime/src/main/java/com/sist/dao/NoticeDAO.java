@@ -20,21 +20,21 @@ public class NoticeDAO {
 		String sql;
 		
 		try {
-			sql = "INSERT INTO notice(notice_num,title,content,reg_date,email) "
-					+ " VALUES(notice_seq.NEXTVAL,?,?,sysdate,?) ";
+			sql = "INSERT INTO notice(notice_num,title,content,reg_date,email,notice) "
+					+ " VALUES(notice_seq.NEXTVAL,?,?,sysdate,?,?) ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
 			pstmt.setString(3, dto.getEmail());
-			
+			pstmt.setInt(4, dto.getNotice());
 			
 			pstmt.executeUpdate();
 			DBUtil.close(pstmt);
 			pstmt = null;
 			
-			sql = "INSERT INTO noticeFile(file_Num, num, saveFilename, originalFilename) "
+			sql = "INSERT INTO noticeFile(noticefile_Num, notice_num, saveFilename, originalFilename) "
 					+ " VALUES (noticeFile_seq.NEXTVAL, notice_seq.CURRVAL, ?, ?)";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -65,7 +65,7 @@ public class NoticeDAO {
 			sb.append(" TO_CHAR(reg_date, 'yyyy-MM-dd') reg_date ");
 			sb.append(" FROM notice n ");
 			sb.append(" JOIN member1 m ON n.email = m.email ");
-			//sb.append(" WHERE notice = 1 ");
+			sb.append(" WHERE notice = 1 ");
 			sb.append(" ORDER BY notice_num DESC ");
 
 			pstmt = conn.prepareStatement(sb.toString());
@@ -501,6 +501,36 @@ public class NoticeDAO {
 		}
 	}
 	
-	
+	public List<NoticeDTO> listNoticeFile(long num) {
+		List<NoticeDTO> list = new ArrayList<NoticeDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT notice_fileNum, saveFilename, originalFileName "
+					+ " FROM noticeFile "
+					+ " WHERE notice_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, num);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				NoticeDTO dto = new NoticeDTO();
+				dto.setNoticefile_num(rs.getLong("noticefile_num"));
+				dto.setSaveFilename(rs.getString("saveFilename"));
+				dto.setOriginalFilename(rs.getString("originalFileName"));
+				
+				list.add(dto);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 	
 }

@@ -6,13 +6,26 @@ import com.sist.util.MyMultipartFile;
 
 public class NoticeDTO {
     private long notice_num;
-    private String title;
+    private int notice;
+    public int getNotice() {
+		return notice;
+	}
+	public void setNotice(int notice) {
+		this.notice = notice;
+	}
+	private String title;
     private String content;
     private String reg_date;
     private String saveFilename;
 	private String originalFilename;
 	private String email;
-	private long file_num;
+	private long noticefile_num;
+	public long getNoticefile_num() {
+		return noticefile_num;
+	}
+	public void setNoticefile_num(long noticefile_num) {
+		this.noticefile_num = noticefile_num;
+	}
 	private long gap;
 	public long getGap() {
 		return gap;
@@ -28,12 +41,7 @@ public class NoticeDTO {
 	public void setListFile(List<MyMultipartFile> listFile) {
 		this.listFile = listFile;
 	}
-	public long getFile_num() {
-		return file_num;
-	}
-	public void setFile_num(long file_num) {
-		this.file_num = file_num;
-	}
+	
 	public long getNotice_num() {
 		return notice_num;
 	}

@@ -173,9 +173,9 @@ public class NoticeController {
 			NoticeDTO dto = new NoticeDTO();
 			
 			dto.setEmail(info.getEmail());
-/*			if(req.getParameter("notice") != null) {
+			if(req.getParameter("notice") != null) {
 				dto.setNotice(Integer.parseInt(req.getParameter("notice")));
-			}*/
+			}
 			dto.setTitle(req.getParameter("title"));
 			dto.setContent(req.getParameter("content"));
 			
@@ -190,5 +190,67 @@ public class NoticeController {
 		}
 
 		return new ModelAndView("redirect:/notice/list");
+	}
+	
+	@RequestMapping(value = "/notice/article", method = RequestMethod.GET)
+	public ModelAndView article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 글보기
+		// 넘어온 파라미터 : 글번호, 페이지번호, size [, 검색컬럼, 검색값]
+		String page = req.getParameter("page");
+		String size = req.getParameter("size");
+		String query = "page=" + page + "&size=" + size;
+		
+		NoticeDAO dao = new NoticeDAO();
+		
+		try {
+			long num = Long.parseLong(req.getParameter("notice_num"));
+			
+			String schType = req.getParameter("schType");
+			String kwd = req.getParameter("kwd");
+			if(schType == null) {
+				schType = "all";
+				kwd = "";
+			}
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			
+			if(kwd.length() != 0) {
+				query += "&schType=" + schType
+						+ "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			NoticeDTO dto = dao.findById(num);
+			if(dto == null) {
+				return new ModelAndView("redirect:/notice/list?"+query);
+			}
+			
+			dto.setContent(dto.getContent().replaceAll(">", "&gt;"));
+			dto.setContent(dto.getContent().replaceAll("<", "&lt;"));
+			dto.setContent(dto.getContent().replaceAll(" ", "&nbsp;"));
+			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			
+			// 이전글/다음글
+			NoticeDTO prevDto = dao.findByPrev(num, schType, kwd);
+			NoticeDTO nextDto = dao.findByNext(num, schType, kwd);
+			
+			// 파일
+			List<NoticeDTO> listFile = dao.listNoticeFile(num);
+			
+			ModelAndView mav = new ModelAndView("notice/article");
+			
+			mav.addObject("dto", dto);
+			mav.addObject("prevDto", prevDto);
+			mav.addObject("nextDto", nextDto);
+			mav.addObject("listFile", listFile);
+			mav.addObject("page", page);
+			mav.addObject("size", size);
+			mav.addObject("query", query);
+			
+			return mav;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ModelAndView("redirect:/notice/list?" + query);
 	}
 }
