@@ -23,7 +23,7 @@
 			if(!confirm('게시글을 삭제하시겠습니까? ')){
 				return;
 			}
-			let q = '${query}&num=${dto.num}';
+			let q = '${query}&num=${dto.notice_num}';
 			let url = '${pageContext.request.contextPath}/notice/delete';
 			
 			location.href = url + '?' + q;
@@ -78,7 +78,7 @@
 								<c:forEach var="vo" items="${listFile}" varStatus="status">
 									<p class="border text-secondary mb-1 p-2">
 										<i class="bi bi-folder2-open"></i>
-										<a href="${pageContext.request.contextPath}/notice/download?fileNum=${vo.fileNum}">${vo.originalFilename}</a>
+										<a href="${pageContext.request.contextPath}/notice/download?noticefile_num=${vo.noticefile_num}">${vo.originalFilename}</a>
 									</p>
 								</c:forEach>
 							</td>
@@ -109,7 +109,7 @@
 						<td width="50%">
 							<c:if test="${sessionScope.member.email == 'admin'}">
 								<button type="button" class="btn btn-light" onclick="deleteNotice();">삭제</button>
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/notice/update?num=${dto.num}&page=${page}&size=${size}';">수정</button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/notice/update?num=${dto.notice_num}&page=${page}&size=${size}';">수정</button>
 							</c:if>
 						</td>
 						<td class="text-end">
