@@ -50,8 +50,8 @@
     <li><a class="dropdown-item" href="#">&nbsp;&nbsp; 베스트 </a></li>
   </ul>
 </div>
-        <a class = "h5" href="#"> 시간표 </a>
-        <a class = "h5" href="#"> 학점계산기 </a>
+        <a class = "h5" href="${pageContext.request.contextPath}/timetable/list"> 시간표 </a>
+        <a class = "h5" href="${pageContext.request.contextPath}/test/template"> 학점계산기 </a>
         
          <div class="dropdown">
   <a class = "h5" data-bs-toggle="dropdown" aria-expanded="false">
