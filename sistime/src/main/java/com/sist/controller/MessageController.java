@@ -58,9 +58,9 @@ public class MessageController {
 			// 전체 데이터 개수
 			int dataCount;
 			if (kwd.length() == 0) {
-				dataCount = dao.dataCount();
+				dataCount = dao.dataCount(email);
 			} else {
-				dataCount = dao.dataCount(schType, kwd);
+				dataCount = dao.dataCount(schType, kwd,email);
 			}
 
 			// 전체 페이지 수
@@ -123,5 +123,26 @@ public class MessageController {
 		ModelAndView mav = new ModelAndView("message/write");
 		
 		return mav;
+	}
+	
+	@RequestMapping(value = "/message/write", method = RequestMethod.POST)
+	public ModelAndView writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 글쓰기 폼
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		MessageDAO dao = new MessageDAO();
+		
+		try {
+			MessageDTO dto = new MessageDTO();
+			dto.setSend_email(info.getEmail());
+			
+			dao.insertMessage(dto);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return new ModelAndView("redirect:/message/list");
 	}
 }

@@ -127,16 +127,16 @@ public class MessageDAO {
 		return list;
 	}
 	
-	public int dataCount() {
+	public int dataCount(String email) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
 
 		try {
-			sql = "SELECT NVL(COUNT(*), 0) FROM message ";
+			sql = "SELECT NVL(COUNT(*), 0) FROM message where send_email = ?";
 			pstmt = conn.prepareStatement(sql);
-
+			pstmt.setString(1, email);
 			rs = pstmt.executeQuery();
 			
 			if (rs.next()) {
@@ -154,7 +154,7 @@ public class MessageDAO {
 	}
 
 	// 검색에서의 데이터 개수
-	public int dataCount(String schType, String kwd) {
+	public int dataCount(String schType, String kwd,String email) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -173,12 +173,15 @@ public class MessageDAO {
 			} else {
 				sql += "  WHERE INSTR(" + schType + ", ?) >= 1 ";
 			}
+			sql += " AND send_email = ? ";
 
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, kwd);
+			pstmt.setString(2, email);
 			if (schType.equals("all")) {
 				pstmt.setString(2, kwd);
+				pstmt.setString(3, email);
 			}
 
 			rs = pstmt.executeQuery();
@@ -195,6 +198,28 @@ public class MessageDAO {
 		}
 
 		return result;
+	}
+	
+	public void insertMessage(MessageDTO dto)throws SQLException{
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "INSERT INTO message(msg_num,content,send_email,read_email,send_date)"
+					+ "VALUES (message_seq.nextval,?,?,?,SYSDATE)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getContent());
+			pstmt.setString(2, dto.getSend_date());
+			pstmt.setString(3, dto.getRead_email());
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			DBUtil.close(pstmt);
+		}
 	}
 
 }
