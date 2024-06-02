@@ -150,52 +150,7 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/member/pwd", method = RequestMethod.GET)
-	public ModelAndView pwdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 패스워드 확인 폼
-		ModelAndView mav = new ModelAndView("member/pwd");
-
-		String mode = req.getParameter("mode");
-		mav.addObject("mode", mode);
-
-		return mav;
-	}
-
-	@RequestMapping(value = "/member/pwd", method = RequestMethod.POST)
-	public ModelAndView pwdSubmit(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		// 패스워드 확인
-		MemberDAO dao = new MemberDAO();
-		HttpSession session = req.getSession();
-
-		try {
-			SessionInfo info = (SessionInfo) session.getAttribute("member");
-
-			// DB에서 해당 회원 정보 가져오기
-			MemberDTO dto = dao.findByEmail(info.getEmail());
-			if (dto == null) {
-				session.invalidate();
-				return new ModelAndView("redirect:/");
-			}
-
-			String userPwd = req.getParameter("user_Pwd");
-			String mode = req.getParameter("mode");
-			if (!dto.getUserPwd().equals(userPwd)) {
-				ModelAndView mav = new ModelAndView("member/pwd");
-
-				mav.addObject("mode", mode);
-				mav.addObject("message", "패스워드가 일치하지 않습니다.");
-
-				return mav;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return new ModelAndView("redirect:/");
-	}
-
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/member/emailCheck", method = RequestMethod.POST)
