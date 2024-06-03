@@ -104,7 +104,7 @@ function calchak(){
                 
                 
                 <td>&nbsp;&nbsp;
-                	<select name="gradevalue" class="form-select"">
+                	<select name="gradevalue" class="form-select">
 						<option value="4.5">A+</option>
 						<option value="4.0">A</option>
 						<option value="3.5">B+</option>
