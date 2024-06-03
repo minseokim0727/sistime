@@ -31,6 +31,7 @@
 }
 p{
 	color : tomato;
+	margin-left: 16px;
 }
 .resultHak{
 	margin : 5px;
@@ -39,10 +40,14 @@ p{
 .hakbutton{
 	margin : 5px;
 	border-radius: 30px;
-	margin-left: 140px;
+	margin-top : 10px;
+	margin-left: 200px;
 	width : 100px;
-	
-	
+}
+
+table {
+  border-spacing: 20px 5px;
+  border-collapse: separate;
 }
 
 </style>
@@ -104,7 +109,7 @@ function calchak(){
                 
                 
                 <td>&nbsp;&nbsp;
-                	<select name="gradevalue" class="form-select">
+                	<select name="gradevalue" class="form-select"">
 						<option value="4.5">A+</option>
 						<option value="4.0">A</option>
 						<option value="3.5">B+</option>
