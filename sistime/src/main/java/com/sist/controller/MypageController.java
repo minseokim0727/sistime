@@ -2,6 +2,7 @@ package com.sist.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import com.sist.annotation.RequestMethod;
 import com.sist.dao.MypageDAO;
 
 import com.sist.domain.MemberDTO;
+import com.sist.domain.MypageDTO;
 import com.sist.domain.SessionInfo;
 import com.sist.servlet.ModelAndView;
 
@@ -102,10 +104,13 @@ public class MypageController {
 	    // 회원 정보를 다시 가져옴
 	    MypageDAO dao = new MypageDAO();
 	    MemberDTO dto = dao.findByEmail(info.getEmail());
-
+    	List<MypageDTO> list = dao.myListpage(info.getEmail());
+    	
 	    // ModelAndView에 회원 정보를 담아서 화면에 전달
 	    ModelAndView mav = new ModelAndView("member/mypage");
 	    mav.addObject("dto", dto);
+	    mav.addObject("dto2", list);
+	    System.out.println(list);
 	    
 	    String message = (String) session.getAttribute("message");
 	    

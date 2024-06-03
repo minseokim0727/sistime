@@ -174,7 +174,17 @@
                     <div class="card-body">
                         <h2 class="card-title">내가 쓴 글 ▼</h2>
                         <!-- 내가 쓴 글 목록 -->
-                        <a href="#" class="card-link">내가 쓴 글 1</a>
+                        <div class="border px-2">
+							<c:forEach var="dto" items="${dto2}" varStatus="status">
+								<div class="text-truncate px-2 subject-list">
+									<p>${dto.title}11111</p>
+									
+								</div>
+							</c:forEach>
+							
+						</div>
+                        
+                        <a href="${pageContext.request.contextPath}/" class="card-link">내가 쓴 글 1</a>
                         <a href="#" class="card-link">내가 쓴 글 2</a>
                     </div>
                 </div>

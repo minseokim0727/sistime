@@ -5,8 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sist.domain.MemberDTO;
+import com.sist.domain.MypageDTO;
+
 import com.sist.util.DBConn;
 import com.sist.util.DBUtil;
 
@@ -234,7 +238,61 @@ public class MypageDAO {
 		} finally {
 			DBUtil.close(pstmt);
 		}
+	
 
 	}
 	
+	// 내가 쓴 글
+	public List<MypageDTO> myListpage(String email){
+		List<MypageDTO> list = new ArrayList<MypageDTO>();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT board_name, title, content "
+					+ " FROM board "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title, content "
+					+ " FROM requestboard "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title, content "
+					+ " FROM qna "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title , to_char(content) "
+					+ " FROM eventpage "
+					+ " WHERE email = '"+email+"' ";
+			
+			pstmt = conn.prepareStatement(sql);
+			/*
+			pstmt.setString(1, email);
+			pstmt.setString(2, email);
+			pstmt.setString(3, email);
+			pstmt.setString(4, email);
+			*/
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				MypageDTO dto = new MypageDTO();
+				
+				
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setBoard_name(rs.getString("board_name"));
+				
+				list.add(dto);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return list;
+	}
 }
