@@ -21,7 +21,6 @@ public class HakController {
 	    @RequestMapping(value="/test/grade",method = RequestMethod.GET)
 	    public ModelAndView gradeForm(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
 	    	ModelAndView mav = new ModelAndView("test/grade");
-	    	System.out.print(1);
 	    	HakDAO dao = new HakDAO();
 	    	
 	    	HttpSession session = req.getSession();
@@ -29,21 +28,14 @@ public class HakController {
 	    	SessionInfo info = (SessionInfo) session.getAttribute("member");
 	    	
 	    	try {
-	    		String sub_year = req.getParameter("sub_year");
-		        String sub_sem = req.getParameter("sub_sem");
+	    		String sub_year = req.getParameter("year");
+		        String sub_sem = req.getParameter("semester");
 		        String email = info.getEmail();
 		        
 		        List<HakDTO> list = dao.hakselect(sub_year, sub_sem, email);
-		        
+		        		        
 		        mav.addObject("list", list);
-		        
-		        for(HakDTO hak1 : list) {
-		            System.out.println(hak1.getSub_name());
-		            System.out.println(hak1.getSub_grade());
-		         }
-		        // DAO의 쿼리는 제대로 되어 있지만, 컨트롤러에서 36번째 코드에서
-		        // 제대로 값을 받아오지 못하고있음
-		        System.out.print(2);
+		           
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	        

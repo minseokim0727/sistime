@@ -28,6 +28,8 @@
 	padding: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
+	border :none;
+	border-radius : 20px;
 }
 </style>
 <script type="text/javascript">

@@ -21,7 +21,7 @@ public class WebAppInit implements ServletContextListener{
 		    : 서블릿에 대해 지정된 URL 패턴을 사용하여 서블릿 매핑을 추가
 		 */
 		// resource 관련 uri는 default 서블릿으로 위임
-		String[] uris = new String[]{"/resources/*", "/uploads/*", "*.css", "*.js"};
+		String[] uris = new String[]{"/resources/*","/resources/**", "/uploads/*", "*.css", "*.js"};
 		sce.getServletContext().getServletRegistration("default").addMapping(uris);
 	}
 

@@ -51,11 +51,13 @@
         <tr>
             <th>Subject Name</th>
             <th>Grade</th>
+            <th></th>
         </tr>
-        <c:forEach var="grade" items="${grades}">
+        <c:forEach var="dto" items="${grades}">
             <tr>
-                <td>${grade.sub_name}</td>
-                <td>${grade.sub_grade}</td>
+                <td>${dto.sub_name}</td>
+                <td>${dto.sub_grade}</td>
+                <input type="text" name="mygrade">
             </tr>
         </c:forEach>
     </table>
