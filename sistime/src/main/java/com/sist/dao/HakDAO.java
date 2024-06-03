@@ -33,12 +33,13 @@ public class HakDAO {
 					+ " JOIN sub ON sub.sub_num = sub_time.sub_num ";
 			
 			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
+			
 			
 			pstmt.setString(1, sub_year);
 	        pstmt.setString(2, sub_sem);
 	        pstmt.setString(3, email);
-			
+	        rs = pstmt.executeQuery();
+	        
 			while (rs.next()) {
 				 dto = new HakDTO();
 

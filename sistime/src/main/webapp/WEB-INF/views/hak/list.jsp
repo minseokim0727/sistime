@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
@@ -32,8 +32,7 @@
 </style>
 <script type="text/javascript">
 function sendOk(){
-	const f = document.gradeForm;
-	f.action="${pageContext.request.contextPath}/test/grade";
+	const f = document.searchForm;
 	f.submit();
 }
 </script>
@@ -52,7 +51,7 @@ function sendOk(){
 			</div>
 			
 			<div class="body-main">
-			<form name="gradeForm"method="GET">
+			<form action="Calcgrade" method="get">
 				<div class="readinfo">
 					<div class="col-auto p-1">
     					<input type="text" name="year" placeholder="년도" class="form-control">

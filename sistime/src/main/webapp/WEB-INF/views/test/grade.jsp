@@ -52,10 +52,10 @@
             <th>Subject Name</th>
             <th>Grade</th>
         </tr>
-        <c:forEach var="grade" items="${grades}">
+        <c:forEach var="dto" items="${list}">
             <tr>
-                <td>${grade.sub_name}</td>
-                <td>${grade.sub_grade}</td>
+                <td>${dto.sub_name}</td>
+                <td>${dto.sub_grade}</td>
             </tr>
         </c:forEach>
     </table>

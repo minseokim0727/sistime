@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>내 학점 계산</title>
 
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
 
@@ -30,13 +30,8 @@
 	margin-bottom: 10px;
 }
 </style>
-<script type="text/javascript">
-function sendOk(){
-	const f = document.gradeForm;
-	f.action="${pageContext.request.contextPath}/test/grade";
-	f.submit();
-}
-</script>
+
+
 </head>
 <body>
 
@@ -52,24 +47,18 @@ function sendOk(){
 			</div>
 			
 			<div class="body-main">
-			<form name="gradeForm"method="GET">
-				<div class="readinfo">
-					<div class="col-auto p-1">
-    					<input type="text" name="year" placeholder="년도" class="form-control">
-					</div>
-					<div class="col-auto p-1">
-   					 	<select name="semester" class="form-select">
-        					<option value="1">1학기</option>
-       						<option value="2">2학기</option>
-   						</select>
-					</div>
-					<div class="readmytime">
-						<button type="button" onclick="sendOk();">내 시간표</button>
-					</div>
-				</div>
-			</form>
-			
-				
+			<table border="1">
+        <tr>
+            <th>Subject Name</th>
+            <th>Grade</th>
+        </tr>
+        <c:forEach var="grade" items="${grades}">
+            <tr>
+                <td>${grade.sub_name}</td>
+                <td>${grade.sub_grade}</td>
+            </tr>
+        </c:forEach>
+    </table>
 			</div>
 		</div>
 	</div>
