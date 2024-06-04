@@ -7,7 +7,7 @@ public class BoardDTO {
 	private String reg_date;
 	private int hitcount;
 	private String email;
-	
+	private int boardLikeCount;
 	
 	public long getBoard_num() {
 		return board_num;
@@ -44,6 +44,12 @@ public class BoardDTO {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public int getBoardLikeCount() {
+		return boardLikeCount;
+	}
+	public void setBoardLikeCount(int boardLikeCount) {
+		this.boardLikeCount = boardLikeCount;
 	}
 	
 
