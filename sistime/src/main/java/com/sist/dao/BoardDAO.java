@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sist.domain.BoardDTO;
+import com.sist.domain.Board_ReplyDTO;
 import com.sist.util.DBConn;
 import com.sist.util.DBUtil;
 
@@ -257,7 +258,7 @@ public class BoardDAO {
 						+ " FROM board b "
 						+ " JOIN member1 m ON b.email = m.email "
 						+ " LEFT OUTER JOIN ("
-						+ "      SELECT board_num, COUNT(*) boardLikeCount FROM boardLike"
+						+ "      SELECT board_num, COUNT(*) boardLikeCount FROM board_Like "
 						+ "      GROUP BY board_num"
 						+ " ) bc ON b.board_num = bc.board_num"
 						+ " WHERE b.board_num = ? ";
@@ -467,6 +468,7 @@ public class BoardDAO {
 			} finally {
 				DBUtil.close(pstmt);
 			}
+		}
 			
 			
 			/*
@@ -497,6 +499,30 @@ public class BoardDAO {
 				}
 				
 				return result;
+			}
+			*/
+			
+			/*
+			// 게시물의 공감 추가
+			public void insertBoardLike(long num, String userId) throws SQLException {
+				PreparedStatement pstmt = null;
+				String sql;
+				
+				try {
+					sql = "INSERT INTO bbsLike(num, userId) VALUES (?, ?)";
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setLong(1, num);
+					pstmt.setString(2, userId);
+					
+					pstmt.executeUpdate();
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw e;
+				} finally {
+					DBUtil.close(pstmt);
+				}
 			}
 			*/
 			
@@ -554,22 +580,21 @@ public class BoardDAO {
 			*/
 			
 			
-			/*
+			
 			// 게시물의 댓글 및 답글 추가
-			public void insertReply(ReplyDTO dto) throws SQLException {
+			public void insertReply(Board_ReplyDTO dto) throws SQLException {
 				PreparedStatement pstmt = null;
 				String sql;
 				
 				try {
-					sql = "INSERT INTO bbsReply(replyNum, num, userId, content, answer, reg_date) "
-							+ " VALUES (bbsReply_seq.NEXTVAL, ?, ?, ?, ?, SYSDATE)";
+					sql = "INSERT INTO  Board_Reply(replyNum, board_num, email, replycontent, B_replydate) "
+							+ " VALUES (Board_Reply_seq.NEXTVAL, ?, ?, ?, SYSDATE)";
 					pstmt = conn.prepareStatement(sql);
 					
-					pstmt.setLong(1, dto.getNum());
-					pstmt.setString(2, dto.getUserId());
-					pstmt.setString(3, dto.getContent());
-					pstmt.setLong(4, dto.getAnswer());
-					
+					pstmt.setLong(1, dto.getBoard_num());
+					pstmt.setString(2, dto.getEmail());
+					pstmt.setString(3, dto.getReplycontent());
+
 					pstmt.executeUpdate();
 					
 				} catch (SQLException e) {
@@ -578,9 +603,8 @@ public class BoardDAO {
 				} finally {
 					DBUtil.close(pstmt);
 				}
-				
 			}
-			*/
+			
 			
 			/*
 			// 게시물의 댓글 개수
@@ -614,10 +638,10 @@ public class BoardDAO {
 			}
 			*/
 			
-			/*
+			
 			// 게시물 댓글 리스트
-			public List<ReplyDTO> listReply(long num, int offset, int size) {
-				List<ReplyDTO> list = new ArrayList<>();
+			public List<Board_ReplyDTO> listReply(long num, int offset, int size) {
+				List<Board_ReplyDTO> list = new ArrayList<>();
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				StringBuilder sb = new StringBuilder();
@@ -627,11 +651,11 @@ public class BoardDAO {
 					sb.append("     NVL(answerCount, 0) answerCount, ");
 					sb.append("     NVL(likeCount, 0) likeCount, ");
 					sb.append("     NVL(disLikeCount, 0) disLikeCount ");
-					sb.append(" FROM bbsReply r ");
+					sb.append(" FROM board_Reply r ");
 					sb.append(" JOIN member1 m ON r.userId = m.userId ");
 					sb.append(" LEFT OUTER  JOIN (");
 					sb.append("	    SELECT answer, COUNT(*) answerCount ");
-					sb.append("     FROM bbsReply ");
+					sb.append("     FROM boardReply ");
 					sb.append("     WHERE answer != 0 ");
 					sb.append("     GROUP BY answer ");
 					sb.append(" ) a ON r.replyNum = a.answer ");
@@ -639,7 +663,7 @@ public class BoardDAO {
 					sb.append("	    SELECT replyNum, ");
 					sb.append("         COUNT(DECODE(replyLike, 1, 1)) likeCount, ");
 					sb.append("         COUNT(DECODE(replyLike, 0, 1)) disLikeCount ");
-					sb.append("     FROM bbsReplyLike ");
+					sb.append("     FROM boardReplyLike ");
 					sb.append("     GROUP BY replyNum ");
 					sb.append(" ) b ON r.replyNum = b.replyNum  ");
 					sb.append(" WHERE num = ? AND r.answer=0 ");
@@ -655,17 +679,12 @@ public class BoardDAO {
 					rs = pstmt.executeQuery();
 					
 					while(rs.next()) {
-						ReplyDTO dto = new ReplyDTO();
+						Board_ReplyDTO dto = new Board_ReplyDTO();
 						
-						dto.setReplyNum(rs.getLong("replyNum"));
-						dto.setNum(rs.getLong("num"));
-						dto.setUserId(rs.getString("userId"));
-						dto.setUserName(rs.getString("userName"));
-						dto.setContent(rs.getString("content"));
-						dto.setReg_date(rs.getString("reg_date"));
-						dto.setAnswerCount(rs.getInt("answerCount"));
-						dto.setLikeCount(rs.getInt("likeCount"));
-						dto.setDisLikeCount(rs.getInt("disLikeCount"));
+						dto.setReplynum(rs.getLong("replynum"));
+						dto.setEmail(rs.getNString("email"));
+						dto.setReplycontent(rs.getNString("replycontent"));
+						dto.setB_replydate(rs.getNString("B_replydate"));
 						
 						list.add(dto);
 					}
@@ -679,7 +698,7 @@ public class BoardDAO {
 				
 				return list;
 			}
-			*/
+			
 			
 			/*
 			public ReplyDTO findByReplyId(long replyNum) {
@@ -888,4 +907,4 @@ public class BoardDAO {
 				*/
 		}
 		
-}
+

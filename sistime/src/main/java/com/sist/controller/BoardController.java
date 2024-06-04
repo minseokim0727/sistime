@@ -3,13 +3,17 @@ package com.sist.controller;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
+import com.sist.annotation.ResponseBody;
 import com.sist.dao.BoardDAO;
 import com.sist.domain.BoardDTO;
+import com.sist.domain.Board_ReplyDTO;
 import com.sist.domain.SessionInfo;
 import com.sist.servlet.ModelAndView;
 import com.sist.util.MyUtil;
@@ -255,7 +259,7 @@ public class BoardController {
 		try {
 			BoardDTO dto = new BoardDTO();
 			
-			dto.setBoard_num(Long.parseLong(req.getParameter("Board_num")));
+			dto.setBoard_num(Long.parseLong(req.getParameter("board_num")));
 			dto.setTitle(req.getParameter("title"));
 			dto.setContent(req.getParameter("content"));
 
@@ -303,4 +307,271 @@ public class BoardController {
 	}
 	
 	
-}
+	/*
+	// 게시글 공감 저장 - AJAX/JSON
+		@ResponseBody
+		@RequestMapping(value = "/board/insertBoardLike", method = RequestMethod.POST)
+		public Map<String, Object> insertBoardLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			// 넘어온 파라미터 : 글번호, 공감/공감취소여부
+			Map<String, Object> model = new HashMap<String, Object>();
+			
+			BoardDAO dao = new BoardDAO();
+			
+			HttpSession session = req.getSession();
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			String state = "false";
+			int boardLikeCount = 0;
+			
+			try {
+				long num = Long.parseLong(req.getParameter("num"));
+				String isNoLike = req.getParameter("isNoLike");
+				
+				if(isNoLike.equals("true")) {
+					// 공감
+					dao.insertBoardLike(num, info.getEmail());
+				} else {
+					// 공감 취소
+					dao.deleteBoardLike(num, info.getUserId());
+				}
+				
+				boardLikeCount = dao.countBoardLike(num);
+				
+				state = "true";
+			} catch (Exception e) {
+			}
+			
+			model.put("state", state);
+			model.put("boardLikeCount", boardLikeCount);
+			
+			return model;
+		}
+		*/
+		
+		// 댓글/답글 저장 - AJAX/JSON
+		@ResponseBody
+		@RequestMapping(value = "/board/insertReply", method = RequestMethod.POST)
+		public Map<String, Object> insertReply(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			Map<String, Object> model = new HashMap<String, Object>();
+			
+			// 넘어온 파라미터 : 게시글번호, 댓글(답글), 부모번호
+			
+			BoardDAO dao = new BoardDAO();
+			
+			HttpSession session = req.getSession();
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			String state = "false";
+			try {
+				Board_ReplyDTO dto = new Board_ReplyDTO();
+				
+				long num = Long.parseLong(req.getParameter("num"));
+				dto.setBoard_num(num);
+				dto.setEmail(info.getEmail());
+				dto.setReplycontent(req.getParameter("content"));
+				
+				dao.insertReply(dto);
+				
+				state = "true";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			model.put("state", state);
+			
+			return model;
+		}
+		
+		
+		// 댓글 리스트 - AJAX : Text
+		@RequestMapping(value = "/board/listReply", method = RequestMethod.GET)
+		public ModelAndView listReply(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			// 넘어온 파라미터 : 글번호 [,페이지번호]
+			
+			BoardDAO dao = new BoardDAO();
+			MyUtil util = new MyUtilBootstrap();
+			
+			try {
+				long num = Long.parseLong(req.getParameter("num"));
+				String pageNo = req.getParameter("pageNo");
+				int current_page = 1;
+				if(pageNo != null) {
+					current_page = Integer.parseInt(pageNo);
+				}
+				
+				int size = 5;
+				int total_page = 0;
+				int replyCount = 0;
+				
+				// replyCount = dao.dataCount(num);
+				total_page = util.pageCount(replyCount, size);
+				if(current_page > total_page) {
+					current_page = total_page;
+				}
+				
+				int offset = (current_page - 1) * size;
+				if(offset < 0) offset = 0;
+				
+			 	List<Board_ReplyDTO> listReply = dao.listReply(num, offset, size);
+				
+				for(Board_ReplyDTO dto : listReply) {
+					dto.setReplycontent(dto.getReplycontent().replaceAll("\n", "<br>"));
+				}
+				
+				// 페이징 : 자바 스크립트 함수(listPage)를 호출
+				String paging = util.pagingMethod(current_page, total_page,
+						"listPage");
+				
+				ModelAndView mav = new ModelAndView("board/listReply");
+				
+				mav.addObject("listReply", listReply);
+				mav.addObject("pageNo", current_page);
+				mav.addObject("replyCount", replyCount);
+				mav.addObject("total_page", total_page);
+				mav.addObject("paging", paging);
+				
+				return mav;
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+				resp.sendError(400);
+				
+				throw e;
+			}
+		}
+		
+		/*
+		@ResponseBody
+		@RequestMapping(value = "/bbs/deleteReply", method = RequestMethod.POST)
+		public Map<String, Object> deleteReply(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			Map<String, Object> model = new HashMap<String, Object>();
+			
+			HttpSession session = req.getSession();
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			String state = "false";
+			
+			BoardDAO dao = new BoardDAO();
+			try {
+				long replyNum = Long.parseLong(req.getParameter("replyNum"));
+				
+				dao.deleteReply(replyNum, info.getUserId());
+				
+				state = "true";
+			} catch (Exception e) {
+			}
+			
+			model.put("state", state);
+			
+			return model;
+		}
+		
+		// 댓글의 답글 리스트  - AJAX : Text
+		@RequestMapping(value = "/bbs/listReplyAnswer", method = RequestMethod.GET)
+		public ModelAndView listReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			BoardDAO dao = new BoardDAO();
+			
+			try {
+				long answer = Long.parseLong(req.getParameter("answer"));
+				
+				List<ReplyDTO> listReplyAnswer = dao.listReplyAnswer(answer);
+				
+				for(ReplyDTO dto : listReplyAnswer) {
+					dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+				}
+				
+				ModelAndView mav = new ModelAndView("bbs/listReplyAnswer");
+				mav.addObject("listReplyAnswer", listReplyAnswer);
+				return mav;
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				resp.sendError(400);
+				throw e;
+			}
+		}
+		
+		// 댓글별 답글 개수 : AJAX - JSON
+		@ResponseBody
+		@RequestMapping(value = "/bbs/countReplyAnswer", method = RequestMethod.POST)
+		public Map<String, Object> countReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			Map<String, Object> model = new HashMap<String, Object>();
+			
+			BoardDAO dao = new BoardDAO();
+			int count = 0;
+			try {
+				long answer = Long.parseLong(req.getParameter("answer"));
+				count = dao.dataCountReplyAnswer(answer);
+				
+				model.put("state", "true");
+			} catch (Exception e) {
+				model.put("state", "false");
+			}
+			model.put("count", count);
+			
+			return model;
+		}
+		
+		// AJAX - 댓글 공감/비공감 저장 : JSON
+		@ResponseBody
+		@RequestMapping(value = "/bbs/insertReplyLike", method = RequestMethod.POST)
+		public Map<String, Object> insertReplyLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			Map<String, Object> model = new HashMap<String, Object>();
+			
+			BoardDAO dao = new BoardDAO();
+			
+			HttpSession session = req.getSession();
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			String state = "false";
+			int likeCount = 0;
+			int disLikeCount = 0;
+			
+			try {
+				long replyNum = Long.parseLong(req.getParameter("replyNum"));
+				int replyLike = Integer.parseInt(req.getParameter("replyLike"));
+				
+				ReplyDTO dto = new ReplyDTO();
+				dto.setReplyNum(replyNum);
+				dto.setUserId(info.getUserId());
+				dto.setReplyLike(replyLike);
+				
+				dao.insertReplyLike(dto);
+				
+				Map<String, Integer> map = dao.countReplyLike(replyNum);
+				if(map.containsKey("likeCount")) {
+					likeCount = map.get("likeCount");
+				}
+				
+				if(map.containsKey("disLikeCount")) {
+					disLikeCount = map.get("disLikeCount");
+				}
+				
+				state = "true";
+			} catch (SQLException e) {
+				if(e.getErrorCode() == 1) {
+					state = "liked";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			model.put("state", state);
+			model.put("likeCount", likeCount);
+			model.put("disLikeCount", disLikeCount);
+			
+			return model;
+		}
+		*/
+	
+	
+	
+	
+	
+	}
+	
+	
+	
+	
+
