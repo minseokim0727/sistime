@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -168,48 +168,18 @@
 						</form>
 					</div>
                 </div>
-
-                <!-- 내가 쓴 글 -->
-                <div class="card">
+				  <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title">내가 쓴 글 ▼</h2>
-                        <!-- 내가 쓴 글 목록 -->
-                        <div class="border px-2">
-							<c:forEach var="dto" items="${dto2}" varStatus="status">
-								<div class="text-truncate px-2 subject-list">
-									<p>${dto.title}</p>
-									
-								</div>
-							</c:forEach>
-							
-						</div>
-                        
-                        <div class="page-navigation">
-							${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
-						</div>
-                        
-                    </div>
-                </div>
-
-                <!-- 내가 쓴 댓글 -->
-                <div class="card">
+                    	<h2 class="card-title"><a href="${pageContext.request.contextPath}/member/myPageList">내가 쓴 글</a></h2>                    	
+                   	</div>
+                   </div>
+                   
+                   <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title">내가 쓴 댓글 ▼</h2>
-                        <!-- 내가 쓴 댓글 목록 -->
-                        <div class="border px-2">
-							<c:forEach var="dto" items="${dto3}" varStatus="status">
-								<div class="text-truncate px-2 subject-list">
-									<p>${dto.reply_content}</p>
-									
-								</div>
-							</c:forEach>
-							
-						</div>
-						<div class="page-navigation">
-							${dataCount == 0 ? "등록된 게시물이 없습니다." : paging2}
-						</div>
-                    </div>
-                </div>
+                    	<h2 class="card-title"><a href="${pageContext.request.contextPath}/member/myReplyList">내가 쓴 댓글</a></h2>                   	
+                   	</div>
+                   </div>
+
                 <div>
 			        <form id="deleteForm" action="${pageContext.request.contextPath}/member/deletemember" method="post">
 			        	<a href="${pageContext.request.contextPath}" class="btn btn-primary">홈 화면</a>

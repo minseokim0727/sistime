@@ -114,80 +114,11 @@ public class MypageController {
 	    // 회원 정보를 다시 가져옴
 	    MypageDAO dao = new MypageDAO();
 	    MemberDTO dto = dao.findByEmail(info.getEmail());
-	    
-	    // 내가 쓴 글 리스트
-    	List<MypageDTO> mylistpage = dao.myListpage(info.getEmail());
-    	// 내가 쓴 댓글 리스트
-    	List<MypageDTO> mylistreply = dao.myListReply(info.getEmail());
-	    
-	    
-	    MyUtil util = new MyUtilBootstrap();
-	    MyUtil util2 = new MyUtilBootstrap();
-	    
-	    
-			String page = req.getParameter("page");
-			String page2 = req.getParameter("page2");
-			// 페이지 페이징
-			int current_page = 1;
-			if (page != null) {
-				current_page = Integer.parseInt(page);
-			}
-			// 댓글 페이징
-			int current_page2 = 1;
-			if (page2 != null) {
-				current_page2 = Integer.parseInt(page2);
-			}
-			
-			// 페이지 개수
-			int pagelistcount = mylistpage.size();
-			// 댓글 갯수
-			int replylistcount = mylistreply.size();
-			
-			// 전체 페이지 수
-			int size = 5;
-			int total_page = util.pageCount(pagelistcount, size);
-			if (current_page > total_page) {
-				current_page = total_page;
-			}
-			
-			// 전체 댓글 수
-			int size2 = 5;
-			int total_reply = util2.pageCount(replylistcount, size2);
-			if (current_page2 > total_reply) {
-				current_page2 = total_reply;
-			} 
-			// 게시물 가져오기
-			int offset = (current_page - 1) * size;
-			if(offset < 0) offset = 0;
-			int offset2 = (current_page2 - 1) * size2;
-			if(offset2 < 0) offset2 = 0;
-			List<MypageDTO> mylistpagelist = dao.myListpageList(info.getEmail(),offset,size);
-			// 댓글 가져오기
-			List<MypageDTO> mylistreplylist = dao.myListReplyList(info.getEmail(),offset2,size2);
-			
-			// 페이징 처리
-			String cp = req.getContextPath();
-			String listUrl = cp + "/member/mypage";
-			String cp2 = req.getContextPath();
-			String listUrl2 = cp2 + "/member/mypage";
-			
-			// 페이징 페이징
-			String paging = util.paging(current_page, total_page, listUrl);
-			// 댓글 페이징
-			String paging2 = util2.paging(current_page2, total_reply, listUrl2);
+	   
 
 	    // 정보 수정 등을 하면 다시 화면에 돌려줘야함
 	    ModelAndView mav = new ModelAndView("member/mypage");
 	    mav.addObject("dto", dto);
-	    
-	    mav.addObject("dto2", mylistpagelist);
-	    
-	    mav.addObject("dto3", mylistreplylist);
-	    mav.addObject("paging", paging);
-	    mav.addObject("paging2", paging2);
-	    mav.addObject("pagelistcount", pagelistcount);
-	    mav.addObject("size", size);
-	    mav.addObject("page", current_page);
 	    
 	    String message = (String) session.getAttribute("message");
 	    
@@ -198,6 +129,130 @@ public class MypageController {
 	    
 	    return mav;
 	}
+	
+	// 내가 쓴 글 보기
+	@RequestMapping(value = "/member/myPageList", method = RequestMethod.GET)
+	public ModelAndView myPageList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+	    SessionInfo info = (SessionInfo) session.getAttribute("member");
+	    if (info == null) { // 로그아웃 된 경우
+	        return new ModelAndView("redirect:/member/login");
+	    }
+	    ModelAndView mav = new ModelAndView("member/myPageList");
+	    
+	    // 회원 정보를 다시 가져옴
+	    MypageDAO dao = new MypageDAO();
+	    MemberDTO dto = dao.findByEmail(info.getEmail());
+	   
+	    
+	    // 내가 쓴 글 리스트
+    	List<MypageDTO> mylistpage = dao.myListpage(info.getEmail());
+    	
+    	MyUtil util = new MyUtilBootstrap();
+    	
+    	String page = req.getParameter("page");
+    	
+    	// 페이지 페이징
+    	int current_page = 1;
+    	if (page != null) {
+    		current_page = Integer.parseInt(page);
+    	}
+    	
+    	// 페이지 개수
+    	int pagelistcount = mylistpage.size();
+    	
+    	// 전체 페이지 수
+    	int size = 5;
+    	int total_page = util.pageCount(pagelistcount, size);
+    	if (current_page > total_page) {
+    		current_page = total_page;
+    	}
+    	
+    	// 게시물 가져오기
+    	int offset = (current_page - 1) * size;
+    	if(offset < 0) offset = 0;
+    	
+    	List<MypageDTO> mylistpagelist = dao.myListpageList(info.getEmail(),offset,size);
+    	
+    	// 페이징 처리
+    	String cp = req.getContextPath();
+    	String listUrl = cp + "/member/myPageList";
+    	// 페이징 페이징
+    	String paging = util.paging(current_page, total_page, listUrl);
+    	
+    	
+    	
+	    mav.addObject("dto", dto);
+	    mav.addObject("pagelistcount", pagelistcount);
+	    mav.addObject("paging", paging);
+	    mav.addObject("pagelistcount", pagelistcount);
+	    mav.addObject("dto2", mylistpagelist);
+	    mav.addObject("size", size);
+	    mav.addObject("page", current_page);
+		return mav;
+	}
+	// 내가 쓴 댓글 보기
+	@RequestMapping(value = "/member/myReplyList", method = RequestMethod.GET)
+	public ModelAndView myReplyList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		if (info == null) { // 로그아웃 된 경우
+			return new ModelAndView("redirect:/member/login");
+		}
+		ModelAndView mav = new ModelAndView("member/myReplyList");
+		
+		// 회원 정보를 다시 가져옴
+		MypageDAO dao = new MypageDAO();
+		MemberDTO dto = dao.findByEmail(info.getEmail());
+		
+		
+		// 내가 쓴 글 리스트
+		List<MypageDTO> mylistreply = dao.myListReply(info.getEmail());
+		
+		MyUtil util = new MyUtilBootstrap();
+		
+		String page = req.getParameter("page");
+		
+		// 댓글 페이징
+		int current_page = 1;
+		if (page != null) {
+			current_page = Integer.parseInt(page);
+		}
+		
+		// 댓글 개수
+		int pagelistcount = mylistreply.size();
+		
+		// 전체 댓글 수
+		int size = 5;
+		int total_page = util.pageCount(pagelistcount, size);
+		if (current_page > total_page) {
+			current_page = total_page;
+		}
+		
+		// 댓글 가져오기
+		int offset = (current_page - 1) * size;
+		if(offset < 0) offset = 0;
+		
+		List<MypageDTO> mylistreplylist = dao.myListReplyList(info.getEmail(),offset,size);
+		
+		// 페이징 처리
+		String cp = req.getContextPath();
+		String listUrl = cp + "/member/myReplyList";
+		// 페이징 페이징
+		String paging = util.paging(current_page, total_page, listUrl);
+		
+		
+		
+		mav.addObject("dto", dto);
+		mav.addObject("pagelistcount", pagelistcount);
+		mav.addObject("paging", paging);
+		mav.addObject("pagelistcount", pagelistcount);
+		mav.addObject("dto3", mylistreplylist);
+		mav.addObject("size", size);
+		mav.addObject("page", current_page);
+		return mav;
+	}
+
 	
 	@RequestMapping(value = "/member/updateName", method = RequestMethod.POST)
 	public ModelAndView updateName(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
