@@ -48,7 +48,8 @@ public class MemberController {
 			SessionInfo info = new SessionInfo();
 			info.setEmail(dto.getEmail());
 			info.setUserName(dto.getUserName());
-
+			info.setNickname(dto.getNickname());
+			
 			session.setAttribute("member", info);
 
 			String preLoginURI = (String) session.getAttribute("preLoginURI");

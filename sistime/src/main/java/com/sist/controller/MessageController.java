@@ -3,12 +3,17 @@ package com.sist.controller;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
+import com.sist.annotation.ResponseBody;
 import com.sist.dao.MessageDAO;
+import com.sist.domain.MemberDTO;
 import com.sist.domain.MessageDTO;
 import com.sist.domain.SessionInfo;
 import com.sist.servlet.ModelAndView;
@@ -30,9 +35,9 @@ public class MessageController {
 
 		MessageDAO dao = new MessageDAO();
 		MyUtil util = new MyUtilBootstrap();
-		
+
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
 		try {
 			String email = info.getEmail();
@@ -54,13 +59,13 @@ public class MessageController {
 			if (req.getMethod().equalsIgnoreCase("GET")) {
 				kwd = URLDecoder.decode(kwd, "utf-8");
 			}
-			
+
 			// 전체 데이터 개수
 			int dataCount;
 			if (kwd.length() == 0) {
 				dataCount = dao.dataCount(email);
 			} else {
-				dataCount = dao.dataCount(schType, kwd,email);
+				dataCount = dao.dataCount(schType, kwd, email);
 			}
 
 			// 전체 페이지 수
@@ -77,9 +82,9 @@ public class MessageController {
 
 			List<MessageDTO> list = null;
 			if (kwd.length() == 0) {
-				list = dao.listMessage(offset, size,email);
+				list = dao.listMessage(offset, size, email);
 			} else {
-				list = dao.listMessage(offset, size, schType, kwd,email);
+				list = dao.listMessage(offset, size, schType, kwd, email);
 			}
 
 			String query = "";
@@ -116,33 +121,209 @@ public class MessageController {
 		// JSP로 포워딩
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/message/write", method = RequestMethod.GET)
-	public ModelAndView writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public ModelAndView writeForm(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		// 글쓰기 폼
 		ModelAndView mav = new ModelAndView("message/write");
-		
+
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/message/write", method = RequestMethod.POST)
-	public ModelAndView writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public ModelAndView writeSubmit(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		// 글쓰기 폼
-		
+
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		
+
 		MessageDAO dao = new MessageDAO();
-		
+
 		try {
 			MessageDTO dto = new MessageDTO();
 			dto.setSend_email(info.getEmail());
-			
+			dto.setContent(req.getParameter("content"));
+			dto.setRead_email(req.getParameter("read_email"));
+
 			dao.insertMessage(dto);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
-		
+
 		return new ModelAndView("redirect:/message/list");
 	}
+
+	@RequestMapping(value = "/message/article", method = RequestMethod.GET)
+	public ModelAndView article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 글보기
+
+		MessageDAO dao = new MessageDAO();
+
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		try {
+			int msg_num = Integer.parseInt(req.getParameter("msg_num"));
+
+			String schType = req.getParameter("schType");
+			String kwd = req.getParameter("kwd");
+			if (schType == null) {
+				schType = "all";
+				kwd = "";
+			}
+			kwd = URLDecoder.decode(kwd, "utf-8");
+
+			if (kwd.length() != 0) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "UTF-8");
+			}
+
+			// 게시물 가져오기
+			MessageDTO dto = dao.findbyNum(msg_num);
+			if (dto == null) { // 게시물이 없으면 다시 리스트로
+				return new ModelAndView("redirect:/message/list?" + query);
+			}
+
+			String send_email = dto.getSend_email();
+			String read_email = dto.getRead_email();
+			String yourname = dao.findbyNickname(read_email);
+			List<MessageDTO> list = dao.findMessage(send_email, read_email);
+
+			ModelAndView mav = new ModelAndView("message/article");
+
+			String send_nickname = info.getNickname();
+
+			// JSP로 전달할 속성
+			mav.addObject("send_nickname", send_nickname);
+			mav.addObject("yourname", yourname);
+			mav.addObject("dto", dto);
+			mav.addObject("list", list);
+			mav.addObject("page", page);
+			mav.addObject("query", query);
+			
+			System.out.println(yourname);
+			System.out.println(send_email);
+			System.out.println("------------");
+			// 포워딩
+			return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/message/list?" + query);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/message/messageSend", method = RequestMethod.POST)
+	public Map<String, Object> messageSend(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException, SQLException {
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		int msg_num = 0;
+		MessageDAO dao = new MessageDAO();
+
+		String yournick = req.getParameter("send_name");
+		String myemail = info.getEmail();
+		String message = req.getParameter("message");
+		String youremail = dao.findbyEmail(yournick);
+
+		MessageDTO dto = new MessageDTO();
+
+		dto.setContent(message);
+		dto.setSend_email(myemail);
+		dto.setRead_email(youremail);
+
+		msg_num = dao.insertMessage(dto);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		String passed = "false";
+		if (!youremail.equals(null)) {
+			passed = "true";
+		}
+		map.put("msg_num", msg_num);
+		map.put("passed", passed);
+
+		return map;
+	}
+
+	@RequestMapping(value = "/message/messageGet", method = RequestMethod.GET)
+	public ModelAndView messageGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException, SQLException {
+		MyUtil util = new MyUtilBootstrap();
+		MessageDAO dao = new MessageDAO();
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		try {
+
+			String page = req.getParameter("page");
+
+			String read_nickname = req.getParameter("read_nickname");
+			String send_nickname = req.getParameter("send_nickname");
+
+			int current_page = 1;
+			if (page != null) {
+				current_page = Integer.parseInt(page);
+			}
+
+			int size = 10;
+			int total_page = 0;
+			int messageCount = 0; // Assuming this should be retrieved from a DAO method like dao.dataCountReply()
+
+			messageCount = dao.dataCount(read_nickname, send_nickname);
+			total_page = util.pageCount(messageCount, size);
+			if (current_page > total_page) {
+				current_page = total_page;
+			}
+
+			int offset = (current_page - 1) * size;
+			if (offset < 0)
+				offset = 0;
+
+			String send_email = dao.findbyEmail(send_nickname);
+			String read_email = dao.findbyEmail(read_nickname);
+
+			List<MessageDTO> list = dao.findMessage(send_email, read_email);
+			MessageDTO dto1 = new MessageDTO();
+			for (MessageDTO dto : list) {
+				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			}
+
+			String paging = util.pagingMethod(current_page, total_page, "listPage");
+
+			ModelAndView mav = new ModelAndView("message/subMessage");
+
+			System.out.println(send_email);
+			System.out.println(read_email);
+			System.out.println(read_nickname);
+			System.out.println(send_nickname);
+
+			System.out.println("***************");
+
+			for (MessageDTO dto3 : list) {
+				System.out.println(dto3);
+			}
+			System.out.println("******************");
+			// JSP로 전달할 속성
+			mav.addObject("dto1", dto1);
+			mav.addObject("send_nickname", send_nickname);
+			mav.addObject("page", current_page);
+			mav.addObject("list", list);
+			mav.addObject("paging", paging);
+			mav.addObject("total_page", total_page);
+
+			return mav;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.sendError(400);
+			throw e;
+		}
+	}
+
 }

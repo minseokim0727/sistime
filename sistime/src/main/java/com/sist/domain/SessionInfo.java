@@ -4,10 +4,17 @@ public class SessionInfo {
 	private String email;
 	private String userName;
 	private int userRoll;
+	private String nickname;
 	
 	
 	public String getUserName() {
 		return userName;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;

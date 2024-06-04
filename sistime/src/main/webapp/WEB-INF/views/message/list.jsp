@@ -46,8 +46,8 @@ function searchList() {
 				<table class="table table-hover board-list">
 					<thead class="table-light">
 						<tr>
-							<th class="read_email">상대방</th>
-							<th class="send_email">나나나</th>
+							<th class="read_email">번호</th>
+							<th class="send_email">상대방</th>
 							<th class="content">내용</th>
 							<th class="send_date">보낸시간</th>
 						</tr>
@@ -60,7 +60,6 @@ function searchList() {
 								<td class="left">
 									<a href="${articleUrl}&msg_num=${dto.msg_num}" class="text-reset">${dto.send_email}</a>
 								</td>
-								<td>${dto.send_email}</td>
 								<td>${dto.content}</td>
 								<td>${dto.send_date}</td>
 							</tr>

@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
 function sendOk() {
-    const f = document.boardForm;
+    const f = document.MessageForm;
 	let str;
 
 
@@ -30,7 +30,7 @@ function sendOk() {
         return;
     }
 
-    f.action = "${pageContext.request.contextPath}/message/list";
+    f.action = "${pageContext.request.contextPath}/message/write";
     f.submit();
 }
 </script>
@@ -49,13 +49,13 @@ function sendOk() {
 			</div>
 			
 			<div class="body-main">
-				<form name="boardForm" method="post">
+				<form name="MessageForm" method="post">
 					<table class="table write-form mt-5">
 						
 						<tr>
-							<td class="bg-light col-sm-2" scope="row">작성자명</td>
+							<td class="bg-light col-sm-2" scope="row">받을 사람</td>
 	 						<td>
-								<p class="form-control-plaintext">${sessionScope.member.email}</p>
+								<textarea name="read_email" id="read_email" class="form-control">${dto.read_email}</textarea>
 							</td>
 						</tr>
 	
