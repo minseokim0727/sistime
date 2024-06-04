@@ -62,7 +62,7 @@
     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/requestboard/list">&nbsp;&nbsp; 화개장터 요청 </a></li>
   </ul>
 </div>
-        <a class = "h5" href="#">관리자만 보이는 버튼 하기</a>
+        <a class = "h5" href="${pageContext.request.contextPath}/complain/list">관리자만 보이는 버튼 하기</a>
     </div>
   </div>
 </div>
