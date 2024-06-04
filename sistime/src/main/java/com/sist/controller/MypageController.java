@@ -61,6 +61,14 @@ public class MypageController {
 				
 				return mav;
 			}
+			
+			// 내가 쓴 글 리스트
+	    	List<MypageDTO> mylistpage = dao.myListpage(info.getEmail());
+	    	// 내가 쓴 댓글 리스트
+	    	List<MypageDTO> mylistreply = dao.myListReply(info.getEmail());
+	    	
+	    	
+	    	
 			//System.out.println("Mode: " + mode);
 			//System.out.println("UserPwd from form: " + userPwd);
 			//System.out.println("UserPwd from DB: " + dto.getUserPwd());
@@ -80,6 +88,9 @@ public class MypageController {
 			
 			mav.addObject("title", "회원 정보 수정");
 			mav.addObject("dto", dto);
+			mav.addObject("dto2", mylistpage);		
+		    mav.addObject("dto3", mylistreply);
+			
 			mav.addObject("mode", "update");
 			
 			return mav;
@@ -100,17 +111,24 @@ public class MypageController {
 	    if (info == null) { // 로그아웃 된 경우
 	        return new ModelAndView("redirect:/member/login");
 	    }
-
+	    
 	    // 회원 정보를 다시 가져옴
 	    MypageDAO dao = new MypageDAO();
 	    MemberDTO dto = dao.findByEmail(info.getEmail());
-    	List<MypageDTO> list = dao.myListpage(info.getEmail());
+	    
+	    // 내가 쓴 글 리스트
+    	List<MypageDTO> mylistpage = dao.myListpage(info.getEmail());
+    	// 내가 쓴 댓글 리스트
+    	List<MypageDTO> mylistreply = dao.myListReply(info.getEmail());
     	
 	    // ModelAndView에 회원 정보를 담아서 화면에 전달
 	    ModelAndView mav = new ModelAndView("member/mypage");
 	    mav.addObject("dto", dto);
-	    mav.addObject("dto2", list);
-	    System.out.println(list);
+	    
+	    mav.addObject("dto2", mylistpage);
+	    
+	    mav.addObject("dto3", mylistreply);
+	    
 	    
 	    String message = (String) session.getAttribute("message");
 	    

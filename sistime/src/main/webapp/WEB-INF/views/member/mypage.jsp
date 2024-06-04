@@ -177,7 +177,7 @@
                         <div class="border px-2">
 							<c:forEach var="dto" items="${dto2}" varStatus="status">
 								<div class="text-truncate px-2 subject-list">
-									<p>${dto.title}11111</p>
+									<p>${dto.title}</p>
 									
 								</div>
 							</c:forEach>
@@ -185,7 +185,7 @@
 						</div>
                         
                         <a href="${pageContext.request.contextPath}/" class="card-link">내가 쓴 글 1</a>
-                        <a href="#" class="card-link">내가 쓴 글 2</a>
+                        
                     </div>
                 </div>
 
@@ -194,8 +194,15 @@
                     <div class="card-body">
                         <h2 class="card-title">내가 쓴 댓글 ▼</h2>
                         <!-- 내가 쓴 댓글 목록 -->
-                        <p class="card-text">글 제목: 내가 쓴 댓글 1</p>
-                        <p class="card-text">글 제목: 내가 쓴 댓글 2</p>
+                        <div class="border px-2">
+							<c:forEach var="dto" items="${dto3}" varStatus="status">
+								<div class="text-truncate px-2 subject-list">
+									<p>${dto.reply_content}</p>
+									
+								</div>
+							</c:forEach>
+							
+						</div>
                     </div>
                 </div>
                 <div>

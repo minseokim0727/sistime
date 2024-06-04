@@ -245,7 +245,7 @@ public class MypageDAO {
 	// 내가 쓴 글
 	public List<MypageDTO> myListpage(String email){
 		List<MypageDTO> list = new ArrayList<MypageDTO>();
-		
+		System.out.println(11);
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
@@ -276,6 +276,7 @@ public class MypageDAO {
 			*/
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
+				
 				MypageDTO dto = new MypageDTO();
 				
 				
@@ -286,6 +287,7 @@ public class MypageDAO {
 				list.add(dto);
 			}
 			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -295,4 +297,61 @@ public class MypageDAO {
 		
 		return list;
 	}
+	// 내가 쓴 댓글
+	public List<MypageDTO> myListReply(String email){
+		List<MypageDTO> list = new ArrayList<MypageDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "select board_name , replycontent , email , board_num "
+					+ " from (select b.board_num , board_name , replycontent , b.email from board b join board_reply r on b.board_num = r.board_num ) "
+					+ " where email = ? and replycontent is not null "
+					+ " union "
+					+ " select board_name, content, email , eventpage_num "
+					+ " from(select b.eventpage_num , board_name , r.content , b.email from Eventpage b join Event_Reply r on b.Eventpage_num = r.Eventpage_num)"
+					+ " where email = ? and content is not null "
+					+ " union "
+					+ " select board_name , answer_content , email , qna_num "
+					+ " from qna "
+					+ " where email = ? and answer_content is not null "
+					+ " union "
+					+ " select board_name , answer_content , email , rb_num "
+					+ " from requestboard "
+					+ " where email = ? and answer_content is not null";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, email);
+			pstmt.setString(2, email);
+			pstmt.setString(3, email);
+			pstmt.setString(4, email);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				MypageDTO dto = new MypageDTO();
+				
+				
+				dto.setBoard_num(rs.getLong("board_num"));
+				dto.setReply_content(rs.getString("replycontent"));
+				dto.setReply_board_name(rs.getString("board_name"));
+				
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		
+		
+		
+		
+		
+		return list;
+	}
+	
 }
