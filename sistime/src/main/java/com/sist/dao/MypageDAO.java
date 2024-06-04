@@ -242,8 +242,8 @@ public class MypageDAO {
 
 	}
 	
-	// 내가 쓴 글
-	public List<MypageDTO> myListpage(String email){
+	// 내가 쓴 글 리스트
+	public List<MypageDTO> myListpageList(String email, int offset, int size){
 		List<MypageDTO> list = new ArrayList<MypageDTO>();
 		System.out.println(11);
 		PreparedStatement pstmt = null;
@@ -251,21 +251,23 @@ public class MypageDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT board_name, title, content "
+			sql = "SELECT board_name, title, content, reg_date "
 					+ " FROM board "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title, content "
+					+ " SELECT board_name, title, content, reg_date "
 					+ " FROM requestboard "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title, content "
+					+ " SELECT board_name, title, content, reg_date "
 					+ " FROM qna "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title , to_char(content) "
+					+ " SELECT board_name, title , to_char(content), reg_date "
 					+ " FROM eventpage "
-					+ " WHERE email = '"+email+"' ";
+					+ " WHERE email = '"+email+"' "
+					+ " ORDER BY reg_date DESC "
+					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
 			
 			pstmt = conn.prepareStatement(sql);
 			/*
@@ -274,6 +276,9 @@ public class MypageDAO {
 			pstmt.setString(3, email);
 			pstmt.setString(4, email);
 			*/
+			
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, size);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
@@ -297,7 +302,62 @@ public class MypageDAO {
 		
 		return list;
 	}
-	// 내가 쓴 댓글
+	// 내가 쓴 글 카운트 용도
+	public List<MypageDTO> myListpage(String email){
+		List<MypageDTO> list = new ArrayList<MypageDTO>();
+		System.out.println(11);
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT board_name, title, content, reg_date "
+					+ " FROM board "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title, content, reg_date "
+					+ " FROM requestboard "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title, content, reg_date "
+					+ " FROM qna "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title , to_char(content), reg_date "
+					+ " FROM eventpage "
+					+ " WHERE email = '"+email+"' ";
+			
+			pstmt = conn.prepareStatement(sql);
+			/*
+			pstmt.setString(1, email);
+			pstmt.setString(2, email);
+			pstmt.setString(3, email);
+			pstmt.setString(4, email);
+			 */
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				MypageDTO dto = new MypageDTO();
+				
+				
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setBoard_name(rs.getString("board_name"));
+				
+				list.add(dto);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return list;
+	}
+	// 내가 쓴 댓글 카운트용도
 	public List<MypageDTO> myListReply(String email){
 		List<MypageDTO> list = new ArrayList<MypageDTO>();
 		PreparedStatement pstmt = null;
@@ -345,12 +405,60 @@ public class MypageDAO {
 			DBUtil.close(rs);
 			DBUtil.close(pstmt);
 		}
+		return list;
+	}
+	
+	// 내가 쓴 댓글 리스트
+	public List<MypageDTO> myListReplyList(String email, int offset, int size){
+		List<MypageDTO> list = new ArrayList<MypageDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
 		
-		
-		
-		
-		
-		
+		try {
+			sql = "select board_name , replycontent , email , board_num "
+					+ " from (select b.board_num , board_name , replycontent , b.email from board b join board_reply r on b.board_num = r.board_num ) "
+					+ " where email = ? and replycontent is not null "
+					+ " union "
+					+ " select board_name, content, email , eventpage_num "
+					+ " from(select b.eventpage_num , board_name , r.content , b.email from Eventpage b join Event_Reply r on b.Eventpage_num = r.Eventpage_num)"
+					+ " where email = ? and content is not null "
+					+ " union "
+					+ " select board_name , answer_content , email , qna_num "
+					+ " from qna "
+					+ " where email = ? and answer_content is not null "
+					+ " union "
+					+ " select board_name , answer_content , email , rb_num "
+					+ " from requestboard "
+					+ " where email = ? and answer_content is not null "
+					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, email);
+			pstmt.setString(2, email);
+			pstmt.setString(3, email);
+			pstmt.setString(4, email);
+			pstmt.setInt(5, offset);
+			pstmt.setInt(6, size);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				MypageDTO dto = new MypageDTO();
+				
+				
+				dto.setBoard_num(rs.getLong("board_num"));
+				dto.setReply_content(rs.getString("replycontent"));
+				dto.setReply_board_name(rs.getString("board_name"));
+				
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
 		return list;
 	}
 	

@@ -184,7 +184,9 @@
 							
 						</div>
                         
-                        <a href="${pageContext.request.contextPath}/" class="card-link">내가 쓴 글 1</a>
+                        <div class="page-navigation">
+							${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+						</div>
                         
                     </div>
                 </div>
@@ -202,6 +204,9 @@
 								</div>
 							</c:forEach>
 							
+						</div>
+						<div class="page-navigation">
+							${dataCount == 0 ? "등록된 게시물이 없습니다." : paging2}
 						</div>
                     </div>
                 </div>

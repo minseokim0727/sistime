@@ -5,12 +5,27 @@ public class MypageDTO {
 	private String board_name;
 	private String title;
 	private String content;
+	private String reg_date;
 	
 	// 내가 쓴 댓글
 	private String reply_content;
 	private long board_num;
 	private String reply_board_name;
+	private String reply_reg_date;
 	
+	
+	public String getReg_date() {
+		return reg_date;
+	}
+	public void setReg_date(String reg_date) {
+		this.reg_date = reg_date;
+	}
+	public String getReply_reg_date() {
+		return reply_reg_date;
+	}
+	public void setReply_reg_date(String reply_reg_date) {
+		this.reply_reg_date = reply_reg_date;
+	}
 	public String getReply_board_name() {
 		return reply_board_name;
 	}
