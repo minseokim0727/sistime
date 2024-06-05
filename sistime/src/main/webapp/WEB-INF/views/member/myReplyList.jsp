@@ -15,29 +15,49 @@
 <body>
 
 	<!-- 내가 쓴 댓글 -->
-		<div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">내가 쓴 댓글 ▼</h2>
-                        <!-- 내가 쓴 댓글 목록 -->
-                        <div class="border px-2">
-							<c:forEach var="dto" items="${dto3}" varStatus="status">
-								<div class="text-truncate px-2 subject-list">
-									
-									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.board_num}" class="text-reset">${dto.reply_content}</a>
-								</div>
-							</c:forEach>
-							
-						</div>
-						<div class="page-navigation">
-							${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
-						</div>
-						<a href="${pageContext.request.contextPath}/member/mypage" class="btn btn-primary">이전 화면</a>
-                    </div>
-                </div>
-             </div>
-          </div>
+		
+          
+          <div class="container">
+		<div class="body-container">	
+			<div class="body-title">
+				<h3><i class="bi bi-app"></i> 내가 쓴 댓글 </h3>
+			</div>
+			
+			<div class="body-main">
+		        <div class="row board-list-header">
+		            
+		            <div class="col-auto">&nbsp;</div>
+		        </div>				
+				
+				<table class="table table-hover board-list">
+					<thead class="table-light">
+						<tr>
+							<th class="num">번호</th>
+							<th class="subject">내용</th>
+							<th class="name">작성일</th>
+
+						</tr>
+					</thead>
+					
+					<tbody>
+						<c:forEach var="dto" items="${dto3}" varStatus="status">
+							<tr>
+								<td>${dataCount - (page-1) * size - status.index}</td>
+								<td class="left">
+									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.board_num}&size=10&page=1" class="text-reset">${dto.reply_content}</a>
+								</td>
+								<td>${dto.reply_reg_date}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				
+				<div class="page-navigation">
+					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+				</div>
+			</div>
+		</div>
+	</div>
 <footer>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>

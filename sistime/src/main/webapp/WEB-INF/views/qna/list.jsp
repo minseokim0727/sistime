@@ -78,7 +78,7 @@ function searchList() {
 								</td>
 								<td>${dto.userName}</td>
 								<td>${dto.reg_date}</td>
-								<td>${not empty dto.answer_content ? "답변완료" : "답변대기"}</td>
+								<td> ${not empty dto.answer_content ? "완료" : "대기"}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -293,6 +293,7 @@ public class MypageDAO {
 				dto.setContent(rs.getString("content"));
 				dto.setBoard_name(rs.getString("board_name"));
 				dto.setBoard_num(rs.getLong("board_num"));
+				dto.setReg_date(rs.getString("reg_date"));
 				list.add(dto);
 			}
 			
@@ -352,6 +353,7 @@ public class MypageDAO {
 				dto.setContent(rs.getString("content"));
 				dto.setBoard_name(rs.getString("board_name"));
 				dto.setBoard_num(rs.getLong("board_num"));
+				dto.setReg_date(rs.getString("reg_date"));
 				list.add(dto);
 			}
 			
@@ -424,19 +426,19 @@ public class MypageDAO {
 		String sql;
 		
 		try {
-			sql = "select board_name , replycontent , email , board_num "
-					+ " from (select b.board_num , board_name , replycontent , b.email from board b join board_reply r on b.board_num = r.board_num ) "
+			sql = "select board_name , replycontent , email , board_num , B_ReplyDate as reply_reg_date "
+					+ " from (select b.board_num ,B_ReplyDate, board_name , replycontent , b.email from board b join board_reply r on b.board_num = r.board_num ) "
 					+ " where email = ? and replycontent is not null "
 					+ " union "
-					+ " select board_name, content, email , eventpage_num "
-					+ " from(select b.eventpage_num , board_name , r.content , b.email from Eventpage b join Event_Reply r on b.Eventpage_num = r.Eventpage_num)"
+					+ " select board_name, content, email , eventpage_num, reg_date as reply_reg_date "
+					+ " from(select b.eventpage_num ,r.reg_date, board_name , r.content , b.email from Eventpage b join Event_Reply r on b.Eventpage_num = r.Eventpage_num) "
 					+ " where email = ? and content is not null "
 					+ " union "
-					+ " select board_name , answer_content , email , qna_num "
+					+ " select board_name , answer_content , email , qna_num ,answer_reg_date "
 					+ " from qna "
 					+ " where email = ? and answer_content is not null "
 					+ " union "
-					+ " select board_name , answer_content , email , rb_num "
+					+ " select board_name , answer_content , email , rb_num, answer_reg_date "
 					+ " from requestboard "
 					+ " where email = ? and answer_content is not null "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
@@ -457,7 +459,9 @@ public class MypageDAO {
 				
 				dto.setBoard_num(rs.getLong("board_num"));
 				dto.setReply_content(rs.getString("replycontent"));
+				
 				dto.setBoard_name(rs.getString("board_name"));
+				dto.setReply_reg_date(rs.getString(5));
 				
 				list.add(dto);
 			}
