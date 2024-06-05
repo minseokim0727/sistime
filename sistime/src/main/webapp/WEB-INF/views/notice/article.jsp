@@ -120,9 +120,13 @@
 									onclick="location.href='${pageContext.request.contextPath}/notice/list?${query}';">리스트</button>
 								
 								<form action ="${pageContext.request.contextPath}/notice/complain">
+								<select name = "comp_reason">
+								<option value="욕설"> 욕설 </option>
+								<option value="불법컨텐츠"> 불법컨텐츠 </option>
+								<option value="광고"> 광고 </option>
+								</select>
 								<button type="submit" class="btn btn-light"
-									onclick=""
-									name="comp_reason" value="complain">신고</button>
+									onclick="">신고</button>
 								<input type="hidden" name="board_name" value="notice"> 
 								<input type="hidden" name="page" value="${page}">
 								<input type="hidden" name="num" value="${dto.notice_num}">
