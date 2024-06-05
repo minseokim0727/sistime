@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.sist.domain.BoardDTO;
 import com.sist.domain.Board_ReplyDTO;
 import com.sist.util.DBConn;
@@ -273,13 +272,13 @@ public class BoardDAO {
 					
 					dto.setBoard_num(rs.getLong("board_num"));
 					dto.setEmail(rs.getString("email"));
-					// dto.setUserName(rs.getString("userName")
+					dto.setUserName(rs.getString("user_Name"));
 					dto.setTitle(rs.getString("title"));
 					dto.setContent(rs.getString("content"));
 					dto.setHitcount(rs.getInt("hitcount"));
 					dto.setReg_date(rs.getString("reg_date"));
 					
-					// dto.setBoardLikeCount(rs.getInt("boardLikeCount"));				
+					dto.setBoardLikeCount(rs.getInt("boardLikeCount"));				
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -469,117 +468,7 @@ public class BoardDAO {
 				DBUtil.close(pstmt);
 			}
 		}
-			
-			
-			/*
-			// 로그인 유저의 게시글 공감 유무
-			public boolean isUserBoardLike(long num, String userId) {
-				boolean result = false;
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
-				String sql;
-				
-				try {
-					sql = "SELECT num, userId FROM bbsLike WHERE num = ? AND userId = ?";
-					pstmt = conn.prepareStatement(sql);
-					
-					pstmt.setLong(1, num);
-					pstmt.setString(2, userId);
-					
-					rs = pstmt.executeQuery();
-					
-					if(rs.next()) {
-						result = true;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					DBUtil.close(rs);
-					DBUtil.close(pstmt);
-				}
-				
-				return result;
-			}
-			*/
-			
-			/*
-			// 게시물의 공감 추가
-			public void insertBoardLike(long num, String userId) throws SQLException {
-				PreparedStatement pstmt = null;
-				String sql;
-				
-				try {
-					sql = "INSERT INTO bbsLike(num, userId) VALUES (?, ?)";
-					pstmt = conn.prepareStatement(sql);
-					
-					pstmt.setLong(1, num);
-					pstmt.setString(2, userId);
-					
-					pstmt.executeUpdate();
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw e;
-				} finally {
-					DBUtil.close(pstmt);
-				}
-			}
-			*/
-			
-			/*
-			// 게시글 공감 삭제
-			public void deleteBoardLike(long num, String userId) throws SQLException {
-				PreparedStatement pstmt = null;
-				String sql;
-				
-				try {
-					sql = "DELETE FROM bbsLike WHERE num = ? AND userId = ?";
-					pstmt = conn.prepareStatement(sql);
-					
-					pstmt.setLong(1, num);
-					pstmt.setString(2, userId);
-					
-					pstmt.executeUpdate();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw e;
-				} finally {
-					DBUtil.close(pstmt);
-				}
-			}
-			*/
-			
-			/*
-			// 게시물의 공감 개수
-			public int countBoardLike(long num) {
-				int result = 0;
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
-				String sql;
-				
-				try {
-					sql = "SELECT NVL(COUNT(*), 0) FROM bbsLike WHERE num=?";
-					pstmt = conn.prepareStatement(sql);
-					
-					pstmt.setLong(1, num);
-					
-					rs = pstmt.executeQuery();
-					
-					if(rs.next()) {
-						result = rs.getInt(1);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} finally {
-					DBUtil.close(rs);
-					DBUtil.close(pstmt);
-				}
-				
-				return result;
-			}
-			*/
-			
-			
+
 			
 			// 게시물의 댓글 및 답글 추가
 			public void insertReply(Board_ReplyDTO dto) throws SQLException {
@@ -606,7 +495,6 @@ public class BoardDAO {
 			}
 			
 			
-			/*
 			// 게시물의 댓글 개수
 			public int dataCountReply(long num) {
 				int result = 0;
@@ -616,8 +504,8 @@ public class BoardDAO {
 				
 				try {
 					sql = "SELECT NVL(COUNT(*), 0) "
-							+ " FROM bbsReply "
-							+ " WHERE num = ? AND answer = 0";
+							+ " FROM board_Reply "
+							+ " WHERE board_num = ? ";
 					pstmt = conn.prepareStatement(sql);
 					
 					pstmt.setLong(1, num);
@@ -636,8 +524,6 @@ public class BoardDAO {
 				
 				return result;
 			}
-			*/
-			
 			
 			// 게시물 댓글 리스트
 			public List<Board_ReplyDTO> listReply(long num, int offset, int size) {
@@ -647,26 +533,10 @@ public class BoardDAO {
 				StringBuilder sb = new StringBuilder();
 				
 				try {
-					sb.append(" SELECT r.replyNum, r.userId, userName, num, content, r.reg_date, ");
-					sb.append("     NVL(answerCount, 0) answerCount, ");
-					sb.append("     NVL(likeCount, 0) likeCount, ");
-					sb.append("     NVL(disLikeCount, 0) disLikeCount ");
+					sb.append(" SELECT replyNum, r.email, user_name, board_num, replycontent, to_char(b_replydate, 'yyyy-mm-dd') b_replydate ");
 					sb.append(" FROM board_Reply r ");
-					sb.append(" JOIN member1 m ON r.userId = m.userId ");
-					sb.append(" LEFT OUTER  JOIN (");
-					sb.append("	    SELECT answer, COUNT(*) answerCount ");
-					sb.append("     FROM boardReply ");
-					sb.append("     WHERE answer != 0 ");
-					sb.append("     GROUP BY answer ");
-					sb.append(" ) a ON r.replyNum = a.answer ");
-					sb.append(" LEFT OUTER  JOIN ( ");
-					sb.append("	    SELECT replyNum, ");
-					sb.append("         COUNT(DECODE(replyLike, 1, 1)) likeCount, ");
-					sb.append("         COUNT(DECODE(replyLike, 0, 1)) disLikeCount ");
-					sb.append("     FROM boardReplyLike ");
-					sb.append("     GROUP BY replyNum ");
-					sb.append(" ) b ON r.replyNum = b.replyNum  ");
-					sb.append(" WHERE num = ? AND r.answer=0 ");
+					sb.append(" JOIN member1 m ON r.email = m.email ");
+					sb.append(" WHERE board_num = ? ");
 					sb.append(" ORDER BY r.replyNum DESC ");
 					sb.append(" OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ");
 					
@@ -683,8 +553,9 @@ public class BoardDAO {
 						
 						dto.setReplynum(rs.getLong("replynum"));
 						dto.setEmail(rs.getNString("email"));
+						dto.setUserName(rs.getString("user_name"));
 						dto.setReplycontent(rs.getNString("replycontent"));
-						dto.setB_replydate(rs.getNString("B_replydate"));
+						dto.setB_replydate(rs.getNString("b_replydate"));
 						
 						list.add(dto);
 					}
@@ -700,17 +571,46 @@ public class BoardDAO {
 			}
 			
 			
-			/*
-			public ReplyDTO findByReplyId(long replyNum) {
-				ReplyDTO dto = null;
+			
+			// 게시물의 댓글 삭제
+			public void deleteReply(long replyNum, String userId) throws SQLException {
+				PreparedStatement pstmt = null;
+				String sql;
+				
+				if(! userId.equals("admin")) {
+					Board_ReplyDTO dto = findByReplyId(replyNum);
+					if(dto == null || (! userId.equals(dto.getEmail()))) {
+						return;
+					}
+				}
+				
+				try {
+					sql = "DELETE FROM Board_Reply "
+							+ " WHERE replynum  = ?";
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setLong(1, replyNum);
+					
+					pstmt.executeUpdate();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw e;
+				} finally {
+					DBUtil.close(pstmt);
+				}		
+			}
+			
+			
+			public Board_ReplyDTO findByReplyId(long replyNum) {
+				Board_ReplyDTO dto = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				String sql;
 				
 				try {
-					sql = "SELECT replyNum, num, r.userId, userName, content, r.reg_date "
-							+ " FROM bbsReply r  "
-							+ " JOIN member1 m ON r.userId = m.userId  "
+					sql = "SELECT replyNum, r.email, user_name, board_num, replycontent, b_replydate "
+							+ " FROM Board_Reply r  "
+							+ " JOIN member1 m ON r.email = m.email  "
 							+ " WHERE replyNum = ? ";
 					pstmt = conn.prepareStatement(sql);
 					
@@ -719,14 +619,13 @@ public class BoardDAO {
 					rs=pstmt.executeQuery();
 					
 					if(rs.next()) {
-						dto=new ReplyDTO();
+						dto=new Board_ReplyDTO();
 						
-						dto.setReplyNum(rs.getLong("replyNum"));
-						dto.setNum(rs.getLong("num"));
-						dto.setUserId(rs.getString("userId"));
-						dto.setUserName(rs.getString("userName"));
-						dto.setContent(rs.getString("content"));
-						dto.setReg_date(rs.getString("reg_date"));
+						dto.setReplynum(rs.getLong("replynum"));
+						dto.setEmail(rs.getString("email"));
+						dto.setUserName(rs.getString("user_name"));
+						dto.setReplycontent(rs.getString("replycontent"));
+						dto.setB_replydate(rs.getString("B_replydate"));
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -736,30 +635,42 @@ public class BoardDAO {
 				}
 				
 				return dto;
-			}
-			*/
+			}	
 			
-			/*
-			// 게시물의 댓글 삭제
-			public void deleteReply(long replyNum, String userId) throws SQLException {
+			// 게시물의 공감 추가
+			public void insertBoardLike(long num, String userId) throws SQLException {
 				PreparedStatement pstmt = null;
 				String sql;
 				
-				if(! userId.equals("admin")) {
-					ReplyDTO dto = findByReplyId(replyNum);
-					if(dto == null || (! userId.equals(dto.getUserId()))) {
-						return;
-					}
-				}
-				
 				try {
-					sql = "DELETE FROM bbsReply "
-							+ " WHERE replyNum IN  "
-							+ " (SELECT replyNum FROM bbsReply START WITH replyNum = ?"
-							+ "     CONNECT BY PRIOR replyNum = answer)";
+					sql = "INSERT INTO board_Like(board_num, email) VALUES (?, ?)";
 					pstmt = conn.prepareStatement(sql);
 					
-					pstmt.setLong(1, replyNum);
+					pstmt.setLong(1, num);
+					pstmt.setString(2, userId);
+					
+					pstmt.executeUpdate();
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw e;
+				} finally {
+					DBUtil.close(pstmt);
+				}
+			}
+			
+			
+			// 게시글 공감 삭제
+			public void deleteBoardLike(long num, String userId) throws SQLException {
+				PreparedStatement pstmt = null;
+				String sql;
+				
+				try {
+					sql = "DELETE FROM board_Like WHERE board_num = ? AND email = ?";
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setLong(1, num);
+					pstmt.setString(2, userId);
 					
 					pstmt.executeUpdate();
 				} catch (SQLException e) {
@@ -767,75 +678,27 @@ public class BoardDAO {
 					throw e;
 				} finally {
 					DBUtil.close(pstmt);
-				}		
-			}
-			*/
-
-			/*
-			// 댓글의 답글 리스트
-			public List<ReplyDTO> listReplyAnswer(long answer) {
-				List<ReplyDTO> list = new ArrayList<>();
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
-				StringBuilder sb=new StringBuilder();
-				
-				try {
-					sb.append(" SELECT replyNum, num, r.userId, userName, content, reg_date, answer ");
-					sb.append(" FROM bbsReply r ");
-					sb.append(" JOIN member1 m ON r.userId = m.userId ");
-					sb.append(" WHERE answer = ? ");
-					sb.append(" ORDER BY replyNum DESC ");
-					pstmt = conn.prepareStatement(sb.toString());
-					
-					pstmt.setLong(1, answer);
-
-					rs = pstmt.executeQuery();
-					
-					while(rs.next()) {
-						ReplyDTO dto=new ReplyDTO();
-						
-						dto.setReplyNum(rs.getLong("replyNum"));
-						dto.setNum(rs.getLong("num"));
-						dto.setUserId(rs.getString("userId"));
-						dto.setUserName(rs.getString("userName"));
-						dto.setContent(rs.getString("content"));
-						dto.setReg_date(rs.getString("reg_date"));
-						dto.setAnswer(rs.getLong("answer"));
-						
-						list.add(dto);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} finally {
-					DBUtil.close(rs);
-					DBUtil.close(pstmt);
 				}
-				
-				return list;
 			}
-			*/
 			
-			/*
-			// 댓글의 답글 개수
-			public int dataCountReplyAnswer(long answer) {
+			// 게시물의 공감 개수
+			public int countBoardLike(long num) {
 				int result = 0;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				String sql;
 				
 				try {
-					sql = "SELECT NVL(COUNT(*), 0) "
-							+ " FROM bbsReply WHERE answer = ?";
+					sql = "SELECT NVL(COUNT(*), 0) FROM board_Like WHERE board_num=?";
 					pstmt = conn.prepareStatement(sql);
 					
-					pstmt.setLong(1, answer);
+					pstmt.setLong(1, num);
 					
 					rs = pstmt.executeQuery();
 					
 					if(rs.next()) {
-						result=rs.getInt(1);
+						result = rs.getInt(1);
 					}
-					
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} finally {
@@ -845,66 +708,4 @@ public class BoardDAO {
 				
 				return result;
 			}
-			*/
-			
-			/*
-			// 댓글의 좋아요 / 싫어요 추가
-			public void insertReplyLike(ReplyDTO dto) throws SQLException {
-				PreparedStatement pstmt = null;
-				String sql;
-				
-				try {
-					sql = "INSERT INTO bbsReplyLike(replyNum, userId, replyLike) VALUES (?, ?, ?)";
-					pstmt = conn.prepareStatement(sql);
-					
-					pstmt.setLong(1, dto.getReplyNum());
-					pstmt.setString(2, dto.getUserId());
-					pstmt.setInt(3, dto.getReplyLike());
-					
-					pstmt.executeUpdate();
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw e;
-				} finally {
-					DBUtil.close(pstmt);
-				}		
-
-			}
-			*/
-			
-			/*
-			// 댓글의 좋아요 / 싫어요 개수
-			public Map<String, Integer> countReplyLike(long replyNum) {
-				Map<String, Integer> map = new HashMap<>();
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
-				String sql;
-				
-				try {
-					sql = " SELECT COUNT(DECODE(replyLike, 1, 1)) likeCount,  "
-						+ "     COUNT(DECODE(replyLike, 0, 1)) disLikeCount  "
-						+ " FROM bbsReplyLike WHERE replyNum = ? ";
-					pstmt = conn.prepareStatement(sql);
-					
-					pstmt.setLong(1, replyNum);
-					
-					rs = pstmt.executeQuery();
-					
-					if(rs.next()) {
-						map.put("likeCount", rs.getInt("likeCount"));
-						map.put("disLikeCount", rs.getInt("disLikeCount"));
-					}
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} finally {
-					DBUtil.close(rs);
-					DBUtil.close(pstmt);
-				}
-				
-				return map;
-				*/
-		}
-		
-
+}

@@ -14,11 +14,11 @@
 				<span class='bold'>${dto.userName}</span>
 			</td>
 			<td width='50%' align='right'>
-				<span>${dto.reg_date}</span> |
+				<span></span> |
 				
 				<c:choose>
-					<c:when test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId == 'admin'}">
-						<span class='deleteReply' data-replyNum='${dto.replyNum}' data-pageNo='${pageNo}'>삭제</span>
+					<c:when test="${sessionScope.member.email==dto.email || sessionScope.member.email == 'admin'}">
+						<span class='deleteReply' data-replyNum='${dto.replynum}' data-pageNo='${pageNo}'>삭제</span>
 					</c:when>
 					<c:otherwise>
 						<span class='notifyReply'>신고</span>
@@ -28,31 +28,9 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan='2' valign='top'>${dto.content}</td>
+			<td colspan='2' valign='top'>${dto.replycontent}</td>
 		</tr>
 
-		<tr>
-			<td>
-				<button type='button' class='btn btn-light btnReplyAnswerLayout' data-replyNum='${dto.replyNum}'>답글 <span id="answerCount${dto.replyNum}">${dto.answerCount}</span></button>
-			</td>
-			<td align='right'>
-				<button type='button' class='btn btn-light btnSendReplyLike' data-replyNum='${dto.replyNum}' data-replyLike='1' title="좋아요"><i class="bi bi-hand-thumbs-up"></i> <span>${dto.likeCount}</span></button>
-				<button type='button' class='btn btn-light btnSendReplyLike' data-replyNum='${dto.replyNum}' data-replyLike='0' title="싫어요"><i class="bi bi-hand-thumbs-down"></i> <span>${dto.disLikeCount}</span></button>	        
-			</td>
-		</tr>
-	
-	    <tr class='reply-answer'>
-	        <td colspan='2'>
-	            <div id='listReplyAnswer${dto.replyNum}' class='answer-list'></div>
-	            <div class="answer-form">
-	                <div class='answer-left'>└</div>
-	                <div class='answer-right'><textarea class='form-control'></textarea></div>
-	            </div>
-	             <div class='answer-footer'>
-	                <button type='button' class='btn btn-light btnSendReplyAnswer' data-replyNum='${dto.replyNum}'>답글 등록</button>
-	            </div>
-			</td>
-	    </tr>
 	</c:forEach>
 </table>
 

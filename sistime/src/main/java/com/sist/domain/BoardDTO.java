@@ -5,10 +5,26 @@ public class BoardDTO {
 	private String title;
 	private String content;
 	private String reg_date;
+	private String userName;
 	private int hitcount;
 	private String email;
 	private int boardLikeCount;
 	
+	private int num;
+	private int likeCheck;
+	
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public int getLikeCheck() {
+		return likeCheck;
+	}
+	public void setLikeCheck(int likeCheck) {
+		this.likeCheck = likeCheck;
+	}
 	public long getBoard_num() {
 		return board_num;
 	}
@@ -50,6 +66,12 @@ public class BoardDTO {
 	}
 	public void setBoardLikeCount(int boardLikeCount) {
 		this.boardLikeCount = boardLikeCount;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 

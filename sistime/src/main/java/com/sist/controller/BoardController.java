@@ -187,8 +187,8 @@ public class BoardController {
 			BoardDTO nextDto = dao.findByNext(dto.getBoard_num(), schType, kwd);
 			
 			// 로그인 유지의 게시글 공감 여부
-			HttpSession session = req.getSession();
-			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			// HttpSession session = req.getSession();
+			// SessionInfo info = (SessionInfo)session.getAttribute("member");
 			// boolean isUserLike = dao.isUserBoardLike(num, info.getEmail());
 			
 			ModelAndView mav = new ModelAndView("board/article");
@@ -306,47 +306,6 @@ public class BoardController {
 		return new ModelAndView("redirect:/board/list?" + query);
 	}
 	
-	
-	/*
-	// 게시글 공감 저장 - AJAX/JSON
-		@ResponseBody
-		@RequestMapping(value = "/board/insertBoardLike", method = RequestMethod.POST)
-		public Map<String, Object> insertBoardLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			// 넘어온 파라미터 : 글번호, 공감/공감취소여부
-			Map<String, Object> model = new HashMap<String, Object>();
-			
-			BoardDAO dao = new BoardDAO();
-			
-			HttpSession session = req.getSession();
-			SessionInfo info = (SessionInfo)session.getAttribute("member");
-			
-			String state = "false";
-			int boardLikeCount = 0;
-			
-			try {
-				long num = Long.parseLong(req.getParameter("num"));
-				String isNoLike = req.getParameter("isNoLike");
-				
-				if(isNoLike.equals("true")) {
-					// 공감
-					dao.insertBoardLike(num, info.getEmail());
-				} else {
-					// 공감 취소
-					dao.deleteBoardLike(num, info.getUserId());
-				}
-				
-				boardLikeCount = dao.countBoardLike(num);
-				
-				state = "true";
-			} catch (Exception e) {
-			}
-			
-			model.put("state", state);
-			model.put("boardLikeCount", boardLikeCount);
-			
-			return model;
-		}
-		*/
 		
 		// 댓글/답글 저장 - AJAX/JSON
 		@ResponseBody
@@ -403,7 +362,7 @@ public class BoardController {
 				int total_page = 0;
 				int replyCount = 0;
 				
-				// replyCount = dao.dataCount(num);
+				replyCount = dao.dataCountReply(num);
 				total_page = util.pageCount(replyCount, size);
 				if(current_page > total_page) {
 					current_page = total_page;
@@ -413,14 +372,13 @@ public class BoardController {
 				if(offset < 0) offset = 0;
 				
 			 	List<Board_ReplyDTO> listReply = dao.listReply(num, offset, size);
-				
+
 				for(Board_ReplyDTO dto : listReply) {
 					dto.setReplycontent(dto.getReplycontent().replaceAll("\n", "<br>"));
 				}
 				
 				// 페이징 : 자바 스크립트 함수(listPage)를 호출
-				String paging = util.pagingMethod(current_page, total_page,
-						"listPage");
+				String paging = util.pagingMethod(current_page, total_page, "listPage");
 				
 				ModelAndView mav = new ModelAndView("board/listReply");
 				
@@ -440,10 +398,10 @@ public class BoardController {
 				throw e;
 			}
 		}
+	
 		
-		/*
 		@ResponseBody
-		@RequestMapping(value = "/bbs/deleteReply", method = RequestMethod.POST)
+		@RequestMapping(value = "/board/deleteReply", method = RequestMethod.POST)
 		public Map<String, Object> deleteReply(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			Map<String, Object> model = new HashMap<String, Object>();
 			
@@ -456,7 +414,7 @@ public class BoardController {
 			try {
 				long replyNum = Long.parseLong(req.getParameter("replyNum"));
 				
-				dao.deleteReply(replyNum, info.getUserId());
+				dao.deleteReply(replyNum, info.getEmail());
 				
 				state = "true";
 			} catch (Exception e) {
@@ -467,56 +425,11 @@ public class BoardController {
 			return model;
 		}
 		
-		// 댓글의 답글 리스트  - AJAX : Text
-		@RequestMapping(value = "/bbs/listReplyAnswer", method = RequestMethod.GET)
-		public ModelAndView listReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			BoardDAO dao = new BoardDAO();
-			
-			try {
-				long answer = Long.parseLong(req.getParameter("answer"));
-				
-				List<ReplyDTO> listReplyAnswer = dao.listReplyAnswer(answer);
-				
-				for(ReplyDTO dto : listReplyAnswer) {
-					dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
-				}
-				
-				ModelAndView mav = new ModelAndView("bbs/listReplyAnswer");
-				mav.addObject("listReplyAnswer", listReplyAnswer);
-				return mav;
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				resp.sendError(400);
-				throw e;
-			}
-		}
-		
-		// 댓글별 답글 개수 : AJAX - JSON
+		// 게시글 공감 저장 - AJAX/JSON
 		@ResponseBody
-		@RequestMapping(value = "/bbs/countReplyAnswer", method = RequestMethod.POST)
-		public Map<String, Object> countReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			Map<String, Object> model = new HashMap<String, Object>();
-			
-			BoardDAO dao = new BoardDAO();
-			int count = 0;
-			try {
-				long answer = Long.parseLong(req.getParameter("answer"));
-				count = dao.dataCountReplyAnswer(answer);
-				
-				model.put("state", "true");
-			} catch (Exception e) {
-				model.put("state", "false");
-			}
-			model.put("count", count);
-			
-			return model;
-		}
-		
-		// AJAX - 댓글 공감/비공감 저장 : JSON
-		@ResponseBody
-		@RequestMapping(value = "/bbs/insertReplyLike", method = RequestMethod.POST)
-		public Map<String, Object> insertReplyLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		@RequestMapping(value = "/board/insertBoardLike", method = RequestMethod.POST)
+		public Map<String, Object> insertBoardLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			// 넘어온 파라미터 : 글번호, 공감/공감취소여부
 			Map<String, Object> model = new HashMap<String, Object>();
 			
 			BoardDAO dao = new BoardDAO();
@@ -525,51 +438,32 @@ public class BoardController {
 			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
 			String state = "false";
-			int likeCount = 0;
-			int disLikeCount = 0;
+			int boardLikeCount = 0;
 			
 			try {
-				long replyNum = Long.parseLong(req.getParameter("replyNum"));
-				int replyLike = Integer.parseInt(req.getParameter("replyLike"));
+				long num = Long.parseLong(req.getParameter("num"));
+				String isNoLike = req.getParameter("isNoLike");
 				
-				ReplyDTO dto = new ReplyDTO();
-				dto.setReplyNum(replyNum);
-				dto.setUserId(info.getUserId());
-				dto.setReplyLike(replyLike);
-				
-				dao.insertReplyLike(dto);
-				
-				Map<String, Integer> map = dao.countReplyLike(replyNum);
-				if(map.containsKey("likeCount")) {
-					likeCount = map.get("likeCount");
+				if(isNoLike.equals("true")) {
+					// 공감
+					dao.insertBoardLike(num, info.getEmail());
+				} else {
+					// 공감 취소
+					dao.deleteBoardLike(num, info.getEmail());
 				}
 				
-				if(map.containsKey("disLikeCount")) {
-					disLikeCount = map.get("disLikeCount");
-				}
+				boardLikeCount = dao.countBoardLike(num);
 				
 				state = "true";
-			} catch (SQLException e) {
-				if(e.getErrorCode() == 1) {
-					state = "liked";
-				}
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 			
 			model.put("state", state);
-			model.put("likeCount", likeCount);
-			model.put("disLikeCount", disLikeCount);
+			model.put("boardLikeCount", boardLikeCount);
 			
 			return model;
 		}
-		*/
-	
-	
-	
-	
-	
-	}
+}
 	
 	
 	

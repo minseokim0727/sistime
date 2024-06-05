@@ -10,8 +10,6 @@ public class Board_ReplyDTO {
 	private String userName;
 	private String title;
 	
-	
-	
 	public long getReplynum() {
 		return replynum;
 	}
@@ -54,5 +52,8 @@ public class Board_ReplyDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	
+	
 
 }

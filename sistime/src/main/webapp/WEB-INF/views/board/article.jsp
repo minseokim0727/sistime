@@ -214,7 +214,7 @@ $(function(){
 				$i.css("color", color);
 				
 				let count = data.boardLikeCount;
-				("#boardLikeCount").text(count);
+				$("#boardLikeCount").text(count);
 			}
 		};
 		
@@ -255,7 +255,7 @@ $(function(){
 		content = encodeURIComponent(content);
 		
 		let url = "${pageContext.request.contextPath}/board/insertReply";
-		let query = "num=" + num + "&content=" + content + "&answer=0";
+		let query = "num=" + num + "&content=" + content;
 		
 		const fn = function(data) {
 			$tb.find("textarea").val("");
@@ -287,148 +287,6 @@ $(function(){
 		
 		const fn = function(data) {
 			listPage(page);
-		};
-		
-		ajaxFun(url, "post", query, "json", fn);
-	});
-});
-
-// 댓글 좋아요 / 싫어요
-$(function(){
-	$(".reply").on("click", ".btnSendReplyLike", function(){
-		let replyNum = $(this).attr("data-replyNum");
-		let replyLike = $(this).attr("data-replyLike");
-		const $btn = $(this);
-		
-		let msg = "게시글에 공감하지 않으십니까 ?";
-		if(replyLike === "1") {
-			msg = "게시글에 공감하십니까 ?";
-		}
-		
-		if(! confirm(msg)) {
-			return false;
-		}
-		
-		let url = "${pageContext.request.contextPath}/board/insertReplyLike";
-		let query = "replyNum="+replyNum+"&replyLike="+replyLike;
-		
-		const fn = function(data) {
-			let state = data.state;
-			if(state === "true") {
-				let likeCount = data.likeCount;
-				let disLikeCount = data.disLikeCount;
-				
-				$btn.parent("td").children().eq(0).find("span").html(likeCount);
-				$btn.parent("td").children().eq(1).find("span").html(disLikeCount);
-			} else if(state === "liked") {
-				alert("게시글 공감 여부는 한번만 가능합니다.");
-			} else {
-				alert("게시글 공감 여부 처리가 실패했습니다.");
-			}
-		};
-		
-		ajaxFun(url, "post", query, "json", fn);
-		
-		
-		
-	});
-});
-
-// 댓글별 답글 리스트
-function listReplyAnswer(answer) {
-	let url = "${pageContext.request.contextPath}/board/listReplyAnswer";
-	let query = "answer=" + answer;
-	let selector = "#listReplyAnswer" + answer;
-	
-	const fn = function(data) {
-		$(selector).html(data);
-	};
-	
-	ajaxFun(url, "get", query, "text", fn);
-}
-
-// 댓글별 답글 개수
-function countReplyAnswer(answer) {
-	let url = "${pageContext.request.contextPath}/board/countReplyAnswer";
-	let query = "answer=" + answer;
-	
-	const fn = function(data) {
-		let count = data.count;
-		let selector = "#answerCount" + answer;
-		$(selector).html(count);
-	};
-	
-	ajaxFun(url, "post", query, "json", fn);
-}
-
-// 댓글별 답글 버튼
-$(function(){
-	$(".reply").on("click", ".btnReplyAnswerLayout", function(){
-		const $trReplyAnswer = $(this).closest("tr").next();
-		
-		let isVisible = $trReplyAnswer.is(":visible");
-		let replyNum = $(this).attr("data-replyNum");
-		
-		if(isVisible) {
-			$trReplyAnswer.hide();
-		} else {
-			$trReplyAnswer.show();
-			
-			// 답글 리스트
-			listReplyAnswer(replyNum);
-			
-			// 답글 개수
-			countReplyAnswer(replyNum);
-		}
-	});	
-});
-
-// 댓글별 답글 등록버튼
-$(function(){
-	$(".reply").on("click", ".btnSendReplyAnswer", function(){
-		let num = "${dto.board_num}";
-		let replyNum = $(this).attr("data-replyNum");
-		const $td = $(this).closest("td");
-		
-		let content = $td.find("textarea").val().trim();
-		if(! content) {
-			$td.find("textarea").focus();
-			return false;
-		}
-		content = encodeURIComponent(content);
-		
-		let url = "${pageContext.request.contextPath}/board/insertReply";
-		let query = "num="+num+"&content="+content+"&answer="+replyNum;
-		
-		const fn = function(data) {
-			$td.find("textarea").val("");
-			
-			let state = data.state;
-			if(state === "true") {
-				listReplyAnswer(replyNum);
-				countReplyAnswer(replyNum);
-			}
-		};
-		
-		ajaxFun(url, "post", query, "json", fn);
-	});	
-});
-
-// 댓글별 답글 삭제
-$(function(){
-	$(".reply").on("click", ".deleteReplyAnswer", function(){
-		if(! confirm('게시글을 삭제하시겠습니까 ? ')) {
-			return false;
-		}
-		let replyNum = $(this).attr("data-replyNum");
-		let answer =$(this).attr("data-answer");
-		
-		let url = "${pageContext.request.contextPath}/board/deleteReply";
-		let query = "replyNum=" + replyNum;
-		
-		const fn = function(data) {
-			listReplyAnswer(answer);
-			countReplyAnswer(answer);
 		};
 		
 		ajaxFun(url, "post", query, "json", fn);
