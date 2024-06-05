@@ -58,7 +58,7 @@ function searchList() {
 							<tr>
 								<td>${dataCount - (page-1) * size - status.index}</td>
 								<td class="left">
-									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.num}" class="text-reset">${dto.comp_reason}</a>
+									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.num}&page=1&size=10&reason=${dto.comp_reason}" class="text-reset">${dto.comp_reason}</a>
 								</td>
 								<td>${dto.email}</td>
 							</tr>
