@@ -251,20 +251,24 @@ public class MypageDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT board_name, title, content, reg_date "
+			sql = "SELECT board_name, title, content, reg_date ,board_num "
 					+ " FROM board "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title, content, reg_date "
+					+ " SELECT board_name, title, content, reg_date, RB_num "
 					+ " FROM requestboard "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title, content, reg_date "
+					+ " SELECT board_name, title, content, reg_date, qna_num "
 					+ " FROM qna "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title , to_char(content), reg_date "
+					+ " SELECT board_name, title, to_char(content), reg_date ,Eventpage_num "
 					+ " FROM eventpage "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title, content, reg_date,Notice_num "
+					+ " FROM Notice "
 					+ " WHERE email = '"+email+"' "
 					+ " ORDER BY reg_date DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
@@ -288,7 +292,7 @@ public class MypageDAO {
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setBoard_name(rs.getString("board_name"));
-				
+				dto.setBoard_num(rs.getLong("board_num"));
 				list.add(dto);
 			}
 			
@@ -311,20 +315,24 @@ public class MypageDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT board_name, title, content, reg_date "
+			sql = "SELECT board_name, title, content, reg_date ,board_num "
 					+ " FROM board "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title, content, reg_date "
+					+ " SELECT board_name, title, content, reg_date, RB_num "
 					+ " FROM requestboard "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title, content, reg_date "
+					+ " SELECT board_name, title, content, reg_date, qna_num "
 					+ " FROM qna "
 					+ " WHERE email = '"+email+"' "
 					+ " UNION "
-					+ " SELECT board_name, title , to_char(content), reg_date "
+					+ " SELECT board_name, title, to_char(content), reg_date ,Eventpage_num "
 					+ " FROM eventpage "
+					+ " WHERE email = '"+email+"' "
+					+ " UNION "
+					+ " SELECT board_name, title, content, reg_date,Notice_num "
+					+ " FROM Notice "
 					+ " WHERE email = '"+email+"' ";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -343,7 +351,7 @@ public class MypageDAO {
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setBoard_name(rs.getString("board_name"));
-				
+				dto.setBoard_num(rs.getLong("board_num"));
 				list.add(dto);
 			}
 			
@@ -395,7 +403,7 @@ public class MypageDAO {
 				
 				dto.setBoard_num(rs.getLong("board_num"));
 				dto.setReply_content(rs.getString("replycontent"));
-				dto.setReply_board_name(rs.getString("board_name"));
+				dto.setBoard_name(rs.getString("board_name"));
 				
 				list.add(dto);
 			}
@@ -449,7 +457,7 @@ public class MypageDAO {
 				
 				dto.setBoard_num(rs.getLong("board_num"));
 				dto.setReply_content(rs.getString("replycontent"));
-				dto.setReply_board_name(rs.getString("board_name"));
+				dto.setBoard_name(rs.getString("board_name"));
 				
 				list.add(dto);
 			}

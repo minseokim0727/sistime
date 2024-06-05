@@ -24,8 +24,8 @@
                         <div class="border px-2">
 							<c:forEach var="dto" items="${dto3}" varStatus="status">
 								<div class="text-truncate px-2 subject-list">
-									<p>${dto.reply_content}</p>
 									
+									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.board_num}" class="text-reset">${dto.reply_content}</a>
 								</div>
 							</c:forEach>
 							
