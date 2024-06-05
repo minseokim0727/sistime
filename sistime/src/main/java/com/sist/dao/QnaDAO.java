@@ -21,14 +21,15 @@ public class QnaDAO {
 		
 		try {
 			sql = "INSERT INTO qna(qna_num, title, content, reg_date, secret, email,answer_content,answer_reg_date) "
-					+ " VALUES (qna_seq.NEXTVAL, ?, ?, SYSDATE, 1, ?,?,?)";
+					+ " VALUES (qna_seq.NEXTVAL, ?, ?, SYSDATE, ?, ?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
-			pstmt.setString(3, dto.getEmail());
-			pstmt.setString(4, dto.getAnswer_content());
-			pstmt.setString(5, dto.getAnswer_reg_date());
+			pstmt.setInt(3, dto.getSecret());
+			pstmt.setString(4, dto.getEmail());
+			pstmt.setString(5, dto.getAnswer_content());
+			pstmt.setString(6, dto.getAnswer_reg_date());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -107,7 +108,7 @@ public class QnaDAO {
 			StringBuilder sb = new StringBuilder();
 
 			try {
-				sb.append(" SELECT qna_num, secret, user_Name, title, answer_content,  ");
+				sb.append(" SELECT qna_num, secret, user_Name, title, answer_content, m.email, ");
 				sb.append("       TO_CHAR(reg_date, 'YYYY-MM-DD') reg_date ");
 				sb.append(" FROM qna q ");
 				sb.append(" JOIN member1 m ON q.email = m.email ");
@@ -126,7 +127,7 @@ public class QnaDAO {
 					
 					dto.setQna_num(rs.getLong("qna_num"));
 					dto.setSecret(rs.getInt("secret"));
-	                
+					dto.setEmail(rs.getString("email"));
 	                dto.setUserName(rs.getString("user_name"));
 	                dto.setTitle(rs.getString("title"));    
 	                dto.setReg_date(rs.getString("reg_date"));

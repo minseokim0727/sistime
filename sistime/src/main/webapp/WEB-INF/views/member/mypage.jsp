@@ -45,7 +45,7 @@
                         <p class="card-text">이메일 : ${dto.email}</p>
                         <p class="card-text">이름 : ${dto.userName}</p>
                         <p class="card-text">닉네임 : ${dto.nickname}</p>
-                        <p class="card-text">생일 : ${dto.birth}</p>
+                        <p class="card-text">생년월일 : ${dto.birth}</p>
                         <p class="card-text">전화번호 : ${dto.tel}</p>
                         <p class="card-text">주소 : ${dto.zip}
                         ${dto.addr1}

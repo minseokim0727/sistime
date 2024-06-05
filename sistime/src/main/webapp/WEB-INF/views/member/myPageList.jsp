@@ -28,15 +28,17 @@
 									
 								</div>
 							</c:forEach>
-							
+							   
 						</div>
-                        
+                       
                         <div class="page-navigation">
 							${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 						</div>
-                        
+                         <a href="${pageContext.request.contextPath}/member/mypage" class="btn btn-primary">이전 화면</a>
                     </div>
                 </div>
+			        	
+
               </div>
            </div>
 <footer>

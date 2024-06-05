@@ -162,7 +162,7 @@ public class MypageController {
     	int pagelistcount = mylistpage.size();
     	
     	// 전체 페이지 수
-    	int size = 5;
+    	int size = 10;
     	int total_page = util.pageCount(pagelistcount, size);
     	if (current_page > total_page) {
     		current_page = total_page;
@@ -223,7 +223,7 @@ public class MypageController {
 		int pagelistcount = mylistreply.size();
 		
 		// 전체 댓글 수
-		int size = 5;
+		int size = 10;
 		int total_page = util.pageCount(pagelistcount, size);
 		if (current_page > total_page) {
 			current_page = total_page;

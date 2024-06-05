@@ -190,6 +190,7 @@ public class QnaController {
 
 			ModelAndView mav = new ModelAndView("qna/article");
 			
+			
 			// JSP로 전달할 속성
 			mav.addObject("dto", dto);
 			mav.addObject("page", page);

@@ -22,6 +22,7 @@ function searchList() {
 	const f = document.searchForm;
 	f.submit();
 }
+
 </script>
 </head>
 <body>
@@ -64,7 +65,9 @@ function searchList() {
 											<c:if test="${sessionScope.member.email==dto.email || sessionScope.member.email=='admin'}">
 												<a href="${articleUrl}&num=${dto.qna_num}">${dto.title}</a>
 											</c:if>
-											
+											<c:if test="${sessionScope.member.email!=dto.email && sessionScope.member.email!='admin'}">
+												비밀글 입니다.
+											</c:if>
 											<i class="bi bi-file-lock2"></i>
 										</c:when>
 										<c:otherwise>
