@@ -42,7 +42,7 @@
 					<tbody>
 						<c:forEach var="dto" items="${dto3}" varStatus="status">
 							<tr>
-								<td>${dataCount - (page-1) * size - status.index}</td>
+								<td>${pagelistcount - (page-1) * size - status.index}</td>
 								<td class="left">
 									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.board_num}&size=10&page=1" class="text-reset">${dto.reply_content}</a>
 								</td>
@@ -51,9 +51,9 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				
+							
 				<div class="page-navigation">
-					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+					${pagelistcount == 0 ? "등록된 게시물이 없습니다." : paging}
 				</div>
 			</div>
 		</div>

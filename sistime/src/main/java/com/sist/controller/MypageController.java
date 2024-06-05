@@ -7,6 +7,7 @@ import java.util.List;
 import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
+import com.sist.dao.MemberDAO;
 import com.sist.dao.MypageDAO;
 
 import com.sist.domain.MemberDTO;
@@ -183,7 +184,7 @@ public class MypageController {
     	
     	
 	    mav.addObject("dto", dto);
-	    mav.addObject("pagelistcount", pagelistcount);
+	    
 	    mav.addObject("paging", paging);
 	    mav.addObject("pagelistcount", pagelistcount);
 	    mav.addObject("dto2", mylistpagelist);
@@ -244,7 +245,7 @@ public class MypageController {
 		
 		
 		mav.addObject("dto", dto);
-		mav.addObject("pagelistcount", pagelistcount);
+		
 		mav.addObject("paging", paging);
 		mav.addObject("pagelistcount", pagelistcount);
 		mav.addObject("dto3", mylistreplylist);
@@ -302,10 +303,18 @@ public class MypageController {
 			}
 			MemberDTO dto = new MemberDTO();
 			MypageDAO dao = new MypageDAO();
+			MemberDAO dao2 = new MemberDAO();
 			dto.setEmail(info.getEmail());
 		    dto.setNickname(req.getParameter("newNickname"));
-		    dao.updateNickname(dto);
 		    
+		    
+		    if(dao2.findByNickname(dto.getNickname()) != null) {
+		    	session.setAttribute("message", "중복된 닉네임입니다.");    	
+		    }else {
+		    	dao.updateNickname(dto);
+		    	session.setAttribute("message", "닉네임 변경 성공.");
+		    }
+		  
 		    
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -413,11 +422,11 @@ public class MypageController {
 	            MypageDAO dao = new MypageDAO();
 	            dao.deleteMember(email);
 
+	            // 회원탈퇴 완료 메시지를 세션에 저장
+	            session.setAttribute("message", "회원탈퇴가 완료되었습니다.");
 	           
 	            session.invalidate();
 
-	            // 회원탈퇴 완료 메시지를 세션에 저장
-	            session.setAttribute("message", "회원탈퇴가 완료되었습니다.");
 
 	            // 홈 화면으로 리다이렉트
 	            return new ModelAndView("redirect:/");

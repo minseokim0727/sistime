@@ -290,9 +290,7 @@ public class QnaController {
 			QnaDTO dto = new QnaDTO();
 			
 			dto.setQna_num(Long.parseLong(req.getParameter("num")));
-			dto.setAnswer_content(req.getParameter("answer_content"));
-			
-			// dto.setAnswerId(info.getUserId());
+			dto.setAnswer_content(req.getParameter("answer"));
 
 			dao.updateAnswer(dto);
 		} catch (Exception e) {
