@@ -434,13 +434,14 @@ public class MypageDAO {
 					+ " from(select b.eventpage_num ,r.reg_date, board_name , r.content , b.email from Eventpage b join Event_Reply r on b.Eventpage_num = r.Eventpage_num) "
 					+ " where email = ? and content is not null "
 					+ " union "
-					+ " select board_name , answer_content , email , qna_num ,answer_reg_date "
+					+ " select board_name , answer_content , email , qna_num ,answer_reg_date as reply_reg_date  "
 					+ " from qna "
 					+ " where email = ? and answer_content is not null "
 					+ " union "
-					+ " select board_name , answer_content , email , rb_num, answer_reg_date "
+					+ " select board_name , answer_content , email , rb_num, answer_reg_date as reply_reg_date "
 					+ " from requestboard "
 					+ " where email = ? and answer_content is not null "
+					+ " ORDER BY reply_reg_date DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
 			
 			pstmt = conn.prepareStatement(sql);

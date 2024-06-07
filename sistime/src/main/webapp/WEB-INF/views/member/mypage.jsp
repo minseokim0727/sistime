@@ -213,10 +213,10 @@
 
         <!-- 회원 탈퇴 -->
         
-                <form id="deleteForm" action="${pageContext.request.contextPath}/member/deletemember" method="post">
-                    <a href="${pageContext.request.contextPath}" class="btn btn-primary">홈 화면</a>
-                    <button type="button" onclick="confirmDelete()" class="btn btn-danger" style="float: right;">회원탈퇴</button>
-                </form>
+         <form id="deleteForm" action="${pageContext.request.contextPath}/member/deletemember" method="post">
+         	<a href="${pageContext.request.contextPath}" class="btn btn-primary">홈 화면</a>
+         	<button type="button" onclick="confirmDelete()" class="btn btn-danger" style="float: right;">회원탈퇴</button>
+         </form>
             
     </div>
 </div>
