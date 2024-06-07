@@ -35,7 +35,7 @@ function searchList() {
 	<div class="container">
 		<div class="body-container">	
 			<div class="body-title">
-				<h3><i class="bi bi-whatsapp"></i> 1대1문의 </h3>
+				<h3><i class="bi bi-whatsapp"></i> 요청 문의 </h3>
 			</div>
 			
 			<div class="body-main">
@@ -63,7 +63,7 @@ function searchList() {
 									<c:choose>
 										<c:when test="${dto.secret==1}">
 											<c:if test="${sessionScope.member.email==dto.email || sessionScope.member.email=='admin'}">
-												<a href="${articleUrl}&num=${dto.qna_num}">${dto.title}</a>
+												<a href="${articleUrl}&num=${dto.RB_num}">${dto.title}</a>
 											</c:if>
 											<c:if test="${sessionScope.member.email!=dto.email && sessionScope.member.email!='admin'}">
 												비밀글 입니다.
@@ -71,12 +71,12 @@ function searchList() {
 											<i class="bi bi-file-lock2"></i>
 										</c:when>
 										<c:otherwise>
-											<a href="${articleUrl}&num=${dto.qna_num}">${dto.title}</a>
+											<a href="${articleUrl}&num=${dto.RB_num}">${dto.title}</a>
 										</c:otherwise>
 									</c:choose>								
 									
 								</td>
-								<td>${dto.userName}</td>
+								<td>${dto.nickname}</td>
 								<td>${dto.reg_date}</td>
 								<td>${not empty dto.answer_content ? "답변완료" : "답변대기"}</td>
 							</tr>
@@ -90,10 +90,10 @@ function searchList() {
 
 				<div class="row board-list-footer">
 					<div class="col">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/list';"><i class="bi bi-arrow-clockwise"></i></button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/requestboard/list';"><i class="bi bi-arrow-clockwise"></i></button>
 					</div>
 					<div class="col-6 text-center">
-						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/qna/list" method="post">
+						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/requestboard/list" method="post">
 							<div class="col p-1">
 								<input type="text" name="kwd" value="${kwd}" class="form-control" placeholder="검색 키워드를 입력하세요">
 							</div>
@@ -103,7 +103,7 @@ function searchList() {
 						</form>
 					</div>
 					<div class="col text-end">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/write';">질문등록</button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/requestboard/write';">질문등록</button>
 					</div>
 				</div>
 

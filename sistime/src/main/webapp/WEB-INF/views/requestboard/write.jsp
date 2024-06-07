@@ -36,7 +36,7 @@ function sendOk() {
         return;
     }
 
-    f.action = "${pageContext.request.contextPath}/qna/${mode}";
+    f.action = "${pageContext.request.contextPath}/requestboard/${mode}";
     f.submit();
 }
 </script>
@@ -51,7 +51,7 @@ function sendOk() {
 	<div class="container">
 		<div class="body-container">	
 			<div class="body-title">
-				<h3><i class="bi bi-whatsapp"></i> 1대1문의 </h3>
+				<h3><i class="bi bi-whatsapp"></i> 요청 문의 </h3>
 			</div>
 			
 			<div class="body-main">
@@ -84,6 +84,13 @@ function sendOk() {
 						</tr>
 						
 						<tr>
+							<td class="bg-light col-sm-2" scope="row">사유</td>
+							<td class="py-3"> 
+								<input type="text" name="reason" class="form-control" value="${dto.reason}">
+							</td>
+						</tr>
+						
+						<tr>
 							<td class="bg-light col-sm-2" scope="row">내 용</td>
 							<td>
 								<textarea name="content" id="content" class="form-control">${dto.content}</textarea>
@@ -96,9 +103,9 @@ function sendOk() {
 							<td class="text-center">
 								<button type="button" class="btn btn-dark" onclick="sendOk();">${mode=='update'?'수정완료':'등록하기'}&nbsp;<i class="bi bi-check2"></i></button>
 								<button type="reset" class="btn btn-light">다시입력</button>
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/list';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/requestboard/list';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
 								<c:if test="${mode=='update'}">
-									<input type="hidden" name="num" value="${dto.qna_num}">
+									<input type="hidden" name="num" value="${dto.RB_num}">
 									<input type="hidden" name="page" value="${page}">
 								</c:if>
 							</td>

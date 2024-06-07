@@ -23,8 +23,8 @@
 			let s = mode === "question" ? "질문" : "답변";
 			
 			if(confirm(s + "을 삭제 하시 겠습니까 ? ")) {
-				let query = "num=${dto.qna_num}&${query}&mode="+mode;
-				let url = "${pageContext.request.contextPath}/qna/delete?" + query;
+				let query = "num=${dto.RB_num}&${query}&mode="+mode;
+				let url = "${pageContext.request.contextPath}/requestboard/delete?" + query;
 				location.href = url;
 			}
 		}
@@ -48,7 +48,7 @@
 					return false;
 				}
 				
-				f.action = "${pageContext.request.contextPath}/qna/answer";
+				f.action = "${pageContext.request.contextPath}/requestboard/answer";
 				f.submit();
 			});
 		});
@@ -81,7 +81,7 @@
 	<div class="container">
 		<div class="body-container">	
 			<div class="body-title">
-				<h3><i class="bi bi-whatsapp"></i> 질문과 답변 </h3>
+				<h3><i class="bi bi-whatsapp"></i> 요청 문의 </h3>
 			</div>
 			
 			<div class="body-main">
@@ -102,7 +102,7 @@
 						</tr>					
 						<tr>
 							<td width="50%">
-								이름 : ${dto.userName}
+								이름 : ${dto.nickname}
 							</td>
 							<td align="right">
 								문의일자 : ${dto.reg_date}
@@ -159,7 +159,7 @@
 								<c:choose>
 									<c:when test="${prevDto.secret==1}">
 										<c:if test="${sessionScope.member.email==prevDto.email || sessionScope.member.email=='admin'}">
-											<a href="${pageContext.request.contextPath}/qna/article?num=${prevDto.qna_num}&${query}">${prevDto.title}</a>
+											<a href="${pageContext.request.contextPath}/requestboard/article?num=${prevDto.RB_num}&${query}">${prevDto.title}</a>
 										</c:if>
 										<c:if test="${sessionScope.member.email!=prevDto.email && sessionScope.member.email!='admin'}">
 											비밀글 입니다.
@@ -167,7 +167,7 @@
 										<i class="bi bi-file-lock2"></i>
 									</c:when>
 									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/qna/article?num=${prevdto.qna_num}&${query}">${prevDto.title}</a>
+										<a href="${pageContext.request.contextPath}/requestboard/article?num=${prevdto.RB_num}&${query}">${prevDto.title}</a>
 									</c:otherwise> 
 								</c:choose>
 							</c:if>
@@ -180,7 +180,7 @@
 								<c:choose>
 									<c:when test="${nextDto.secret==1}">
 										<c:if test="${sessionScope.member.email==nextDto.email || sessionScope.member.email=='admin'}">
-											<a href="${pageContext.request.contextPath}/qna/article?num=${nextDto.qna_num}&${query}">${nextDto.title}</a>
+											<a href="${pageContext.request.contextPath}/requestboard/article?num=${nextDto.RB_num}&${query}">${nextDto.title}</a>
 										</c:if>
 										<c:if test="${sessionScope.member.email!=nextDto.email && sessionScope.member.email!='admin'}">
 											비밀글 입니다.
@@ -188,7 +188,7 @@
 										<i class="bi bi-file-lock2"></i>
 									</c:when>
 									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/qna/article?num=${nextDto.qna_num}&${query}">${nextDto.title}</a>
+										<a href="${pageContext.request.contextPath}/requestboard/article?num=${nextDto.RB_num}&${query}">${nextDto.title}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:if>
@@ -200,7 +200,7 @@
 					<tr>
 						<td width="50%">
 							<c:if test="${sessionScope.member.email==dto.email}">
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/update?num=${dto.qna_num}&page=${page}';">질문수정</button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/requestboard/update?num=${dto.RB_num}&page=${page}';">질문수정</button>
 							</c:if>
 							
 							
@@ -221,7 +221,7 @@
 				    		
 						</td>
 						<td class="text-end">
-							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/list?${query}';">리스트</button>
+							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/requestboard/list?${query}';">리스트</button>
 						</td>
 					</tr>
 				</table>
@@ -240,7 +240,7 @@
 							</tr>
 							<tr>
 							   <td align='right'>
-							   		<input type="hidden" name="num" value="${dto.qna_num}">	
+							   		<input type="hidden" name="num" value="${dto.RB_num}">	
 							   		<input type="hidden" name="page" value="${page}">					   
 							        <button type='button' class='btn btn-light btnSendAnswer'>답변 등록</button>
 							    </td>

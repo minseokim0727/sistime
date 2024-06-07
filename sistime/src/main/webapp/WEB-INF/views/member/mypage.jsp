@@ -9,16 +9,38 @@
     <title>마이 페이지</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .container {
-            margin-top: 50px;
-        }
-    </style>
+<style>
+  .accordion-item {
+    margin-bottom: 10px; /* 카드 간의 여백을 줄입니다 */
+  }
+
+  .accordion-button {
+    padding: 10px 15px; /* 버튼의 패딩을 줄입니다 */
+    text-align: center; /* 버튼 텍스트 가운데 정렬 */
+  }
+
+  .accordion-body {
+    padding: 10px 15px; /* 콘텐츠의 패딩을 줄입니다 */
+    
+  }
+
+  .card {
+    
+  }
+
+  
+
+  .form-control {
+    height: calc(1.5em + .75rem + 2px); /* 입력 필드의 높이를 줄입니다 */
+    padding: .25rem .5rem; /* 입력 필드의 패딩을 줄입니다 */
+    font-size: .875rem; /* 입력 필드의 폰트 크기를 줄입니다 */
+  }
+
+  .btn {
+    padding: .25rem .5rem; /* 버튼의 패딩을 줄입니다 */
+    font-size: .875rem; /* 버튼의 폰트 크기를 줄입니다 */
+  }
+</style>
     <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
 
 </head>
@@ -26,170 +48,179 @@
 <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 <body>
-    <div class="container">
-            <!-- 메시지 출력 영역 -->
-        <c:if test="${not empty message}">
+<div class="row justify-content-center">
+    <div class="col-md-5">
+		<c:if test="${not empty message}">
             <div class="alert alert-info" role="alert">
                 ${message}
             </div>
         </c:if>
-    
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <!-- 내 정보 -->
-                <div class="card">
-                    <div class="card-body">
-                    
-                        <h2 class="card-title">현재 내 정보 ▼</h2>
-                        <!-- 정보 창들 -->
+        <!-- 내 정보 -->
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                       현재 내 정보
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
+                    <div class="accordion-body">
                         <p class="card-text">이메일 : ${dto.email}</p>
                         <p class="card-text">이름 : ${dto.userName}</p>
                         <p class="card-text">닉네임 : ${dto.nickname}</p>
                         <p class="card-text">생년월일 : ${dto.birth}</p>
                         <p class="card-text">전화번호 : ${dto.tel}</p>
-                        <p class="card-text">주소 : ${dto.zip}
-                        ${dto.addr1}
-                        ${dto.addr2}
-                        </p>
-                                 
+                        <p class="card-text">주소 : ${dto.zip} ${dto.addr1} ${dto.addr2}</p>
                         <p class="card-text">가입 날짜 : ${dto.register_date}</p>
-                       	
                     </div>
                 </div>
+            </div>
 
-                <!-- 닉네임 변경 -->
-				<div class="card">
-				    <div class="card-body">
-				        <h2 class="card-title">이름 변경 ▼</h2>
-				        <!-- 현재 닉네임 -->
-				        <p class="card-text">현재 이름: ${dto.userName}</p>
-				        <!-- 닉네임 변경 확인 -->
-				        <form action="${pageContext.request.contextPath}/member/updateName" method="post">
-				            <div class="mb-3">
-				                <label for="newName" class="form-label">새로운 닉네임</label>
-				                <input type="text" class="form-control" id="newName" name="newName" required>
-				            </div>
-				            <div class="d-flex flex-row-reverse">
-				            <button type="submit" class="btn btn-primary p-2">변경 확인</button>
-				            </div>
-				        </form>
-				    </div>
-				</div>
-				
-                <!-- 닉네임 변경 -->
-				<div class="card">
-				    <div class="card-body">
-				        <h2 class="card-title">닉네임 변경 ▼</h2>
-				        <!-- 현재 닉네임 -->
-				        <p class="card-text">현재 닉네임: ${dto.nickname}</p>
-				        <!-- 닉네임 변경 확인 -->
-				        <form action="${pageContext.request.contextPath}/member/updateNickname" method="post">
-				            <div class="mb-3">
-				                <label for="newNickname" class="form-label">새로운 닉네임</label>
-				                <input type="text" class="form-control" id="newNickname" name="newNickname" required>
-				            </div>
-				            <div class="d-flex flex-row-reverse">
-				            <button type="submit" class="btn btn-primary p-2">변경 확인</button>
-				            </div>
-				        </form>
-				    </div>
-				</div>
-
-				<!-- 비밀번호 변경 -->
-				<div class="card">
-				    <div class="card-body">
-				        <h2 class="card-title">비밀번호 변경 ▼</h2>
-				        <!-- 비밀번호 변경 입력 폼 -->
-				        <form action="${pageContext.request.contextPath}/member/updatePassword" method="post">
-				            <input type="password" class="form-control mb-2" name="currentPassword" placeholder="현재 비밀번호" required>
-				            <input type="password" class="form-control mb-2" name="newPassword" placeholder="새로운 비밀번호" required>
-				            <input type="password" class="form-control mb-2" name="confirmPassword" placeholder="새로운 비밀번호 확인" required>
-				            <div class="d-flex flex-row-reverse">
-				            <button type="submit" class="btn btn-primary p-2">변경 확인</button>
-				            </div>
-				        </form>
-				    </div>
-				</div>
-
-
-                <!-- 모든 정보 수정 -->
-                <div class="card">
-                    <div class="card-body">
-                    	<h2 class="card-title">내 정보 수정 ▼</h2>
-						<form action="${pageContext.request.contextPath}/member/updateMember" method="post">
-						    
-						<div class="row mb-3">
-							<label class="col-sm-2 col-form-label" for="birth">생년월일</label>
-							<div class="col-sm-10">
-								<input type="date" name="birth" id="birth" class="form-control"
-									value="${dto.birth}" placeholder="생년월일"> <small
-									class="form-control-plaintext">생년월일은 yyyy-MM-dd 형식으로 입력
-									합니다.</small>
-							</div>
-						</div>
-						    <div class="row mb-3">
-							<label class="col-sm-2 col-form-label" for="tel">전화번호</label>
-							<div class="col-sm-10 row">
-								<div class="col-sm-10 pe-2">
-									<input type="text" name="tel" id="tel" class="form-control"
-										value="${dto.tel}" >
-								</div>
-								
-							</div>
-						</div>
-						    <div class="row mb-3">
-							<label class="col-sm-2 col-form-label" for="zip">우편번호</label>
-							<div class="col-sm-5">
-								<div class="input-group">
-									<input type="text" name="zip" id="zip" class="form-control"
-										placeholder="우편번호" value="${dto.zip}" readonly>
-									<button class="btn btn-primary " type="button"
-										style="margin-left: 3px;"
-										onclick="daumPostcode();">우편번호 검색</button>
-								</div>
-							</div>
-						</div>
-						    <div class="row mb-3">
-							<label class="col-sm-2 col-form-label" for="addr1">주소</label>
-								<div class="col-sm-10">
-									<div>
-										<input type="text" name="addr1" id="addr1" class="form-control"
-											placeholder="기본 주소" value="${dto.addr1}" readonly>
-									</div>
-									<div style="margin-top: 5px;">
-										<input type="text" name="addr2" id="addr2" class="form-control"
-											placeholder="상세 주소" value="${dto.addr2}">
-									</div>
-								</div>
-						</div>
-						    <div class="d-flex flex-row-reverse">
-				            <button type="submit" class="btn btn-primary p-2">정보 업데이트</button>
-				            </div>
-						</form>
-					</div>
+            <!-- 이름 변경 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        이름 변경 
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
+                    <div class="accordion-body">
+                        <p class="card-text">현재 이름: ${dto.userName}</p>
+                        <form action="${pageContext.request.contextPath}/member/updateName" method="post">
+                            <div class="mb-3">
+                                <label for="newName" class="form-label">새로운 닉네임</label>
+                                <input type="text" class="form-control" id="newName" name="newName" required>
+                            </div>
+                            <div class="d-flex flex-row-reverse">
+                                <button type="submit" class="btn btn-primary p-2">변경 확인</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-				  <div class="card">
-                    <div class="card-body">
-                    	<h2 class="card-title"><a href="${pageContext.request.contextPath}/member/myPageList">내가 쓴 글</a></h2>                    	
-                   	</div>
-                   </div>
-                   
-                   <div class="card">
-                    <div class="card-body">
-                    	<h2 class="card-title"><a href="${pageContext.request.contextPath}/member/myReplyList">내가 쓴 댓글</a></h2>                   	
-                   	</div>
-                   </div>
+            </div>
 
-                <div>
-			        <form id="deleteForm" action="${pageContext.request.contextPath}/member/deletemember" method="post">
-			        	<a href="${pageContext.request.contextPath}" class="btn btn-primary">홈 화면</a>
-			            <button type="button" onclick="confirmDelete()" class="btn btn-danger" style="float: right;">회원탈퇴</button>
-			        </form>
-                </div> 
-                
+            <!-- 닉네임 변경 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        닉네임 변경 
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+                    <div class="accordion-body">
+                        <p class="card-text">현재 닉네임: ${dto.nickname}</p>
+                        <form action="${pageContext.request.contextPath}/member/updateNickname" method="post">
+                            <div class="mb-3">
+                                <label for="newNickname" class="form-label">새로운 닉네임</label>
+                                <input type="text" class="form-control" id="newNickname" name="newNickname" required>
+                            </div>
+                            <div class="d-flex flex-row-reverse">
+                                <button type="submit" class="btn btn-primary p-2">변경 확인</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비밀번호 변경 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        비밀번호 변경 
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" >
+                    <div class="accordion-body">
+                        <form action="${pageContext.request.contextPath}/member/updatePassword" method="post">
+                            <input type="password" class="form-control mb-2" name="currentPassword" placeholder="현재 비밀번호" required>
+                            <input type="password" class="form-control mb-2" name="newPassword" placeholder="새로운 비밀번호" required>
+                            <input type="password" class="form-control mb-2" name="confirmPassword" placeholder="새로운 비밀번호 확인" required>
+                            <div class="d-flex flex-row-reverse">
+                                <button type="submit" class="btn btn-primary p-2">변경 확인</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 모든 정보 수정 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        내 정보 수정 
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" >
+                    <div class="accordion-body">
+                        <form action="${pageContext.request.contextPath}/member/updateMember" method="post">
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="birth">생년월일</label>
+                                <div class="col-sm-10">
+                                    <input type="date" name="birth" id="birth" class="form-control" value="${dto.birth}" placeholder="생년월일">
+                                    <small class="form-control-plaintext">생년월일은 yyyy-MM-dd 형식으로 입력합니다.</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="tel">전화번호</label>
+                                <div class="col-sm-10 row">
+                                    <div class="col-sm-10 pe-2">
+                                        <input type="text" name="tel" id="tel" class="form-control" value="${dto.tel}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="zip">우편번호</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="zip" id="zip" class="form-control" placeholder="우편번호" value="${dto.zip}" readonly>
+                                        <button class="btn btn-primary" type="button" style="margin-left: 3px;" onclick="daumPostcode();">우편번호 검색</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="addr1">주소</label>
+                                <div class="col-sm-10">
+                                    <div>
+                                        <input type="text" name="addr1" id="addr1" class="form-control" placeholder="기본 주소" value="${dto.addr1}" readonly>
+                                    </div>
+                                    <div style="margin-top: 5px;">
+                                        <input type="text" name="addr2" id="addr2" class="form-control" placeholder="상세 주소" value="${dto.addr2}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row-reverse">
+                                <button type="submit" class="btn btn-primary p-2">정보 업데이트</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- 내가 쓴 글 -->
+        <div class="card">
+            <div class="card-body">
+                <a href="${pageContext.request.contextPath}/member/myPageList">내가 쓴 글</a>
+            </div>
+        </div>
+
+        <!-- 내가 쓴 댓글 -->
+        <div class="card">
+            <div class="card-body">
+                <a href="${pageContext.request.contextPath}/member/myReplyList">내가 쓴 댓글</a>
+            </div>
+        </div>
+
+        <!-- 회원 탈퇴 -->
+        
+                <form id="deleteForm" action="${pageContext.request.contextPath}/member/deletemember" method="post">
+                    <a href="${pageContext.request.contextPath}" class="btn btn-primary">홈 화면</a>
+                    <button type="button" onclick="confirmDelete()" class="btn btn-danger" style="float: right;">회원탈퇴</button>
+                </form>
+            
     </div>
+</div>
+
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 		<script>
 	    function daumPostcode() {
