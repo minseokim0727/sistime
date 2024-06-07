@@ -7,7 +7,13 @@ public class MessageDTO {
 	private String read_email;
 	private String send_date;
 	private String read_date;
-	
+	private long gap;
+	public long getGap() {
+		return gap;
+	}
+	public void setGap(long gap) {
+		this.gap = gap;
+	}
 	public int getMsg_num() {
 		return msg_num;
 	}
