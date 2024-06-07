@@ -2,6 +2,7 @@ package com.sist.filter;
 
 import java.io.IOException;
 
+import com.sist.dao.BanDAO;
 import com.sist.domain.SessionInfo;
 
 import jakarta.servlet.Filter;
@@ -34,7 +35,30 @@ public class LoginFilter implements Filter {
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
-		if(info == null && isExcludeUri(req) == false) {
+		 if(info != null) {
+	            //사용자가 BAN 상태인지 확인
+	            try {  
+	               
+	                
+	                BanDAO dao = new BanDAO();
+	                int banState = dao.findByID(info.getEmail());
+	                System.out.println(banState);
+	                System.out.println(info.getEmail());
+	                if (banState == 1) {
+	                    // BAN 상태인 경우 세션을 삭제하고 로그인 페이지로 리다이렉트
+	                    session.invalidate();
+	                    resp.sendRedirect(cp + "/member/login");
+	                    return;
+	                }
+
+	               
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	            }
+		 
+		else if(info == null && isExcludeUri(req) == false) {
+
 			if(isAjaxRequest(req)) {
 				resp.sendError(403);
 			} else {

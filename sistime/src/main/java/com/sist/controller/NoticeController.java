@@ -13,6 +13,7 @@ import java.util.List;
 import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
+import com.sist.dao.BanDAO;
 import com.sist.dao.ComplainDAO;
 import com.sist.dao.NoticeDAO;
 import com.sist.domain.ComplainDTO;
@@ -539,10 +540,11 @@ public class NoticeController {
 
 		String page = req.getParameter("page");
 		String size = req.getParameter("size");
+		long num = Long.parseLong(req.getParameter("num"));
+
 		try {
 			ComplainDTO dto = new ComplainDTO();
 
-			long num = Long.parseLong(req.getParameter("num"));
 			String board_name = req.getParameter("board_name");
 			String email = req.getParameter("email");
 			String comp_reason = req.getParameter("comp_reason");
@@ -558,8 +560,35 @@ public class NoticeController {
 			e.printStackTrace();
 		}
 
-		return new ModelAndView("redirect:/notice/list?page=" + page + "&size=" + size );
+		return new ModelAndView("redirect:/notice/article?page=" + page + "&size=" + size + "&num=" + num);
 
 	}
+	
+	@RequestMapping(value = "/notice/ban", method = RequestMethod.GET)
+	public ModelAndView ban(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// 신고
+		BanDAO dao = new BanDAO();
+
+		String page = req.getParameter("page");
+		String size = req.getParameter("size");
+		long num = Long.parseLong(req.getParameter("num"));
+		try {
+			int ban_date = Integer.parseInt(req.getParameter("ban_date"));
+			String email = req.getParameter("email");
+			String ban_reason = req.getParameter("ban_reason");
+			
+			dao.insertBan(ban_date, ban_reason, email);
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/notice/article?page=" + page + "&size=" + size + "&num=" + num );
+
+	}
+	
+	
 
 }
