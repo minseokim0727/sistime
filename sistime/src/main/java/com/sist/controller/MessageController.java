@@ -190,24 +190,25 @@ public class MessageController {
 
 			String send_email = dto.getSend_email();
 			String read_email = dto.getRead_email();
-			String yourname = dao.findbyNickname(read_email);
+
 			List<MessageDTO> list = dao.findMessage(send_email, read_email);
 
 			ModelAndView mav = new ModelAndView("message/article");
 
-			String send_nickname = info.getNickname();
+			String send_nickname = dao.findbyNickname(send_email);
+			String read_nickname = dao.findbyNickname(read_email);
 
+			if (read_nickname.equals(info.getNickname())) {
+				read_nickname = send_nickname;
+			}
 			// JSP로 전달할 속성
-			mav.addObject("send_nickname", send_nickname);
-			mav.addObject("yourname", yourname);
+			mav.addObject("read_nickname", read_nickname);
+
 			mav.addObject("dto", dto);
 			mav.addObject("list", list);
 			mav.addObject("page", page);
 			mav.addObject("query", query);
-			
-			System.out.println(yourname);
-			System.out.println(send_email);
-			System.out.println("------------");
+
 			// 포워딩
 			return mav;
 		} catch (Exception e) {
@@ -227,22 +228,28 @@ public class MessageController {
 		int msg_num = 0;
 		MessageDAO dao = new MessageDAO();
 
-		String yournick = req.getParameter("send_name");
-		String myemail = info.getEmail();
+		String send_name = req.getParameter("send_name");
+		String read_name = req.getParameter("read_name");
 		String message = req.getParameter("message");
-		String youremail = dao.findbyEmail(yournick);
 
+		String send_email = dao.findbyEmail(send_name);
+		String read_email = dao.findbyEmail(read_name);
+		
 		MessageDTO dto = new MessageDTO();
-
+		dto.setSend_email(send_email);
+		dto.setRead_email(read_email);
 		dto.setContent(message);
-		dto.setSend_email(myemail);
-		dto.setRead_email(youremail);
+		
+		System.out.println("********************");
+		System.out.println(send_email);
+		System.out.println(read_email);
+		System.out.println("********************");
 
 		msg_num = dao.insertMessage(dto);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		String passed = "false";
-		if (!youremail.equals(null)) {
+		if (!read_email.equals(null)) {
 			passed = "true";
 		}
 		map.put("msg_num", msg_num);
@@ -262,9 +269,7 @@ public class MessageController {
 		try {
 
 			String page = req.getParameter("page");
-
-			String read_nickname = req.getParameter("read_nickname");
-			String send_nickname = req.getParameter("send_nickname");
+			int msg_num = Integer.parseInt(req.getParameter("msg_num"));
 
 			int current_page = 1;
 			if (page != null) {
@@ -273,9 +278,8 @@ public class MessageController {
 
 			int size = 10;
 			int total_page = 0;
-			int messageCount = 0; // Assuming this should be retrieved from a DAO method like dao.dataCountReply()
+			int messageCount = 0;
 
-			messageCount = dao.dataCount(read_nickname, send_nickname);
 			total_page = util.pageCount(messageCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;
@@ -284,34 +288,33 @@ public class MessageController {
 			int offset = (current_page - 1) * size;
 			if (offset < 0)
 				offset = 0;
+			MessageDTO dto = dao.findbyNum(msg_num);
 
-			String send_email = dao.findbyEmail(send_nickname);
-			String read_email = dao.findbyEmail(read_nickname);
+			String send_email = dto.getSend_email();
+			String read_email = dto.getRead_email();
+			String send_nickname2 = dao.findbyNickname(send_email);
+
+			String read_nickname = dao.findbyNickname(read_email);
+
+			if (read_nickname.equals(info.getNickname())) {
+				read_nickname = send_nickname2;
+			}
 
 			List<MessageDTO> list = dao.findMessage(send_email, read_email);
-			MessageDTO dto1 = new MessageDTO();
-			for (MessageDTO dto : list) {
-				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+
+			for (MessageDTO dto1 : list) {
+				dto1.setContent(dto1.getContent().replaceAll("\n", "<br>"));
 			}
 
 			String paging = util.pagingMethod(current_page, total_page, "listPage");
 
 			ModelAndView mav = new ModelAndView("message/subMessage");
 
-			System.out.println(send_email);
-			System.out.println(read_email);
-			System.out.println(read_nickname);
-			System.out.println(send_nickname);
-
-			System.out.println("***************");
-
-			for (MessageDTO dto3 : list) {
-				System.out.println(dto3);
-			}
-			System.out.println("******************");
 			// JSP로 전달할 속성
-			mav.addObject("dto1", dto1);
-			mav.addObject("send_nickname", send_nickname);
+			mav.addObject("send_nickname", info.getNickname());
+			mav.addObject("read_nickname", read_nickname);
+
+			mav.addObject("dto", dto);
 			mav.addObject("page", current_page);
 			mav.addObject("list", list);
 			mav.addObject("paging", paging);

@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <div class="chat-messages" id="chat-messages">
+   
         <c:forEach var="dto" items="${list}">
             <c:choose>
                 <c:when test="${sessionScope.member.nickname eq dto.send_email}">
@@ -49,7 +49,7 @@
                 </c:otherwise>
             </c:choose>
         </c:forEach>
-    </div>
+   
     <div class="page-navigation">
         ${paging}
     </div>

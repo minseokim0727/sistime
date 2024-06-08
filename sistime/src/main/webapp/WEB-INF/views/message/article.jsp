@@ -100,7 +100,7 @@ body {
 <body>
 	<div class="chat-container">
 		<div class="chat-partner">
-			<p id="partner-name">${yourname}</p>
+			<p id="partner-name">${read_nickname}</p>
 		</div>
 		<div class="chat-messages" id="chat-messages"></div>
 
@@ -157,11 +157,13 @@ body {
 
 		function sendOk() {
 			let message = $("#message").val();
-			let send_name = "${yourname}";
+			let read_name = "${read_nickname}";
+			let send_name = "${sessionScope.member.nickname}";
 			let url = "${pageContext.request.contextPath}/message/messageSend";
 			let query = {
 				message : message,
-				send_name : send_name
+				send_name : send_name,
+				read_name : read_name
 			};
 
 			$.ajax({
@@ -208,7 +210,7 @@ body {
 		// 페이지 로드 시 listPage() 함수를 호출하여 메시지를 가져오도록 설정합니다.
 		$(document).ready(function() {
 			listPage();
-			setInterval(listPage, 10000); // 10초마다 새로운 메시지를 가져옴
+			setInterval(listPage, 5000); // 5초마다 새로운 메시지를 가져옴
 		});
 	</script>
 
