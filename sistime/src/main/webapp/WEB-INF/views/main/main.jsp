@@ -131,7 +131,7 @@
 								</div>
 							</c:forEach>
 						</div>	
-							<a style="float: right;">더보기</a>
+							
                 </div>
                 <div class="card">
                     <h3><a href="${pageContext.request.contextPath}/event/list">이벤트 페이지</a></h3>
