@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.sist.util.DBConn;
 import com.sist.util.DBUtil;
@@ -52,7 +54,7 @@ public class BanDAO {
 		int banState = 0;
 		
 		try {
-			sql = "select ban_state from ban where email = ?";
+			sql = "select ban_state , ban_date from ban where email = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);
 			
@@ -60,6 +62,14 @@ public class BanDAO {
 			
 			if(rs.next()) {
 				banState = rs.getInt("ban_state");
+				Timestamp OraBanDate = rs.getTimestamp("ban_date");
+				LocalDateTime bandate = OraBanDate.toLocalDateTime();
+				if(banState == 1 && bandate.isBefore(LocalDateTime.now())) {
+					System.out.println(bandate);
+					updateBanState(email);
+					banState = 0;
+				}
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -68,5 +78,22 @@ public class BanDAO {
 			DBUtil.close(rs);
 		}
 		return banState;
+	}
+	
+	public void updateBanState(String email) throws SQLException{
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "update ban set ban_state = 0 where email = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			DBUtil.close(pstmt);
+		}
 	}
 }
