@@ -20,14 +20,19 @@
 	type="text/css">
 
 <script type="text/javascript">
-	function check() {
-		const f = document.eventForm;
-		let str;
-		alert('tq');
+		function check() {
+		    const f = document.eventForm;
+		    const startDate = f.eventStartDate.value;
+		    
+		    if (!startDate.trim()) {
+		        alert("이벤트 시작 날짜를 입력하세요.");
+		        return false; // 폼 제출을 막음
+		    }
+		    
+		    f.action = "${pageContext.request.contextPath}/event/${mode}";
+		    return true;
+		}
 
-		f.action = "${pageContext.request.contextPath}/event/write";
-		return true;
-	}
 
 	<c:if test="${mode=='update'}">
 	function deleteFile(num) {
@@ -35,7 +40,7 @@
 			return;
 		}
 		let url = "${pageContext.request.contextPath}/event/deleteFile?num="
-				+ num + "&category=${category}&page=${page}";
+				+ num + "&page=${page}";
 		location.href = url;
 	}
 	</c:if>
@@ -62,27 +67,28 @@
 							<tr>
 								<td class="bg-light col-sm-2" scope="row">제 목</td>
 								<td><input type="text" name="title" class="form-control"
-									value="${dto.subject}"></td>
+									value="${dto.event_title}"></td>
 							</tr>
 
-							<c:if test="${sessionScope.member.email == 'admin'}">
-								<tr>
-									<td class="bg-light col-sm-2" scope="row">공지여부</td>
-									<td><input type="checkbox" class="form-check-input"
-										name="notice" id="notice" value="1"> <label
-										class="form-check-label" for="notice">이벤트</label></td>
-								</tr>
-							</c:if>
+
 							<tr>
 								<td class="bg-light col-sm-2" scope="row">작성자명</td>
 								<td>
 									<p class="form-control-plaintext">${sessionScope.member.nickname}</p>
 								</td>
 							</tr>
-
+							<c:if test="${sessionScope.member.email == 'admin'}">
+								<tr>
+									<td class="bg-light col-sm-2" scope="row">이벤트 시작 날짜</td>
+									<td><input type="date" name="eventStartDate"
+										class="form-control"></td>
+								</tr>
+							</c:if>
+							
 							<tr>
 								<td class="bg-light col-sm-2" scope="row">내 용</td>
-								<td><textarea name="content" id="ir1" class="form-control" style="width: 95%; height: 270px;">${dto.content}</textarea></td>
+								<td><textarea name="content" id="ir1" class="form-control"
+										style="width: 95%; height: 270px;">${dto.event_content}</textarea></td>
 							</tr>
 
 							<tr>
@@ -96,7 +102,7 @@
 									<td>
 										<p class="form-control-plaintext">
 											<c:if test="${not empty dto.saveFilename}">
-												<a href="javascript:deleteFile('${dto.num}');"><i
+												<a href="javascript:deleteFile('${dto.eventpage_num}');"><i
 													class="bi bi-trash"></i></a>
 											${dto.originalFilename}
 										</c:if>
@@ -120,9 +126,10 @@
 										onclick="location.href='${pageContext.request.contextPath}/event/list';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i
 											class="bi bi-x"></i>
 									</button> <c:if test="${mode=='update'}">
-										<input type="hidden" name="num" value="${dto.num}">
+										<input type="hidden" name="num" value="${dto.eventpage_num}">
 										<input type="hidden" name="page" value="${page}">
-										<input type="hidden" name="fileSize" value="${dto.fileSize}">
+										<input type="hidden" name="size" value="${size}">
+										<input type="hidden" name="fileSize" value="${dto.filesize}">
 										<input type="hidden" name="saveFilename"
 											value="${dto.saveFilename}">
 										<input type="hidden" name="originalFilename"
@@ -141,7 +148,6 @@
 		charset="utf-8"></script>
 
 	<script type="text/javascript">
-	alert('1');
 		var oEditors = [];
 		nhn.husky.EZCreator
 				.createInIFrame({
@@ -153,6 +159,7 @@
 
 		function submitContents(elClickedObj) {
 			oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+			console.log(document.eventForm.content.value);
 			try {
 				if (!check()) {
 					return;

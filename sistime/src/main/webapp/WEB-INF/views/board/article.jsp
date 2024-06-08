@@ -192,6 +192,7 @@ function ajaxFun(url, method, formData, dataType, fn, file = false) {
 // 게시글 공감 여부
 $(function(){
 	$(".btnSendBoardLike").click(function(){
+		
 		const $i = $(this).find("i");
 		let isNoLike = $i.css("color") === "rgb(0, 0, 0)";
 		let msg = isNoLike ? "게시글에 공감하시겠습니까 ?" : "게시글 공감을 취소하시겠습니까 ?";
