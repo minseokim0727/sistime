@@ -89,7 +89,7 @@ function searchList() {
 						</form>
 					</div>
 					<div class="col text-end">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/message/write';">글올리기</button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/message/write';">새로 보내기</button>
 					</div>
 				</div>
 

@@ -12,6 +12,7 @@ import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
 import com.sist.annotation.ResponseBody;
+import com.sist.dao.MemberDAO;
 import com.sist.dao.MessageDAO;
 import com.sist.domain.MemberDTO;
 import com.sist.domain.MessageDTO;
@@ -138,14 +139,17 @@ public class MessageController {
 
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
+		String read_nickname = req.getParameter("nickname");
+		
+		
 		MessageDAO dao = new MessageDAO();
-
+		String read_email = dao.findbyEmail(read_nickname);
+		
 		try {
 			MessageDTO dto = new MessageDTO();
 			dto.setSend_email(info.getEmail());
 			dto.setContent(req.getParameter("content"));
-			dto.setRead_email(req.getParameter("read_email"));
+			dto.setRead_email(read_email);
 
 			dao.insertMessage(dto);
 		} catch (Exception e) {
@@ -328,5 +332,28 @@ public class MessageController {
 			throw e;
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/message/nicknameCheck", method = RequestMethod.POST)
+	public Map<String, Object> nicknameCheck(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// 아이디 중복 검사 - AJAX : JSON 으로 응답
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		MemberDAO dao = new MemberDAO();
+
+		String nickname = req.getParameter("nickname");
+		MemberDTO dto = dao.findByNickname(nickname);
+		
+		String passed = "true";
+		if (dto == null) {
+			passed = "false";
+		}
+
+		map.put("passed", passed);
+
+		return map;
+	}
+
 
 }
