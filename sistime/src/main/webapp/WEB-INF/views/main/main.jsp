@@ -9,7 +9,7 @@
 <title>spring</title>
 
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
-    <style>
+<style>
         .body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -42,6 +42,36 @@
             flex: 1;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+		/* 이미지 크기 */
+        .carousel-inner img {
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+		/* 버튼 위치 */
+        .carousel-control-prev {
+            left: 25%;
+        }
+		/* 버튼 위치 */
+        .carousel-control-next {
+            right: 25%;
+        }
+        
+    	.border {
+    		margin-top: 10px;
+    		padding: 10px;
+    		border: 1px solid #ddd;
+    		border-radius: 5px;
+    		background-color: #f8f9fa;
+		}
+		
+		
+}
+        
     </style>
 </head>
 <body>
@@ -54,7 +84,7 @@
         <div id="carouselExample" class="carousel slide">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="${pageContext.request.contextPath}/resources/images/bg.png"  class="d-block w-100" alt="...">
+      <img src="${pageContext.request.contextPath}/resources/images/bg.png"  class="d-block" alt="...">
     </div>
    
   </div>
@@ -72,19 +102,51 @@
         <div class="content-wrapper">
             <div class="content">
                 <div class="card">
-                    <h3>To Do</h3>
-                    <p>Task 1</p>
-                    <p>Task 2</p>
+                    <h3><a href="${pageContext.request.contextPath}/notice/list">공지사항</a></h3>
+						<div class="border px-2">
+							<c:forEach var="dto" items="${listNotice}">
+								<div class="text-truncate pax-2 subject-list">
+									<a href="${pageContext.request.contextPath}/notice/article?page=1&size=10&num=${dto.notice_num}">${dto.title}</a>
+								</div>
+							</c:forEach>
+							<c:forEach var="n" begin="${listNotice.size() +1}" end="5">
+								<div class="text-truncate pax-2 subject-list">
+								&nbsp;
+								</div>
+							</c:forEach>
+						</div>	
                 </div>
                 <div class="card">
-                    <h3>In Progress</h3>
-                    <p>Task 3</p>
-                    <p>Task 4</p>
+                    <h3><a href="${pageContext.request.contextPath}/board/list">자유 게시판</a></h3>
+                    
+                    	<div class="border px-2">
+							<c:forEach var="dto" items="${listboard}">
+								<div class="text-truncate pax-2 subject-list">
+									<a href="${pageContext.request.contextPath}/board/article?page=1&size=10&num=${dto.board_num}">${dto.title}</a>
+								</div>
+							</c:forEach>
+							<c:forEach var="n" begin="${listboard.size() +1}" end="5">
+								<div class="text-truncate pax-2 subject-list">
+								&nbsp;
+								</div>
+							</c:forEach>
+						</div>	
+							<a style="float: right;">더보기</a>
                 </div>
                 <div class="card">
-                    <h3>Done</h3>
-                    <p>Task 5</p>
-                    <p>Task 6</p>
+                    <h3><a href="${pageContext.request.contextPath}/event/list">이벤트 페이지</a></h3>
+                    	<div class="border px-2">
+							<c:forEach var="dto" items="${listEvent}">
+								<div class="text-truncate pax-2 subject-list">
+									<a href="${pageContext.request.contextPath}/event/article?page=1&size=10&num=${dto.eventpage_num}">${dto.title}</a>
+								</div>
+							</c:forEach>
+							<c:forEach var="n" begin="${listEvent.size() +1}" end="5">
+								<div class="text-truncate pax-2 subject-list">
+								&nbsp;
+								</div>
+							</c:forEach>
+						</div>	
                 </div>
             </div>
         </div>
