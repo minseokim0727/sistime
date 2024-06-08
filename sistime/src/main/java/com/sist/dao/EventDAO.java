@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sist.domain.EventDTO;
+import com.sist.domain.EventReplyDTO;
+
 import com.sist.util.DBConn;
 import com.sist.util.DBUtil;
 
@@ -79,14 +81,44 @@ public class EventDAO {
 
 		return result;
 	}
-
-	public List<EventDTO> listEvent(int offset, int size) {
-		List<EventDTO> list = new ArrayList<EventDTO>();
-
+	public String findByNickname(String email) {
+		String nickname = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		StringBuilder sb = new StringBuilder();
+		
+		try {
+			sb.append(" SELECT e.email,m.nickname from eventpage e ");
+			sb.append(" join member1 m on e.email = m.email ");
+			sb.append(" where e.email = ? ");
+			
+			pstmt = conn.prepareStatement(sb.toString());
 
+			pstmt.setString(1, email);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				nickname = rs.getString("nickname");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return nickname;
+	}
+
+	public List<EventDTO> listEvent(int offset, int size) {
+		List<EventDTO> list = new ArrayList<EventDTO>();
+		
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+		String nickname;
 		try {
 			sb.append(" SELECT eventpage_num, m.email, title, content, ");
 			sb.append(" TO_CHAR(reg_date, 'yyyy-MM-dd') reg_date ");
@@ -94,7 +126,7 @@ public class EventDAO {
 			sb.append(" JOIN member1 m ON e.email = m.email ");
 			sb.append(" ORDER BY eventpage_num DESC ");
 			sb.append(" OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ");
-
+		
 			pstmt = conn.prepareStatement(sb.toString());
 
 			pstmt.setInt(1, offset);
@@ -110,7 +142,10 @@ public class EventDAO {
 				dto.setEvent_title(rs.getString("title"));
 				dto.setEvent_content(rs.getString("content"));
 				dto.setReg_date(rs.getString("reg_date"));
-
+				
+				
+				nickname = findByNickname(dto.getEmail());
+				dto.setNickname(nickname);
 				list.add(dto);
 			}
 
@@ -130,6 +165,7 @@ public class EventDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		StringBuilder sb = new StringBuilder();
+		String nickname;
 
 		try {
 			sb.append(" SELECT eventpage_num, e.email, title, content, ");
@@ -170,6 +206,9 @@ public class EventDAO {
 				dto.setEvent_title(rs.getString("title"));
 				dto.setEvent_content(rs.getString("content"));
 				dto.setReg_date(rs.getString("reg_date"));
+				
+				nickname = findByNickname(dto.getEmail());
+				dto.setNickname(nickname);
 
 				list.add(dto);
 			}
@@ -189,6 +228,7 @@ public class EventDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		StringBuilder sb = new StringBuilder();
+		String nickname;
 
 		try {
 			sb.append(" SELECT eventpage_num, m.email, title, content, ");
@@ -210,6 +250,9 @@ public class EventDAO {
 				dto.setEvent_title(rs.getString("title"));
 				dto.setEvent_content(rs.getString("content"));
 				dto.setReg_date(rs.getString("reg_date"));
+				
+				nickname = findByNickname(dto.getEmail());
+				dto.setNickname(nickname);
 
 				list.add(dto);
 			}
@@ -229,19 +272,18 @@ public class EventDAO {
 		String sql;
 
 		try {
-			sql = "INSERT INTO eventpage(eventpage_num, title, content, start_date, end_date, hitcount, savefilename, originalfilename, filesize, reg_date, board_name, notice, email)"
-				    + "VALUES (eventpage_seq.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), TO_DATE(?, 'YYYY-MM-DD'), 0, ?, ?, ?, SYSDATE, 'event', ?, ?)";
+			sql = "INSERT INTO eventpage(eventpage_num, title, content, start_date, hitcount, savefilename, originalfilename, filesize, reg_date, board_name, notice, email)"
+				    + "VALUES (eventpage_seq.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), 0, ?, ?, ?, SYSDATE, 'event', ?, ?)";
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1, dto.getEvent_title());
 				pstmt.setString(2, dto.getEvent_content());
-				pstmt.setString(3, "2024-06-07");  // start_date
-				pstmt.setString(4, "2024-06-07");  // end_date
-				pstmt.setString(5, dto.getSaveFilename());
-				pstmt.setString(6, dto.getOriginalFilename());
-				pstmt.setLong(7, dto.getFilesize());
-				pstmt.setLong(8, dto.getGap());
-				pstmt.setString(9, dto.getEmail());
+				pstmt.setString(3, dto.getStart_date());  // start_date
+				pstmt.setString(4, dto.getSaveFilename());
+				pstmt.setString(5, dto.getOriginalFilename());
+				pstmt.setLong(6, dto.getFilesize());
+				pstmt.setLong(7, dto.getNotice());
+				pstmt.setString(8, dto.getEmail());
 
 				pstmt.executeUpdate();
 
@@ -278,9 +320,10 @@ public class EventDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
+		String nickname;
 
 		try {
-			sql = "SELECT m.message_num, m1.email, user_Name, title, content, "
+			sql = "SELECT e.eventpage_num, m1.email, user_Name, title, content, "
 					+ " saveFilename, originalFilename, filesize, reg_date, hitCount, "
 					+ " NVL(likeCount, 0) likeCount "
 					+ " FROM eventpage e "
@@ -311,6 +354,9 @@ public class EventDAO {
 				dto.setReg_date(rs.getString("reg_date"));
 				
 				dto.setLikeCount(rs.getInt("likeCount"));
+				
+				nickname = findByNickname(dto.getEmail());
+				dto.setNickname(nickname);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -355,7 +401,7 @@ public class EventDAO {
 			} else {
 				sb.append(" SELECT eventpage_num, title FROM eventpage ");
 				sb.append(" WHERE eventpage_num > ? ");
-				sb.append(" ORDER BY num ASC ");
+				sb.append(" ORDER BY eventpage_num ASC ");
 				sb.append(" FETCH FIRST 1 ROWS ONLY ");
 
 				pstmt = conn.prepareStatement(sb.toString());
@@ -403,7 +449,7 @@ public class EventDAO {
 			if (kwd != null && kwd.length() != 0) {
 				sb.append(" SELECT eventpage_num, title ");
 				sb.append(" FROM eventpage e ");
-				sb.append(" JOIN member1 m ON b.userId = m.userId ");
+				sb.append(" JOIN member1 m ON b.email = m.email ");
 				sb.append(" WHERE eventpage_num < ? ");
 				if (schType.equals("all")) {
 					sb.append("   AND ( INSTR(title, ?) >= 1 OR INSTR(content, ?) >= 1 ) ");
@@ -425,7 +471,7 @@ public class EventDAO {
 				}
 			} else {
 				sb.append(" SELECT eventpage_num, title FROM eventpage ");
-				sb.append(" WHERE title = ? AND eventpage_num < ? ");
+				sb.append(" WHERE eventpage_num < ? ");
 				sb.append(" ORDER BY eventpage_num DESC ");
 				sb.append(" FETCH FIRST 1 ROWS ONLY ");
 
@@ -461,7 +507,7 @@ public class EventDAO {
 		try {
 			sql = "SELECT eventpage_num, email "
 					+ " FROM eventpage_like "
-					+ " WHERE num = ? AND email = ?";
+					+ " WHERE eventpage_num = ? AND email = ?";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setLong(1, num);
@@ -473,6 +519,385 @@ public class EventDAO {
 				result = true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	public void updateEvent(EventDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "UPDATE eventpage SET  title=?, content=? ,saveFilename=?, originalFilename=?, filesize=? "
+				+ " WHERE eventpage_num=? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getEvent_title());
+			pstmt.setString(2, dto.getEvent_content());
+			
+			pstmt.setString(3, dto.getSaveFilename());
+			pstmt.setString(4, dto.getOriginalFilename());
+			pstmt.setLong(5, dto.getFilesize());
+			pstmt.setLong(6, dto.getEventpage_num());
+			pstmt.executeUpdate();
+	
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}
+	}
+	
+	public void deleteEvent(long num) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "DELETE FROM eventpage WHERE eventpage_num = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, num);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}
+	}
+	
+	public void deleteEvent(long[] nums) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "DELETE FROM eventpage WHERE eventpage_num = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			for(long num : nums) {
+				pstmt.setLong(1, num);
+				pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}
+	}
+	
+	public void insertEventLike(long num, String email) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "INSERT INTO eventpage_like(eventpage_num, email) VALUES (?, ?)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, num);
+			pstmt.setString(2, email);
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}
+		
+	}
+	
+	public void deleteEventLike(long num, String email) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "DELETE FROM eventpage_like WHERE eventpage_num = ? AND email = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, num);
+			pstmt.setString(2, email);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}
+		
+	}
+	
+	public int countEventLike(long num) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT NVL(COUNT(*), 0) FROM eventpage_like WHERE eventpage_num=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, num);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	public int dataCountReply(long num) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT NVL(COUNT(*), 0) "
+					+ " FROM event_reply "
+					+ " WHERE eventpage_num = ? AND answer = 0";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, num);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	public List<EventReplyDTO> listReply(long num, int offset, int size) {
+		List<EventReplyDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			sb.append("SELECT reply_num, r.email, nickname, up_reply, content, r.reg_date, eventpage_num, ");
+			sb.append("       NVL(a.answer_count, 0) AS answerCount ");
+			sb.append("FROM event_reply r ");
+			sb.append("JOIN member1 m ON r.email = m.email ");
+			sb.append("LEFT OUTER JOIN ( ");
+			sb.append("    SELECT answer, COUNT(*) AS answer_count ");
+			sb.append("    FROM event_reply ");
+			sb.append("    WHERE answer != 0 ");
+			sb.append("    GROUP BY answer ");
+			sb.append(") a ON r.reply_num = a.answer ");
+			sb.append("WHERE eventpage_num = ? AND r.answer = 0 ");
+			sb.append("ORDER BY r.reply_num DESC ");
+			sb.append("OFFSET ? ROWS FETCH FIRST ? ROWS ONLY");
+
+			
+			pstmt = conn.prepareStatement(sb.toString());
+			
+			pstmt.setLong(1, num);
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, size);
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				EventReplyDTO dto = new EventReplyDTO();
+				
+				dto.setReply_num(rs.getLong("reply_num"));
+				dto.setUp_reply(rs.getLong("up_reply"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setEmail(rs.getString("email"));
+				dto.setContent(rs.getString("content"));
+				dto.setReg_date(rs.getString("reg_date"));
+				 dto.setAnswerCount(rs.getInt("answerCount"));
+				
+				list.add(dto);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return list;
+	}
+	
+	public void insertReply(EventReplyDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "INSERT INTO event_reply(reply_num, up_reply, email, content, answer, reg_date,eventpage_num) "
+					+ " VALUES (event_reply_seq.NEXTVAL, ?, ?, ?, ?, SYSDATE,?)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, dto.getUp_reply());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setLong(4, dto.getAnswer());
+			pstmt.setLong(5, dto.getEVENTPAGE_NUM());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}
+	}
+	
+	public EventReplyDTO readReply(long reply_num) {
+		EventReplyDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT reply_num, eventpage_num, r.email, nickname, content, r.reg_date "
+					+ "  FROM event_reply r "
+					+ "  JOIN member1 m ON r.email = m.email  "
+					+ "  WHERE reply_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, reply_num);
+
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new EventReplyDTO();
+				
+				dto.setReply_num(rs.getLong("reply_num"));
+				dto.setEVENTPAGE_NUM(rs.getLong("eventpage_num"));
+				dto.setEmail(rs.getString("email"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setContent(rs.getString("content"));
+				dto.setReg_date(rs.getString("reg_date"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return dto;
+	}
+	
+	public void deleteReply(long reply_num, String email) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		if(! email.equals("admin")) {
+			EventReplyDTO dto = readReply(reply_num);
+			if(dto == null || (! email.equals(dto.getEmail()))) {
+				return;
+			}
+		}
+		
+		try {
+			sql = "DELETE FROM event_reply "
+					+ "  WHERE reply_num IN  "
+					+ "  (SELECT reply_num FROM event_Reply START WITH reply_num = ?"
+					+ "     CONNECT BY PRIOR reply_num = answer)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, reply_num);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			DBUtil.close(pstmt);
+		}		
+		
+	}
+	
+	public List<EventReplyDTO> listReplyAnswer(long answer) {
+		List<EventReplyDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = " SELECT reply_num, up_reply, r.email, nickname, content, reg_date, answer "
+					+ " FROM event_reply r "
+					+ " JOIN member1 m ON r.email = m.email "
+					+ " WHERE answer = ? "
+					+ " ORDER BY reply_num DESC ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, answer);
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				EventReplyDTO dto = new EventReplyDTO();
+				
+				dto.setReply_num(rs.getLong("reply_num"));
+				dto.setUp_reply(rs.getLong("up_reply"));
+				dto.setEmail(rs.getString("email"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setContent(rs.getString("content"));
+				dto.setReg_date(rs.getString("reg_date"));
+				dto.setAnswer(rs.getLong("answer"));
+				
+				list.add(dto);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+		
+		return list;
+	}
+	
+	public int dataCountReplyAnswer(long answer) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT NVL(COUNT(*), 0) FROM event_reply WHERE answer = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, answer);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			DBUtil.close(rs);

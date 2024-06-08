@@ -245,7 +245,7 @@ public class MypageDAO {
 	// 내가 쓴 글 리스트
 	public List<MypageDTO> myListpageList(String email, int offset, int size){
 		List<MypageDTO> list = new ArrayList<MypageDTO>();
-		System.out.println(11);
+		//System.out.println(11);
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
@@ -310,7 +310,7 @@ public class MypageDAO {
 	// 내가 쓴 글 카운트 용도
 	public List<MypageDTO> myListpage(String email){
 		List<MypageDTO> list = new ArrayList<MypageDTO>();
-		System.out.println(11);
+		//System.out.println(11);
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;

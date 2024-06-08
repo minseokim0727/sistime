@@ -128,7 +128,7 @@ function searchList() {
 									<td class="left">
 										<span class="d-inline-block text-truncate align-middle" style="max-width: 390px;"><a href="${articleUrl}&num=${dto.eventpage_num}" class="text-reset">${dto.event_title}</a></span>
 									</td>
-									<td>${dto.email}</td>
+									<td>관리자</td>
 									<td>${dto.reg_date}</td>
 								</tr>
 								</c:if>
@@ -147,7 +147,7 @@ function searchList() {
 										<span class="d-inline-block text-truncate align-middle" style="max-width: 390px;"><a href="${articleUrl}&num=${dto.eventpage_num}" class="text-reset">${dto.event_title}</a></span>
 										<c:if test="${dto.gap < 1}"><img class="align-middle" src="${pageContext.request.contextPath}/resources/images/new.gif"></c:if>
 									</td>
-									<td>${dto.email}</td>
+									<td>${dto.nickname}</td>
 									<td>${dto.reg_date}</td>
 								</tr>
 								</c:if>

@@ -14,7 +14,21 @@ public class EventDTO {
 		private String email;
 		private long filesize;
 		private int likeCount;
+		private int notice;
+		private String nickname;
 		
+		public String getNickname() {
+			return nickname;
+		}
+		public void setNickname(String nickname) {
+			this.nickname = nickname;
+		}
+		public int getNotice() {
+			return notice;
+		}
+		public void setNotice(int notice) {
+			this.notice = notice;
+		}
 		public int getLikeCount() {
 			return likeCount;
 		}
