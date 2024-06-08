@@ -24,7 +24,7 @@
             padding: 20px;
             box-sizing: border-box;
         }
-
+		/* justify-content 건드리면 중간 공백 사라짐 */
         .content-wrapper {
             display: flex;
             flex-direction: column;
@@ -47,7 +47,7 @@
             width: 50%;
             margin: 0 auto;
         }
-
+		/* 버튼 크기 */
         .carousel-control-prev,
         .carousel-control-next {
             width: 5%;
@@ -68,7 +68,7 @@
     		border-radius: 5px;
     		background-color: #f8f9fa;
 		}
-		
+
 		
 }
         
@@ -81,7 +81,8 @@
 <div class="body">
     <div class="main">
         
-        <div id="carouselExample" class="carousel slide">
+<div id="carouselExample" class="carousel slide">
+      		
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="${pageContext.request.contextPath}/resources/images/bg.png"  class="d-block" alt="...">
@@ -96,6 +97,7 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
+  
 </div>
      
       
