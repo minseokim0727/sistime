@@ -10,11 +10,17 @@ public class TimeDTO {
 	private int sub_grade;
 	private int univ_num;
 	private String sub_date;
-	private String sub_start;
-	private String sub_end;
+	private String sub_time;
 	private int tot_grade;
 	private String email;
+	private int sem_num;
 	
+	public int getSem_num() {
+		return sem_num;
+	}
+	public void setSem_num(int sem_num) {
+		this.sem_num = sem_num;
+	}
 	public int getSub_num() {
 		return sub_num;
 	}
@@ -69,17 +75,11 @@ public class TimeDTO {
 	public void setSub_date(String sub_date) {
 		this.sub_date = sub_date;
 	}
-	public String getSub_start() {
-		return sub_start;
+	public String getSub_time() {
+		return sub_time;
 	}
-	public void setSub_start(String sub_start) {
-		this.sub_start = sub_start;
-	}
-	public String getSub_end() {
-		return sub_end;
-	}
-	public void setSub_end(String sub_end) {
-		this.sub_end = sub_end;
+	public void setSub_time(String sub_time) {
+		this.sub_time = sub_time;
 	}
 	public int getTot_grade() {
 		return tot_grade;
@@ -93,5 +93,7 @@ public class TimeDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+
 
 }
