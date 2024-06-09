@@ -68,7 +68,7 @@
     		border-radius: 5px;
     		background-color: #f8f9fa;
 		}
-
+		
 		
 }
         
@@ -153,6 +153,7 @@
             </div>
         </div>
     </div>
+   
     </div>
     <footer>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
