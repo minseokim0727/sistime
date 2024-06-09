@@ -12,8 +12,10 @@ import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
 import com.sist.annotation.ResponseBody;
+import com.sist.dao.CreateDAO;
 import com.sist.dao.MemberDAO;
 import com.sist.dao.MessageDAO;
+import com.sist.domain.CreateDTO;
 import com.sist.domain.MemberDTO;
 import com.sist.domain.MessageDTO;
 import com.sist.domain.SessionInfo;
@@ -103,7 +105,11 @@ public class MessageController {
 			}
 
 			String paging = util.paging(current_page, total_page, listUrl);
-
+			CreateDAO createDAO = new CreateDAO();
+			List<CreateDTO> listcreate = createDAO.selectBoardname();
+			// 최근 베스트 게시판 5개
+			
+			mav.addObject("listcreate", listcreate);
 			// 포워딩할 JSP에 전달할 속성
 			mav.addObject("list", list);
 			mav.addObject("page", current_page);

@@ -20,6 +20,7 @@
 <script type="text/javascript">
 function searchList() {
 	const f = document.searchForm;
+	
 	f.submit();
 }
 </script>
@@ -34,9 +35,9 @@ function searchList() {
 	<div class="container">
 		<div class="body-container">	
 			<div class="body-title">
-				<h3><i class="bi bi-app"></i> 자유 게시판 </h3>
+				<h3><i class="bi bi-app"></i> ${board_name} </h3>
 			</div>
-			
+				<h4>${description}</h4>
 			<div class="body-main">
 		        <div class="row board-list-header">
 		            <div class="col-auto me-auto">${dataCount}개(${page}/${total_page} 페이지)</div>
@@ -78,7 +79,7 @@ function searchList() {
 						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/admin/list';"><i class="bi bi-arrow-clockwise"></i></button>
 					</div>
 					<div class="col-6 text-center">
-						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/admin/list" method="post">
+						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/admin/list?board_name=${board_name}" method="post">
 							<div class="col-auto p-1">
 								<select name="schType" class="form-select">
 									<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>

@@ -6,7 +6,9 @@ import java.util.List;
 import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.dao.ComplainDAO;
+import com.sist.dao.CreateDAO;
 import com.sist.domain.ComplainDTO;
+import com.sist.domain.CreateDTO;
 import com.sist.servlet.ModelAndView;
 import com.sist.util.MyUtil;
 import com.sist.util.MyUtilBootstrap;
@@ -64,6 +66,11 @@ public class ComplainController {
 			String paging = util.paging(current_page, total_page, listUrl);
 
 			// 포워딩할 JSP에 전달할 데이터
+			CreateDAO createDAO = new CreateDAO();
+			List<CreateDTO> listcreate = createDAO.selectBoardname();
+			// 최근 베스트 게시판 5개
+			
+			mav.addObject("listcreate", listcreate);
 			mav.addObject("list", list);
 			mav.addObject("page", current_page);
 			mav.addObject("dataCount", dataCount);

@@ -15,8 +15,10 @@ import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
 import com.sist.dao.BanDAO;
 import com.sist.dao.ComplainDAO;
+import com.sist.dao.CreateDAO;
 import com.sist.dao.NoticeDAO;
 import com.sist.domain.ComplainDTO;
+import com.sist.domain.CreateDTO;
 import com.sist.domain.NoticeDTO;
 import com.sist.domain.SessionInfo;
 import com.sist.servlet.ModelAndView;
@@ -117,6 +119,12 @@ public class NoticeController {
 			articleUrl = cp + "/notice/article?page=" + current_page + "&" + query;
 
 			String paging = util.paging(current_page, total_page, listUrl);
+			
+			CreateDAO createDAO = new CreateDAO();
+			List<CreateDTO> listcreate = createDAO.selectBoardname();
+			// 최근 베스트 게시판 5개
+			
+			mav.addObject("listcreate", listcreate);
 
 			// 포워딩할 JSP에 전달할 데이터
 			mav.addObject("list", list);
