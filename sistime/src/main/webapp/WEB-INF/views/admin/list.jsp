@@ -34,7 +34,7 @@ function searchList() {
 	<div class="container">
 		<div class="body-container">	
 			<div class="body-title">
-				<h3><i class="bi bi-app"></i> ${pagename} </h3>
+				<h3><i class="bi bi-app"></i> 자유 게시판 </h3>
 			</div>
 			
 			<div class="body-main">
@@ -59,11 +59,11 @@ function searchList() {
 							<tr>
 								<td>${dataCount - (page-1) * size - status.index}</td>
 								<td class="left">
-									<a href="${articleUrl}&num=${dto.num}" class="text-reset">${dto.subject}</a>
+									<a href="${articleUrl}&num=${dto.board_num}" class="text-reset">${dto.title}</a>
 								</td>
-								<td>${dto.userName}</td>
+								<td>${dto.email}</td>
 								<td>${dto.reg_date}</td>
-								<td>${dto.hitCount}</td>
+								<td>${dto.hitcount}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -75,14 +75,14 @@ function searchList() {
 
 				<div class="row board-list-footer">
 					<div class="col">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/bbs/list';"><i class="bi bi-arrow-clockwise"></i></button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/admin/list';"><i class="bi bi-arrow-clockwise"></i></button>
 					</div>
 					<div class="col-6 text-center">
-						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/bbs/list" method="post">
+						<form class="row" name="searchForm" action="${pageContext.request.contextPath}/admin/list" method="post">
 							<div class="col-auto p-1">
 								<select name="schType" class="form-select">
 									<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
-									<option value="userName" ${schType=="userName"?"selected":""}>작성자</option>
+								 	<option value="userName" ${schType=="userName"?"selected":""}>작성자</option>	
 									<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
 									<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
 									<option value="content" ${schType=="content"?"selected":""}>내용</option>
@@ -97,7 +97,7 @@ function searchList() {
 						</form>
 					</div>
 					<div class="col text-end">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/bbs/write';">글올리기</button>
+						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/admin/write2?board_name=${board_name}';">글올리기</button>
 					</div>
 				</div>
 

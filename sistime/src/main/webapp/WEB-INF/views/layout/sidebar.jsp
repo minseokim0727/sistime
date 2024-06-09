@@ -88,7 +88,7 @@
 				<ul class="dropdown-menu">
 					<c:forEach var="dto" items="${listcreate}">
 						<li><a class="dropdown-item"
-							href="${pageContext.request.contextPath}/admin/list?board_Id=${dto.BOARD_ID}">&nbsp;&nbsp;
+							href="${pageContext.request.contextPath}/admin/list?board_name=${dto.BOARD_NAME}">&nbsp;&nbsp;
 								${dto.BOARD_NAME} </a></li>
 					</c:forEach>
 				</ul>
