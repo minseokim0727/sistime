@@ -84,8 +84,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <form name="subForm" method="post">
                             <c:forEach var="dto" items="${list}" varStatus="status">
+                        <form name="subForm" method="post">
                                 <tr>
                                     <td> <input type="hidden" name="sub_num" value="${dto.sub_num}" /> ${dto.sub_num} </td>
                                     <td> <input type="hidden" name="sub_name" value="${dto.sub_name}" /> ${dto.sub_name} </td>
@@ -95,13 +95,13 @@
                                     <td> <input type="hidden" name="sub_grade" value="${dto.sub_grade}" /> ${dto.sub_grade} </td>
                                     <td> <input type="hidden" name="sub_time" value="${dto.sub_time}" /> ${dto.sub_time} </td>
                                     <td>
-                                        <button type="button" onclick="submitForm('/sistime/timetable/insert')"> 등록 </button>
+                                        <button type="button" onclick="submitForm('/sistime/timetable/insert?year=${dto.sub_year}&semester=${dto.semester}&sem_num=${sem_num}&sub_num=${dto.sub_num}')"> 등록 </button>
                                         <button type="button" onclick="submitForm('/sistime/timetable/delete')"> 삭제 </button>
                                     </td>
                                 </tr>
-                            </c:forEach>
-                            <input type="hidden" name="sub_sem" value = "${sub_sem}">
                         </form>
+                            </c:forEach>
+                         
                     </tbody>
                 </table>
             </div>
@@ -119,16 +119,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="hour" begin="9" end="17">
-                            <tr>
-                                <td>${hour}:00-${hour+1}:00</td>
-                                <td></td>
-                                <td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
+         <c:forEach var="hour" begin="9" end="17">
+    <tr>
+        <td id="time_${hour}">${hour}:00-${hour+1}:00</td>
+        <td id="mon_${hour}"></td>
+        <td id="tue_${hour}"></td>
+        <td id="wed_${hour}"></td>
+        <td id="thu_${hour}"></td>
+        <td id="fri_${hour}"></td>
+    </tr>
 </c:forEach>
+
 </tbody>
 </table>
 </div>
@@ -153,6 +154,8 @@ function submitForm(actionUrl) {
     form.action = actionUrl;
     form.submit();
 }
+
+
 
 </script>
 </body>
