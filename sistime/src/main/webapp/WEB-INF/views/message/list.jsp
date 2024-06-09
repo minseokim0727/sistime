@@ -57,7 +57,7 @@ function searchList() {
 						<c:forEach var="dto" items="${list}" varStatus="status">
 							<tr>
 								<td>${dataCount - (page-1) * size - status.index}</td>
-								<td class="left">
+								<td>
 									<a href="${articleUrl}&msg_num=${dto.msg_num}" class="text-reset">${dto.send_email}</a>
 								</td>
 								<td>${dto.content}</td>

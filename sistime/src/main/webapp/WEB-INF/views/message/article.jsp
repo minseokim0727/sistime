@@ -22,7 +22,7 @@ body {
 }
 
 .chat-partner {
-	background-color: #3498db;
+	background-color: #696969;
 	color: #ffffff;
 	padding: 10px;
 	border-top-left-radius: 10px;
@@ -40,32 +40,32 @@ body {
 }
 
 .chat-messages .sent-message {
-	background-color: #3498db;
+	background-color: #778899;
 	color: #ffffff;
 	padding: 10px;
 	border-radius: 5px;
 	margin-bottom: 10px;
 	max-width: 70%;
 	align-self: flex-end;
-	text-align: right; /* 보낸 메시지를 오른쪽으로 정렬 */
-	margin-left: auto; /* 보낸 메시지 박스를 오른쪽으로 붙임 */
+	text-align: right;
+	margin-left: auto;
 }
 
 .chat-messages .received-message {
-	background-color: #f2f2f2;
+	background-color: 	#D3D3D3;
 	color: #333333;
 	padding: 10px;
 	border-radius: 5px;
 	margin-bottom: 10px;
 	max-width: 70%;
 	align-self: flex-start;
-	text-align: left; /* 받은 메시지를 왼쪽으로 정렬 */
+	text-align: left;
 }
 
 .chat-input {
 	display: flex;
 	padding: 10px;
-	justify-content: flex-end; /* 채팅 입력창을 오른쪽으로 정렬 */
+	justify-content: flex-end;
 }
 
 .chat-input input {
@@ -78,7 +78,7 @@ body {
 
 .chat-input button {
 	padding: 8px 15px;
-	background-color: #3498db;
+	background-color: #778899;
 	color: #ffffff;
 	border: none;
 	border-radius: 5px;
@@ -87,7 +87,7 @@ body {
 }
 
 .chat-input button:hover {
-	background-color: #2980b9;
+	background-color: #e87442;
 }
 
 .page-navigation {
@@ -114,7 +114,7 @@ body {
 			<a href="${pageContext.request.contextPath}/message/list"
 				style="text-decoration: none;">
 				<button type="button"
-					style="padding: 8px 15px; background-color: #cccccc; color: #ffffff; border: none; border-radius: 5px; cursor: pointer;">
+					style="padding: 8px 15px; background-color: #E0E0E0; color:black ; border: none; border-radius: 5px; cursor: pointer;">
 					메시지 목록으로 돌아가기</button>
 			</a>
 		</div>
