@@ -140,7 +140,7 @@
                     	<div class="border px-2">
 							<c:forEach var="dto" items="${listEvent}">
 								<div class="text-truncate pax-2 subject-list">
-									<a href="${pageContext.request.contextPath}/event/article?page=1&size=10&num=${dto.eventpage_num}">${dto.title}</a>
+									<a href="${pageContext.request.contextPath}/event/article?page=1&size=10&num=${dto.eventpage_num}">${dto.event_title}</a>
 								</div>
 							</c:forEach>
 							<c:forEach var="n" begin="${listEvent.size() +1}" end="5">
