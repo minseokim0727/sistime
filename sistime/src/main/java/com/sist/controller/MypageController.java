@@ -70,28 +70,17 @@ public class MypageController {
 	    	// 내가 쓴 댓글 리스트
 	    	List<MypageDTO> mylistreply = dao.myListReply(info.getEmail());
 	    	
-	    	
-	    	
-			//System.out.println("Mode: " + mode);
-			//System.out.println("UserPwd from form: " + userPwd);
-			//System.out.println("UserPwd from DB: " + dto.getUserPwd());
-
-//			if (mode.equals("delete")) {
-//				// 회원탈퇴
-//				dao.deleteMember(info.getEmail());
-//
-//				session.removeAttribute("member");
-//				session.invalidate();
-//
-//				return new ModelAndView("redirect:/");
-//			}
+	    	// 페이지 갯수
+	    	int pagelistcount = mylistpage.size();
+	    	// 댓글 갯수
+	    	int replylistcount = mylistreply.size();
 
 			// 회원정보수정 - 마이페이지 폼
 			ModelAndView mav = new ModelAndView("member/mypage");
 	
 			mav.addObject("dto", dto);
-			mav.addObject("dto2", mylistpage);		
-		    mav.addObject("dto3", mylistreply);
+			mav.addObject("pagelistcount", pagelistcount);		
+		    mav.addObject("replylistcount", replylistcount);
 
 			return mav;
 		} catch (Exception e) {
@@ -115,12 +104,23 @@ public class MypageController {
 	    // 회원 정보를 다시 가져옴
 	    MypageDAO dao = new MypageDAO();
 	    MemberDTO dto = dao.findByEmail(info.getEmail());
+	    
+	    // 내가 쓴 글 리스트
+    	List<MypageDTO> mylistpage = dao.myListpage(info.getEmail());
+    	// 내가 쓴 댓글 리스트
+    	List<MypageDTO> mylistreply = dao.myListReply(info.getEmail());
+    	
+    	// 페이지 갯수
+    	int pagelistcount = mylistpage.size();
+    	// 댓글 갯수
+    	int replylistcount = mylistreply.size();
 	   
 
 	    // 정보 수정 등을 하면 다시 화면에 돌려줘야함
 	    ModelAndView mav = new ModelAndView("member/mypage");
 	    mav.addObject("dto", dto);
-	    
+	    mav.addObject("pagelistcount", pagelistcount);		
+	    mav.addObject("replylistcount", replylistcount);
 	    String message = (String) session.getAttribute("message");
 	    
         if (message != null) {

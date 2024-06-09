@@ -200,14 +200,14 @@
         <!-- 내가 쓴 글 -->
         <div class="card">
             <div class="card-body">
-                <a href="${pageContext.request.contextPath}/member/myPageList">내가 쓴 글</a>
+                <a href="${pageContext.request.contextPath}/member/myPageList">내가 쓴 글 : ${pagelistcount}개</a>
             </div>
         </div>
 
         <!-- 내가 쓴 댓글 -->
         <div class="card">
             <div class="card-body">
-                <a href="${pageContext.request.contextPath}/member/myReplyList">내가 쓴 댓글</a>
+                <a href="${pageContext.request.contextPath}/member/myReplyList">내가 쓴 댓글 : ${replylistcount}개</a>
             </div>
         </div>
 
