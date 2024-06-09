@@ -1,33 +1,56 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>관리자 페이지</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        text-align: center;
+    }
+    li {
+        display: inline;
+        margin: 0 10px;
+    }
+    li a {
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 20px 30px;
+        text-decoration: none;
+        font-size: 20px;
+    }
+    li a:hover {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+</style>
 </head>
 <body>
-    <form name="createForm" method="post">
-        <input type="text" name="pageName">
-        <button type="button" onclick="sendData()">전송</button>
-    </form>
-
-    <script type="text/javascript">
-        function sendData() {
-            // 폼 요소 가져오기
-            let form = document.forms["createForm"];
-            // 입력된 값 가져오기
-            let pageName = form["pageName"].value;
-            // 페이지 이름이 비어있는지 확인
-            if (!pageName.trim()) {
-                alert("페이지 이름을 입력하세요.");
-                return;
-            }
-            // 서버로 데이터 전송
-            form.action = "${pageContext.request.contextPath}/admin/"+pageName;
-            form.submit();
-        }
-    </script>
+    <div class="header">
+        <h1>관리자 페이지</h1>
+    </div>
+    <ul>
+        <li><a href="${pageContext.request.contextPath}/admin/write">게시판 만들기</a></li>
+        <li><a href="<c:url value='/menu2.jsp'/>">메뉴 2</a></li>
+        <li><a href="<c:url value='/menu3.jsp'/>">메뉴 3</a></li>
+    </ul>
 </body>
 </html>

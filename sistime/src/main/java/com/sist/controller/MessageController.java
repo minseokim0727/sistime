@@ -243,11 +243,6 @@ public class MessageController {
 		dto.setSend_email(send_email);
 		dto.setRead_email(read_email);
 		dto.setContent(message);
-		
-		System.out.println("********************");
-		System.out.println(send_email);
-		System.out.println(read_email);
-		System.out.println("********************");
 
 		msg_num = dao.insertMessage(dto);
 
