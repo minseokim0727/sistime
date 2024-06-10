@@ -133,6 +133,27 @@
 								<input type="hidden" name="email" value="${dto.email}">
 								<input type="hidden" name="size" value="${size}">
 								</form>
+								
+								<form action ="${pageContext.request.contextPath}/notice/ban">
+								<select name = "ban_reason">
+								<option value="욕설"> 욕설 </option>
+								<option value="불법컨텐츠"> 불법컨텐츠 </option>
+								<option value="광고"> 광고 </option>
+								</select>
+								<select name = "ban_date">
+								<option value="1"> 1일 </option>
+								<option value="2"> 7일 </option>
+								<option value="3"> 30일 </option>
+								<option value="4"> 영구 </option>
+								</select>
+								<button type="submit" class="btn btn-light"
+									onclick="">차단</button>
+								<input type="hidden" name="board_name" value="notice"> 
+								<input type="hidden" name="page" value="${page}">
+								<input type="hidden" name="num" value="${dto.notice_num}">
+								<input type="hidden" name="email" value="${dto.email}">
+								<input type="hidden" name="size" value="${size}">
+								</form>
 			
 
 							</td>
