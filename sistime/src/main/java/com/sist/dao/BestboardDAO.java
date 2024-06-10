@@ -101,9 +101,9 @@ public class BestboardDAO {
 		//	sb.append("     WHERE answer = 0 ");
 			sb.append("     GROUP BY board_num");
 			sb.append(" ) c ON b.board_num = c.board_num");
+			sb.append(" where hitcount>10 ");
 			sb.append(" ORDER BY b.board_num DESC ");
 			sb.append(" OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ");
-			sb.append(" where hitcount>10 ");
 
 			pstmt = conn.prepareStatement(sb.toString());
 			
