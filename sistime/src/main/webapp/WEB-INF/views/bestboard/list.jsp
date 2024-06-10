@@ -96,9 +96,7 @@ function searchList() {
 							</div>
 						</form>
 					</div>
-					<div class="col text-end">
-						<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/board/write';">글올리기</button>
-					</div>
+					
 				</div>
 
 			</div>
