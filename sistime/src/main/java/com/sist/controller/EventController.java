@@ -14,8 +14,11 @@ import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
 import com.sist.annotation.ResponseBody;
+import com.sist.dao.BanDAO;
+import com.sist.dao.ComplainDAO;
 import com.sist.dao.CreateDAO;
 import com.sist.dao.EventDAO;
+import com.sist.domain.ComplainDTO;
 import com.sist.domain.CreateDTO;
 import com.sist.domain.EventDTO;
 import com.sist.domain.EventReplyDTO;
@@ -722,6 +725,63 @@ public class EventController {
 		model.put("count", count);
 
 		return model;
+	}
+	
+	@RequestMapping(value = "/event/complain", method = RequestMethod.GET)
+	public ModelAndView complain(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// 신고
+		ComplainDAO dao = new ComplainDAO();
+
+		String page = req.getParameter("page");
+		String size = req.getParameter("size");
+		long num = Long.parseLong(req.getParameter("num"));
+
+		try {
+			ComplainDTO dto = new ComplainDTO();
+
+			String board_name = req.getParameter("board_name");
+			String email = req.getParameter("email");
+			String comp_reason = req.getParameter("comp_reason");
+
+			dto.setBoard_name(board_name);
+			dto.setComp_reason(comp_reason);
+			dto.setEmail(email);
+			dto.setNum(num);
+
+			dao.insertComplain(dto);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/event/article?page=" + page + "&size=" + size + "&num=" + num);
+
+	}
+	
+	@RequestMapping(value = "/event/ban", method = RequestMethod.GET)
+	public ModelAndView ban(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// 신고
+		BanDAO dao = new BanDAO();
+
+		String page = req.getParameter("page");
+		String size = req.getParameter("size");
+		long num = Long.parseLong(req.getParameter("num"));
+		try {
+			int ban_date = Integer.parseInt(req.getParameter("ban_date"));
+			String email = req.getParameter("email");
+			String ban_reason = req.getParameter("ban_reason");
+			
+			dao.insertBan(ban_date, ban_reason, email);
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/event/article?page=" + page + "&size=" + size + "&num=" + num );
+
 	}
 	
 

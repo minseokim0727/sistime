@@ -118,6 +118,43 @@
 						</td>
 						<td class="text-end">
 							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/board/list?${query}';">리스트</button>
+							<form action ="${pageContext.request.contextPath}/board/complain">
+								<select name = "comp_reason">
+								<option value="욕설"> 욕설 </option>
+								<option value="불법컨텐츠"> 불법컨텐츠 </option>
+								<option value="광고"> 광고 </option>
+								</select>
+								<button type="submit" class="btn btn-light"
+									onclick="">신고</button>
+								<input type="hidden" name="board_name" value="board"> 
+								<input type="hidden" name="page" value="${page}">
+								<input type="hidden" name="num" value="${dto.board_num}">
+								<input type="hidden" name="email" value="${dto.email}">
+								<input type="hidden" name="size" value="${size}">
+								</form>
+								<c:if
+									test="${sessionScope.member.email == 'admin'}">
+								<form action ="${pageContext.request.contextPath}/board/ban">
+								<select name = "ban_reason">
+								<option value="욕설"> 욕설 </option>
+								<option value="불법컨텐츠"> 불법컨텐츠 </option>
+								<option value="광고"> 광고 </option>
+								</select>
+								<select name = "ban_date">
+								<option value="1"> 1일 </option>
+								<option value="2"> 7일 </option>
+								<option value="3"> 30일 </option>
+								<option value="4"> 영구 </option>
+								</select>
+								<button type="submit" class="btn btn-light"
+									onclick="">차단</button>
+								<input type="hidden" name="board_name" value="board"> 
+								<input type="hidden" name="page" value="${page}">
+								<input type="hidden" name="num" value="${dto.board_num}">
+								<input type="hidden" name="email" value="${dto.email}">
+								<input type="hidden" name="size" value="${size}">
+								</form>
+								</c:if>
 						</td>
 					</tr>
 				</table>
