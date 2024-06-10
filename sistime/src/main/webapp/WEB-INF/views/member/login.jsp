@@ -113,6 +113,7 @@
 
                <div class="d-grid">
                   <p class="form-control-plaintext text-center text-primary">${message}</p>
+                  <p class="form-control-plaintext text-center text-primary">${banmsg}</p>
                </div>
 
             </div>

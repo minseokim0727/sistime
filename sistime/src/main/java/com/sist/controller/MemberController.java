@@ -9,6 +9,7 @@ import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
 import com.sist.annotation.ResponseBody;
+import com.sist.dao.BanDAO;
 import com.sist.dao.MemberDAO;
 import com.sist.domain.MemberDTO;
 import com.sist.domain.SessionInfo;
@@ -65,7 +66,18 @@ public class MemberController {
 		}
 
 		ModelAndView mav = new ModelAndView("member/login");
-
+		BanDAO bandao = new BanDAO();
+		
+		try {
+			String banmsg = null;
+			if(bandao.findByID(email) == 1) {
+				banmsg = "차단되었습니다";
+			}
+			mav.addObject("banmsg", banmsg);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		String msg = "아이디 또는 패스워드가 일치하지 않습니다.";
 		mav.addObject("message", msg);
 
