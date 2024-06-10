@@ -115,6 +115,58 @@ public class TimeDAO {
 		return list;
 	}
 	
+public List<TimeDTO> subList(int sem_num) throws SQLException{
+		
+		TimeDTO dto = null;
+		List<TimeDTO> list = new ArrayList<TimeDTO>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = " WITH subject_info AS ( "
+					+ "    SELECT s.sub_name, s.sub_pro, s.sub_grade, t.sub_date, t.sub_start, t.sub_end "
+					+ "    FROM sub_timeboard tb "
+					+ "    JOIN sub_semester ss ON tb.sem_num = ss.sem_num "
+					+ "    JOIN sub_time t ON tb.sub_tnum = t.sub_tnum "
+					+ "    JOIN sub s ON t.sub_num = s.sub_num "
+					+ "    WHERE ss.sem_num = ? "
+					+ ") "
+					+ " SELECT "
+					+ "    sub_name, "
+					+ "    sub_pro, "
+					+ "    sub_grade, "
+					+ "    listagg(sub_date || ' (' || sub_start || '-' || sub_end || ')', ', ') "
+					+ "        within group (order by sub_date) as sub_schedule "
+					+ " FROM subject_info "
+					+ " GROUP BY sub_name, sub_pro, sub_grade";
+			
+			ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, sem_num);
+
+			
+			rs=ps.executeQuery();
+			
+			while(rs.next()) {
+				dto = new TimeDTO();
+				
+				dto.setSub_name(rs.getString("sub_name"));
+				dto.setSub_pro(rs.getString("sub_pro"));
+				dto.setSub_time(rs.getString("sub_schedule"));
+	
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs);
+			DBUtil.close(ps);
+		}
+		
+		return list;
+	}
+	
 	public void insertSub(int sub_num , int sem_num) throws SQLException{
 		PreparedStatement ps = null;
 		String sql;
@@ -157,4 +209,25 @@ public class TimeDAO {
 			DBUtil.close(ps);
 		}
 	}
+	
+	public void deleteSub(int sub_num , int sem_num) throws SQLException{
+		PreparedStatement ps = null;
+		String sql;
+		
+		try {
+			sql = "delete sub_timeboard where sem_num = ? and sub_tnum = ?";
+			
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, sem_num);
+			ps.setInt(2, sub_num);
+			
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(ps);
+		}
+	}
+	
+	
 }

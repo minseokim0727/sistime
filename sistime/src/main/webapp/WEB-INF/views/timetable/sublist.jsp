@@ -96,7 +96,7 @@
                                     <td> <input type="hidden" name="sub_time" value="${dto.sub_time}" /> ${dto.sub_time} </td>
                                     <td>
                                         <button type="button" onclick="submitForm('/sistime/timetable/insert?year=${dto.sub_year}&semester=${dto.semester}&sem_num=${sem_num}&sub_num=${dto.sub_num}')"> 등록 </button>
-                                        <button type="button" onclick="submitForm('/sistime/timetable/delete')"> 삭제 </button>
+                                        <button type="button" onclick="submitForm('/sistime/timetable/delete?year=${dto.sub_year}&semester=${dto.semester}&sem_num=${sem_num}&sub_num=${dto.sub_num}')"> 삭제 </button>
                                     </td>
                                 </tr>
                         </form>
@@ -119,14 +119,119 @@
                         </tr>
                     </thead>
                     <tbody>
-         <c:forEach var="hour" begin="9" end="17">
+         <c:forEach var="hour"  begin="9" end="17">
     <tr>
         <td id="time_${hour}">${hour}:00-${hour+1}:00</td>
-        <td id="mon_${hour}"></td>
-        <td id="tue_${hour}"></td>
-        <td id="wed_${hour}"></td>
-        <td id="thu_${hour}"></td>
-        <td id="fri_${hour}"></td>
+        <td id="mon_${hour}">
+        <c:forEach var="dto" items="${subList}" varStatus="status">
+        <c:choose>
+       <c:when test="${dto.sub_time == ('월 (' += (hour-1) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('월 (' += (hour-1) += '-' += (hour)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('월 (' += (hour) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('월 (' += (hour) += '-' += (hour+2)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+   </c:choose>
+        </c:forEach>
+        </td>
+        <td id="tue_${hour}">
+         <c:forEach var="dto" items="${subList}" varStatus="status">
+        <c:choose>
+       <c:when test="${dto.sub_time == ('화 (' += (hour-1) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('화 (' += (hour-1) += '-' += (hour)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('화 (' += (hour) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('화 (' += (hour) += '-' += (hour+2)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+   </c:choose>
+        </c:forEach>
+        </td>
+        <td id="wed_${hour}">
+         <c:forEach var="dto" items="${subList}" varStatus="status">
+        <c:choose>
+       <c:when test="${dto.sub_time == ('수 (' += (hour-1) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('수 (' += (hour-1) += '-' += (hour)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('수 (' += (hour) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('수 (' += (hour) += '-' += (hour+2)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+   </c:choose>
+        </c:forEach>
+        </td>
+        <td id="thu_${hour}">
+         <c:forEach var="dto" items="${subList}" varStatus="status">
+        <c:choose>
+       <c:when test="${dto.sub_time == ('목 (' += (hour-1) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('목 (' += (hour-1) += '-' += (hour)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('목 (' += (hour) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('목 (' += (hour) += '-' += (hour+2)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+   </c:choose>
+        </c:forEach>
+        </td>
+        <td id="fri_${hour}">
+         <c:forEach var="dto" items="${subList}" varStatus="status">
+        <c:choose>
+       <c:when test="${dto.sub_time == ('금 (' += (hour-1) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('금 (' += (hour-1) += '-' += (hour)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('금 (' += (hour) += '-' += (hour+1)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+       <c:when test="${dto.sub_time == ('금 (' += (hour) += '-' += (hour+2)) += ')'}">
+           ${dto.sub_name}
+           ${dto.sub_pro}
+       </c:when>
+   </c:choose>
+        </c:forEach>
+        </td>
     </tr>
 </c:forEach>
 

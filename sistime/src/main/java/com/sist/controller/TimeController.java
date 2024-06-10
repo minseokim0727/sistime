@@ -77,8 +77,12 @@ public class TimeController {
 	        
 	        
 	        List<TimeDTO> list = dao.semesterSelect(sub_year, semester);
-	        		        
+	        List<TimeDTO> subList = dao.subList(sem_num);
+	        for(TimeDTO dto : subList) {
+	        	System.out.println(dto);
+	        }
 	        mav.addObject("list", list);
+	        mav.addObject("subList", subList);
 	        mav.addObject("year", sub_year);
 	        mav.addObject("semester", semester);
 	        mav.addObject("sem_num", sem_num);
@@ -104,12 +108,36 @@ public class TimeController {
 			
 			year = req.getParameter("sub_year");
 			semester = req.getParameter("semester");
-			System.out.println(sem_num);
-			System.out.println(year);
-			System.out.println(semester);
+			
 			sub_num = Integer.parseInt(req.getParameter("sub_num"));
-			System.out.println(sub_num);
+			
 			dao.insertSub(sub_num, sem_num);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ModelAndView("redirect:/timetable/sublist?sem_num=" + sem_num + "&year=" + year + "&semester=" + semester);
+	}
+	
+	@RequestMapping(value = "/timetable/delete", method = RequestMethod.POST)
+	public ModelAndView deleteSub(HttpServletRequest req, HttpServletResponse resp) throws SQLException , IOException{
+		TimeDAO dao = new TimeDAO();
+			String year = null;
+			String semester =null;
+			int sub_num = 0;
+			int sem_num = 0;
+		
+		
+		try {
+			sem_num = Integer.parseInt(req.getParameter("sem_num"));
+			
+			year = req.getParameter("sub_year");
+			semester = req.getParameter("semester");
+			
+			sub_num = Integer.parseInt(req.getParameter("sub_num"));
+			
+			dao.deleteSub(sub_num, sem_num);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
