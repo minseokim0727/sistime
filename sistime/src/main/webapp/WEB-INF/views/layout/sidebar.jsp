@@ -79,8 +79,7 @@
 							화개장터 요청 </a></li>
 				</ul>
 			</div>
-			<a class="h5" href="${pageContext.request.contextPath}/complain/list">관리자만
-				보이는 버튼 하기</a>
+			
 			<div class="dropdown">
 				<a class="h5" data-bs-toggle="dropdown" aria-expanded="false" href="${pageContext.request.contextPath}/layout/sidebar">
 					기타 장터&nbsp; <i class="bi bi-caret-down downicon"></i>
