@@ -114,7 +114,7 @@ public class BestboardDAO {
 			
 			while (rs.next()) {
 				BoardDTO dto = new BoardDTO();
-
+				dto.setUserName(rs.getString("user_name"));
 				dto.setBoard_num(rs.getLong("Board_num"));
 				dto.setEmail(rs.getString("email"));
 				dto.setTitle(rs.getString("title"));

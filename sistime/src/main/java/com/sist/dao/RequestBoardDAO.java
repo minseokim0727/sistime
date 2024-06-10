@@ -161,7 +161,7 @@ public class RequestBoardDAO {
 		String sql;
 		
 		try {
-			sql= "select RB_num, secret, nickname,title,content, reg_date, answer_content , ANSWER_REG_DATE, m.email "
+			sql= "select RB_num, secret, nickname,title,content, reg_date, answer_content , ANSWER_REG_DATE, m.email, reason "
 					+ " from RequestBoard q"
 					+ " JOIN member1 m ON q.email = m.email "
 					+ " where RB_num = ? ";
@@ -184,6 +184,7 @@ public class RequestBoardDAO {
 				dto.setReg_date(rs.getString("reg_date"));
 				dto.setAnswer_content(rs.getString("answer_content"));  
                 dto.setAnswer_reg_date(rs.getString("answer_reg_date"));
+                dto.setReason(rs.getString("reason"));
 			}
 			
 			

@@ -106,11 +106,13 @@
 							</td>
 							<td align="right">
 								문의일자 : ${dto.reg_date}
+								
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="2" valign="top" height="200">
+								<p> 사유 : ${dto.reason} </p>
 								${dto.content}
 							</td>
 						</tr>
