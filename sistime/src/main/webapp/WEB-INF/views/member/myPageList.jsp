@@ -31,9 +31,9 @@
 				<table class="table table-hover board-list">
 					<thead class="table-light">
 						<tr>
-							<th class="num">번호</th>
-							<th class="subject">내용</th>
-							<th class="name">작성일</th>
+							<th class="num" style="text-align: center;">번호</th>
+							<th class="subject"style="text-align: left;">내용</th>
+							<th class="name"style="text-align: center;">작성일</th>
 
 						</tr>
 					</thead>
@@ -41,11 +41,11 @@
 					<tbody>
 						<c:forEach var="dto" items="${dto2}" varStatus="status">
 							<tr>
-								<td>${pagelistcount - (page-1) * size - status.index}</td>
-								<td class="left">
+								<td style="text-align: center;">${pagelistcount - (page-1) * size - status.index}</td>
+								<td class="left" style="text-align: left;">
 									<a href="${pageContext.request.contextPath}/${dto.board_name}/article?num=${dto.board_num}&size=10&page=1" class="text-reset">${dto.title}</a>
 								</td>
-								<td>${dto.reg_date}</td>
+								<td style="text-align: center;">${dto.reg_date}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
