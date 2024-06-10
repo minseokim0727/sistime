@@ -38,7 +38,11 @@ public class MainController {
 		BoardDAO boardDAO = new BoardDAO();
 		List<BoardDTO> listboard = boardDAO.listBoard(0, 5);
 		
+		CreateDAO createDAO = new CreateDAO();
+		List<CreateDTO> listcreate = createDAO.selectBoardname();
+		// 최근 베스트 게시판 5개
 		
+		mav.addObject("listcreate", listcreate);
 		
 		
 		

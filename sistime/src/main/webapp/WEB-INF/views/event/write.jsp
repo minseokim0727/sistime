@@ -77,13 +77,13 @@
 									<p class="form-control-plaintext">${sessionScope.member.nickname}</p>
 								</td>
 							</tr>
-							<c:if test="${sessionScope.member.email == 'admin'}">
+							
 								<tr>
 									<td class="bg-light col-sm-2" scope="row">이벤트 시작 날짜</td>
 									<td><input type="date" name="eventStartDate"
 										class="form-control"></td>
 								</tr>
-							</c:if>
+							
 							
 							<tr>
 								<td class="bg-light col-sm-2" scope="row">내 용</td>
@@ -143,38 +143,34 @@
 			</div>
 		</div>
 	</main>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/se2/js/service/HuskyEZCreator.js"
-		charset="utf-8"></script>
-
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 	<script type="text/javascript">
-		var oEditors = [];
-		nhn.husky.EZCreator
-				.createInIFrame({
-					oAppRef : oEditors,
-					elPlaceHolder : "ir1",
-					sSkinURI : "${pageContext.request.contextPath}/resources/se2/SmartEditor2Skin.html",
-					fCreator : "createSEditor2"
-				});
+	var oEditors = [];
+	nhn.husky.EZCreator.createInIFrame({
+		oAppRef: oEditors,
+		elPlaceHolder: "ir1",
+		sSkinURI: "${pageContext.request.contextPath}/resources/se2/SmartEditor2Skin.html",
+		fCreator: "createSEditor2"
+	});
+	
+	function submitContents(elClickedObj) {
+		 oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
 
-		function submitContents(elClickedObj) {
-			oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
-			console.log(document.eventForm.content.value);
-			try {
-				if (!check()) {
-					return;
-				}
-
-				elClickedObj.submit();
-			} catch (e) {
+		 try {
+			if(! check()) {
+				return;
 			}
+	
+			elClickedObj.submit();
+		} catch(e) {
 		}
-
-		function setDefaultFont() {
-			var sDefaultFont = '돋움';
-			var nFontSize = 12;
-			oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
-		}
+	}
+	
+	function setDefaultFont() {
+		var sDefaultFont = '돋움';
+		var nFontSize = 12;
+		oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
+	}
 	</script>
 	<footer>
 		<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
