@@ -54,7 +54,13 @@ public class BanDAO {
 		int banState = 0;
 		
 		try {
-			sql = "select ban_state , ban_date from ban where email = ?";
+			sql = "select rownum , ban_state , ban_date "
+					+ "from ( "
+					+ "    SELECT "
+					+ "        rownum , ban_state , ban_date , email"
+					+ "    FROM ban "
+					+ "    ORDER BY ROWNUM DESC) "
+					+ "where email = ? and rownum =1";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);
 			

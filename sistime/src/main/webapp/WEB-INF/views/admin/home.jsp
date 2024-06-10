@@ -49,6 +49,7 @@
     </div>
     <ul>
         <li><a href="${pageContext.request.contextPath}/admin/write">게시판 만들기</a></li>
+        <li><a href="${pageContext.request.contextPath}/complain/list">신고게시판</a></li>
         <li><a href="<c:url value='/menu2.jsp'/>">메뉴 2</a></li>
         <li><a href="<c:url value='/menu3.jsp'/>">메뉴 3</a></li>
     </ul>
