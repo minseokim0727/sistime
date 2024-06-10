@@ -35,7 +35,7 @@ function searchList() {
 	<div class="container">
 		<div class="body-container">	
 			<div class="body-title">
-				<h3><i class="bi bi-whatsapp"></i> 요청 문의 </h3>
+				<h3><i class="bi bi-whatsapp"></i> 게시판 요청 문의 </h3>
 			</div>
 			
 			<div class="body-main">
