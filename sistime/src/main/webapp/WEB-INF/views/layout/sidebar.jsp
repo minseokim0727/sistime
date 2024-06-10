@@ -58,7 +58,7 @@
 					<li><a class="dropdown-item"
 						href="${pageContext.request.contextPath}/event/list">&nbsp;&nbsp;
 							이벤트 </a></li>
-					<li><a class="dropdown-item" href="#">&nbsp;&nbsp; 베스트 </a></li>
+					<li><a class="dropdown-item" href="${pageContext.request.contextPath}/bestboard/list">&nbsp;&nbsp; 베스트 </a></li>
 				</ul>
 			</div>
 			<a class="h5"

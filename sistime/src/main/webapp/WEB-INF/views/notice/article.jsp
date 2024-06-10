@@ -120,8 +120,7 @@
 									onclick="location.href='${pageContext.request.contextPath}/notice/list?${query}';">리스트</button>
 								
 								
-								<c:if
-									test="${sessionScope.member.email == 'admin'}">
+								
 								<form action ="${pageContext.request.contextPath}/notice/complain">
 								<select name = "comp_reason">
 								<option value="욕설"> 욕설 </option>
@@ -136,7 +135,8 @@
 								<input type="hidden" name="email" value="${dto.email}">
 								<input type="hidden" name="size" value="${size}">
 								</form>
-								
+								<c:if
+									test="${sessionScope.member.email == 'admin'}">
 								<form action ="${pageContext.request.contextPath}/notice/ban">
 								<select name = "ban_reason">
 								<option value="욕설"> 욕설 </option>

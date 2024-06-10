@@ -9,10 +9,7 @@ import com.sist.annotation.Controller;
 import com.sist.annotation.RequestMapping;
 import com.sist.annotation.RequestMethod;
 import com.sist.dao.BestboardDAO;
-import com.sist.dao.BoardDAO;
-import com.sist.dao.CreateDAO;
 import com.sist.domain.BoardDTO;
-import com.sist.domain.CreateDTO;
 import com.sist.servlet.ModelAndView;
 import com.sist.util.MyUtil;
 import com.sist.util.MyUtilBootstrap;
@@ -29,7 +26,7 @@ public class BestboardController {
 			// 게시물 리스트
 			ModelAndView mav = new ModelAndView("bestboard/list");
 
-			BoardDAO dao = new BoardDAO();
+			
 			MyUtil util = new MyUtilBootstrap();
 			BestboardDAO dao2 = new BestboardDAO();
 			
@@ -56,9 +53,9 @@ public class BestboardController {
 				// 전체 데이터 개수
 				int dataCount;
 				if (kwd.length() == 0) {
-					dataCount = dao.dataCount();
+					dataCount = dao2.dataCount();
 				} else {
-					dataCount = dao.dataCount(schType, kwd);
+					dataCount = dao2.dataCount(schType, kwd);
 				}
 				
 				// 전체 페이지 수
@@ -74,9 +71,9 @@ public class BestboardController {
 				
 				List<BoardDTO> list = null;
 				if (kwd.length() == 0) {
-					list = dao.listBoard(offset, size);
+					list = dao2.listbestBoard(offset, size);
 				} else {
-					list = dao.listBoard(offset, size, schType, kwd);
+					list = dao2.listbestBoard(offset, size, schType, kwd);
 				}
 
 				String query = "";
@@ -95,11 +92,7 @@ public class BestboardController {
 
 				String paging = util.paging(current_page, total_page, listUrl);
 				
-				CreateDAO createDAO = new CreateDAO();
-				List<CreateDTO> listcreate = createDAO.selectBoardname();
-				// 최근 베스트 게시판 5개
 				
-				mav.addObject("listcreate", listcreate);
 				// 포워딩할 JSP에 전달할 속성
 				mav.addObject("list", list);
 				mav.addObject("page", current_page);
@@ -117,6 +110,7 @@ public class BestboardController {
 
 			// JSP로 포워딩
 			return mav;
-
 	}
+	
+	
 }
